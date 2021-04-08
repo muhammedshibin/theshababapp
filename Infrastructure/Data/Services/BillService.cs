@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using Core.CoreDtos;
 using Core.DataFilters;
 using Core.Entities;
+using Core.Enumerations;
 using Core.Interfaces;
 using Core.Specifications;
 
@@ -69,18 +70,36 @@ namespace Infrastructure.Data.Services
         }
         public async Task GenerateIndividualBillsAsync(int month , int year)
         {
+            var inmateBills = new List<InmateBill>();
+
             var inmatesSpec = new InmateWithLeaveSpecification();
             var inmates = await  _unitOfWork.Repository<Inmate>().FindAllBySpecAsync(inmatesSpec);
 
+            var categories = await _unitOfWork.Repository<Category>().FindAllAsync();
+
             var monthlyBillDetails = await GenerateMonthlyBillAsync(month, year);
+            var messTransactions = monthlyBillDetails.CategoryWiseExpenses.FirstOrDefault(c => c.CategoryName == BillCategory.MESS.ToString());
+            var otherTransactions = monthlyBillDetails.CategoryWiseExpenses.Where(c => c.CategoryName != BillCategory.RENT.ToString() && c.CategoryName == BillCategory.MESS.ToString()).ToList();
+            var categoryNames = otherTransactions.Select(o => o.CategoryName).Distinct();
+            
+            
+            var bottomBedInmates = inmates.Where(i => !i.IsInmateOnTopBed).Count();
+
+            var defaultRent = categories.FirstOrDefault(c => c.Name == BillCategory.RENT.ToString()).DefaultRate;
+
+            var rentforTop = GetRentForBottom(bottomBedInmates, inmates.Count, defaultRent);
 
             var firstDayOfMonth = new DateTime(year, month, 1);
             var lastDayOfMonth = firstDayOfMonth.AddMonths(1).AddDays(-1);
+            double numberOfDaysInMonth = (lastDayOfMonth - firstDayOfMonth).Days;
 
             foreach (var inmate in inmates)
             {
+                var inmateBill = new InmateBill();
+                var billDetails = new List<BillDetail>();
                 var leavesForInmate = inmate.InmateLeaves;
-                var numberOfDays = 0;
+                double occuppancy = 1;
+                int numberOfLeaveDays = 0;
                 if (leavesForInmate.Any())
                 {
                     var leaveDaysInMonth = leavesForInmate.Where(l =>
@@ -89,15 +108,73 @@ namespace Infrastructure.Data.Services
                     foreach (var leave in leaveDaysInMonth)
                     {
                         if (leave.ToDate < lastDayOfMonth)
-                           numberOfDays = (leave.ToDate - leave.FromDate).Days;
-                        if (leave.FromDate)
+                           numberOfLeaveDays += (leave.ToDate - leave.FromDate).Days;
+                        if (leave.FromDate < firstDayOfMonth)
+                            numberOfLeaveDays += (leave.ToDate - firstDayOfMonth).Days;
+                        if (leave.ToDate > lastDayOfMonth)
+                            numberOfLeaveDays += (lastDayOfMonth - leave.FromDate).Days;
                     }
+                    
                 }
+                occuppancy = (numberOfDaysInMonth - numberOfLeaveDays) / numberOfDaysInMonth;
+
+                var rentDetail = new BillDetail("Rent", (int)BillCategory.RENT, BillCategory.RENT.ToString(),rentforTop, inmateBill);
+
+                billDetails.Add(rentDetail);
+
+                if (!inmate.IsInmateOnTopBed)
+                {
+                    rentDetail.Amount = rentforTop + 30;
+                }
+
+                var messExpense = messTransactions.TotalAmount;
+
+                var amountForInmate = (messExpense / inmates.Count) * occuppancy;
+
+                var messDetail = new BillDetail("Mess", (int)BillCategory.MESS, BillCategory.MESS.ToString(), amountForInmate, inmateBill);
+
+                billDetails.Add(messDetail);
+
+                //other expenses
+                foreach (var category in categoryNames)
+                {
+                    var cat = categories.FirstOrDefault(c => c.Name == category);
+
+                    var thisCategoryDetails = otherTransactions.Where(t => t.CategoryName == category).FirstOrDefault();
+
+                    var expense = thisCategoryDetails.TotalAmount;
+
+                    if(!cat.IsApplicableForVisitors && inmate.IsVisit)
+                    {
+                        continue;
+                    }
+                    else
+                    {
+                        amountForInmate = cat.NeedToConsiderDays ? (expense / inmates.Count) * occuppancy : (expense / inmates.Count);
+
+                        var thisCategoryBillDetail = new BillDetail(category, cat.Id, category, amountForInmate, inmateBill);
+
+                        billDetails.Add(thisCategoryBillDetail);
+                    }
+
+                }
+
+                if (!inmate.IsVisit)
+                {
+                    var depositCategory = categories.FirstOrDefault(c => c.Name == BillCategory.DEPOSIT.ToString());
+                    var depositBill = new BillDetail("DEPOSIT", BillCategory.DEPOSIT.GetHashCode(),BillCategory.DEPOSIT.ToString(), depositCategory.DefaultRate, inmateBill);
+                    billDetails.Add(depositBill);
+                }
+
+                inmateBill.BillItems = billDetails;
+
+                inmateBills.Add(inmateBill);
             }
-            
-            
-            
-            
+        }
+
+        public double GetRentForBottom(int x, int y, double rent)
+        {
+            return (rent - x * 30) / y;
         }
     }
 }

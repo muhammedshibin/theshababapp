@@ -16,7 +16,9 @@ namespace Core.Entities
         public string PhoneNumber { get; set; }
         public string PictureUrl { get; set; }
         public InmateStatus Status { get; set; } = InmateStatus.Active;
-        
+        public bool IsVisit { get; set; } = false;
+        public bool IsInmateOnTopBed { get; set; } = false;
+
 
         public IReadOnlyList<Leave> InmateLeaves;
     }
