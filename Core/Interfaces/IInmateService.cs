@@ -8,7 +8,10 @@ namespace Core.Interfaces
     public interface IInmateService
     {
         public Task<IReadOnlyList<Inmate>> GetInmates(InmateFilter inmateFilter);
-        public Task<Inmate> GetInMate(int id);
+        public Task<int> GetInmatesCount(InmateFilter filter);
+        public Task<Inmate> GetInmate(int id);
         public Task<bool> AddInmate(Inmate inmate);
+        public Task<bool> UpdateInmate(Inmate inmate);
+        public Task<bool> AddVendor(Vendor vendor);
     }
 }

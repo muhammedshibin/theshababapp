@@ -5,7 +5,7 @@ using Core.Entities;
 
 namespace Core.Specifications
 {
-    public class TransactionWithCategoryAndVendorSpecification : BaseSpecification<Transaction>
+    public class TransactionWithCategoryAndVendorSpecification : BaseSpecification<TransactionDetail>
     {
         public TransactionWithCategoryAndVendorSpecification(TransactionsFilter spec) : 
             base(txn =>

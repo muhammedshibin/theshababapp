@@ -5,7 +5,7 @@ namespace Core.Specifications
 {
     public class InmateSpecification : BaseSpecification<Inmate>
     {
-        public InmateSpecification(InmateFilter filter) : 
+        public InmateSpecification(InmateFilter filter, bool forCount = false) : 
             base(i => (string.IsNullOrEmpty(filter.Search)|| i.FullName.ToLower().Contains(filter.Search)))
         {
             AddOrderBy(i => i.FullName);
@@ -22,7 +22,7 @@ namespace Core.Specifications
                         break;
                 }   
             }
-            AddPagination(filter.PageIndex - 1 * filter.PageSize , filter.PageSize);
+            if(!forCount) AddPagination((filter.PageIndex - 1) * filter.PageSize , filter.PageSize);
         }
         
     }

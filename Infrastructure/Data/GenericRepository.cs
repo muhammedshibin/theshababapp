@@ -61,5 +61,10 @@ namespace Infrastructure.Data
         {
             return SpecificationEvaluator<T>.GenerateExpression(_context.Set<T>(), spec);
         }
+
+        public async Task<int> GetCountForSpecAsync(ISpecification<T> spec)
+        {
+            return await EvaluateExpression(spec).CountAsync();
+        }
     }
 }

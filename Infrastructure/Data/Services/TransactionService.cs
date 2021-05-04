@@ -8,7 +8,7 @@ using Core.Specifications;
 
 namespace Infrastructure.Data.Services
 {
-    public class TransactionService
+    public class TransactionService : ITransactionService
     {
         private readonly IUnitOfWork _unitOfWork;
 
@@ -17,24 +17,24 @@ namespace Infrastructure.Data.Services
             _unitOfWork = unitOfWork;
         }
         
-        public async Task<IReadOnlyList<Transaction>> GetTransactions(TransactionsFilter specParams)
+        public async Task<IReadOnlyList<TransactionDetail>> GetTransactions(TransactionsFilter specParams)
         {
             var spec = new TransactionWithCategoryAndVendorSpecification(specParams);
-            var transactions = await  _unitOfWork.Repository<Transaction>().FindAllBySpecAsync(spec);
+            var transactions = await  _unitOfWork.Repository<TransactionDetail>().FindAllBySpecAsync(spec);
             return transactions;
         }
 
-        public async Task<Transaction> GetTransaction(int id)
+        public async Task<TransactionDetail> GetTransaction(int id)
         {
             var spec = new TransactionWithCategoryAndVendorSpecification(id);
-            var transaction = await _unitOfWork.Repository<Transaction>().FindOneBySpecAsync(spec);
+            var transaction = await _unitOfWork.Repository<TransactionDetail>().FindOneBySpecAsync(spec);
             return transaction;
         }
 
         
-        public async Task<bool> PostTransaction(Transaction transaction)
+        public async Task<bool> PostTransaction(TransactionDetail transaction)
         {
-           _unitOfWork.Repository<Transaction>().Add(transaction);
+           _unitOfWork.Repository<TransactionDetail>().Add(transaction);
 
             var vendor = await _unitOfWork.Repository<Vendor>().FindByIdAsync(transaction.PaidPartyId);
 

@@ -169,6 +169,10 @@ namespace Infrastructure.Data.Services
                 inmateBill.BillItems = billDetails;
 
                 inmateBills.Add(inmateBill);
+
+                _unitOfWork.Repository<InmateBill>().AddMany(inmateBills);
+
+                await _unitOfWork.Complete();
             }
         }
 

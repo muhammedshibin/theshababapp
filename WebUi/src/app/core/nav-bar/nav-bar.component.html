@@ -1,0 +1,27 @@
+<nav class="navbar navbar-expand-md navbar-light fixed-top bg-info d-flex justify-content-between">
+   
+        <div>
+            <a class="navbar-brand" href="#">Shabab</a>
+        </div>
+        <div>
+            <ul class="navbar-nav mr-auto">
+                <li class="nav-item active">
+                    <a class="nav-link" href="#">Home <span class="sr-only">(current)</span></a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#">Link</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link disabled" href="#" tabindex="-1" aria-disabled="true">Disabled</a>
+                </li>
+            </ul>
+        </div>
+        <div>
+            <form #loginForm="ngForm" (ngSubmit)="onLogin()" class="form-inline ">
+                <input class="form-control mr-sm-2" name="username" [(ngModel)]="username" placeholder="Username">
+                <input class="form-control mr-sm-2" type="password" name="password" [(ngModel)]="password" placeholder="Password">
+                <button class="btn btn-danger my-2 my-sm-0" type="submit">Login</button>
+            </form>
+        </div>
+  
+</nav>

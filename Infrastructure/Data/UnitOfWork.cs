@@ -23,7 +23,7 @@ namespace Infrastructure.Data
 
             if (_repositories.ContainsKey(entityName)) return (IGenericRepository<T>) _repositories[entityName];
             var repositoryInstance =
-                Activator.CreateInstance(typeof(GenericRepository<>).MakeGenericType(), _context);
+                Activator.CreateInstance(typeof(GenericRepository<>).MakeGenericType(typeof(T)), _context);
             _repositories.Add(entityName,repositoryInstance);
             return (IGenericRepository<T>)_repositories[entityName];
         }

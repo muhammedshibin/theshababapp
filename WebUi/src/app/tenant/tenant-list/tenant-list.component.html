@@ -1,0 +1,16 @@
+<div class="container">
+    <div class="row">
+        <div class="col-3" *ngFor="let tenant of tenants">
+            <app-tenant-card [tenant]='tenant'></app-tenant-card>
+        </div>
+    </div>
+    <div class="d-flex justify-content-center">
+        <div class="row" *ngIf="pagination">
+            <div class="col-xs-12 col-12">
+                <pagination [boundaryLinks]="true" (pageChanged)="onPageChange($event)"  [itemsPerPage]="pagination.pageSize"
+                       [totalItems]="pagination.count"></pagination>
+            </div>
+        </div>
+    </div>
+    
+</div>

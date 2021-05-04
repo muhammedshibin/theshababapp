@@ -21,7 +21,13 @@ namespace Infrastructure.Data.Services
             return await  _unitOfWork.Repository<Inmate>().FindAllBySpecAsync(spec);
         }
 
-        public async Task<Inmate> GetInMate(int id)
+        public async Task<int> GetInmatesCount(InmateFilter filter)
+        {
+            var spec = new InmateSpecification(filter,true);
+            return await _unitOfWork.Repository<Inmate>().GetCountForSpecAsync(spec);
+        }
+
+        public async Task<Inmate> GetInmate(int id)
         {
             return await _unitOfWork.Repository<Inmate>().FindByIdAsync(id);
         }
@@ -29,6 +35,19 @@ namespace Infrastructure.Data.Services
         public async Task<bool> AddInmate(Inmate inmate)
         {
             _unitOfWork.Repository<Inmate>().Add(inmate);
+            return await _unitOfWork.Complete() > 0;
+        }
+        public async Task<bool> UpdateInmate(Inmate inmateRequest)
+        {
+            var inmate = await  _unitOfWork.Repository<Inmate>().FindByIdAsync(inmateRequest.Id);
+            if (inmate == null) return false;
+            inmate = inmateRequest;           
+            return await _unitOfWork.Complete() > 0;
+        }
+
+        public async Task<bool> AddVendor(Vendor vendor)
+        {
+            _unitOfWork.Repository<Vendor>().Add(vendor);
             return await _unitOfWork.Complete() > 0;
         }
     }

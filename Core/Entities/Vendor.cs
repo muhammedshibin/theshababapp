@@ -11,6 +11,7 @@ namespace Core.Entities
         public string Name { get; set; }
         public double AmountInHand { get; set; }
         public double DueAmount { get; set; }
-        
+        public List<TransactionDetail> Transactions { get; set; }
+
     }
 }

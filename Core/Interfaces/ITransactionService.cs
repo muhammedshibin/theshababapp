@@ -7,8 +7,8 @@ namespace Core.Interfaces
 {
     public interface ITransactionService
     {
-        Task<IReadOnlyList<Transaction>> GetTransactions(TransactionsFilter specParams);
-        Task<Transaction> GetTransaction(int id);
-        Task<bool> PostTransaction(Transaction transaction);
+        Task<IReadOnlyList<TransactionDetail>> GetTransactions(TransactionsFilter specParams);
+        Task<TransactionDetail> GetTransaction(int id);
+        Task<bool> PostTransaction(TransactionDetail transaction);
     }
 }

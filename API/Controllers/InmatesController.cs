@@ -2,58 +2,110 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using API.Dtos;
+using Core.DataFilters;
 using AutoMapper;
 using Core.Entities;
 using Core.Interfaces;
 using Core.Specifications;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Hosting;
+using System.IO;
+using API.Extensions;
 
 namespace API.Controllers
 {
     public class InmatesController : BaseApiController
     {
-        private readonly IUnitOfWork _unitOfWork;
+        
         private readonly IMapper _mapper;
+        private readonly IWebHostEnvironment _env;
+        private readonly IInmateService _inmateService;
 
-        public InmatesController(IUnitOfWork unitOfWork,IMapper mapper)
+        public InmatesController(IInmateService inmateService,IMapper mapper,IWebHostEnvironment env)
         {
-            _unitOfWork = unitOfWork;
             _mapper = mapper;
+            _env = env;
+            _inmateService = inmateService;
         }
         [HttpGet]
-        public async Task<ActionResult<IReadOnlyList<TransactionDto>>> GetTransactions([FromQuery]TransactionSpecParams specParams)
+        public async Task<ActionResult<IReadOnlyList<InmateDto>>> GetInmates([FromQuery]InmateFilter inmateFilter)
         {
-            var spec = new TransactionWithCategoryAndVendorSpecification(specParams);
-            var transactions = await  _unitOfWork.Repository<Transaction>().FindAllBySpecAsync(spec);
-            return Ok(_mapper.Map<IReadOnlyList<TransactionDto>>(transactions));
+            var count = await _inmateService.GetInmatesCount(inmateFilter);
+            var inmates = await _inmateService.GetInmates(inmateFilter);
+
+            Response.AddPaginationHeader(count, inmateFilter.PageIndex, inmateFilter.PageSize);
+
+            return Ok(_mapper.Map<IReadOnlyList<InmateDto>>(inmates));
         }
 
         [HttpGet("{id}")]
-        public async Task<ActionResult<TransactionDto>> GetTransaction(int id)
+        public async Task<ActionResult<InmateDto>> GetInmate(int id)
         {
-            var spec = new TransactionWithCategoryAndVendorSpecification(id);
-            var transaction = await _unitOfWork.Repository<Transaction>().FindOneBySpecAsync(spec);
-            return _mapper.Map<TransactionDto>(transaction);
+            var inmates = await _inmateService.GetInmate(id);
+            return Ok(_mapper.Map<InmateDto>(inmates));
         }
 
         [HttpPost]
-        public async Task<ActionResult<TransactionDto>> PostTransaction(TransactionDto transactionDto)
+        public async Task<ActionResult<InmateDto>> AddInmate(InmateDto inmateDto)
         {
-            var transaction = _mapper.Map<Transaction>(transactionDto);
-            _unitOfWork.Repository<Transaction>().Add(transaction);
+            var imageUrl = string.Empty;
 
-            var vendor = await _unitOfWork.Repository<Vendor>().FindByIdAsync(transactionDto.PaidPartyId);
-
-            if (vendor != null)
+            if(inmateDto.InmatePhoto != null)
             {
-                vendor.AmountInHand = transactionDto.IsExpense
-                    ? vendor.AmountInHand - transactionDto.Amount
-                    : vendor.AmountInHand + transactionDto.Amount;
-                vendor.ModfiedOn = DateTime.Now;
+                IFormFile file = inmateDto.InmatePhoto;
+                var UrlHost = _env.WebRootPath;
+                var location = Path.Combine(UrlHost, "Images");
+                var ImageUrl = Path.Combine(location, file.FileName);
+                await inmateDto.InmatePhoto.CopyToAsync(new FileStream(ImageUrl, FileMode.Create));
+                imageUrl = @"Images/" + file.FileName;
             }
 
-            await _unitOfWork.Complete();
-            return transactionDto;
+            var inmate = _mapper.Map<Inmate>(inmateDto);
+            inmate.PictureUrl = imageUrl;
+
+            var created = await _inmateService.AddInmate(inmate);
+
+            if (created) return Created("Success", inmateDto);
+
+            return BadRequest();
+        }
+
+        [HttpPatch]
+        public async Task<ActionResult<InmateDto>> UpdateInmate(InmateDto inmateDto)
+        {
+            var imageUrl = string.Empty;
+
+            if (inmateDto.InmatePhoto != null)
+            {
+                IFormFile file = inmateDto.InmatePhoto;
+                var UrlHost = _env.WebRootPath;
+                var location = Path.Combine(UrlHost, "Images");
+                var ImageUrl = Path.Combine(location, file.FileName);
+                await inmateDto.InmatePhoto.CopyToAsync(new FileStream(ImageUrl, FileMode.Create));
+                imageUrl = @"Images/" + file.FileName;
+            }
+
+            var inmate = _mapper.Map<Inmate>(inmateDto);
+            inmate.PictureUrl = imageUrl;
+
+            var created = await _inmateService.UpdateInmate(inmate);
+
+            if (created) return Ok(inmateDto);
+
+            return BadRequest();
+        }
+
+        [HttpPost("vendor")]
+        public async Task<ActionResult<VendorDto>> CreateVendorAccount(VendorDto vendorDto)
+        {
+            var vendor = _mapper.Map<Vendor>(vendorDto);
+
+            var created = await  _inmateService.AddVendor(vendor);
+
+            if (created) return vendorDto;
+
+            return BadRequest();
         }
 
     }

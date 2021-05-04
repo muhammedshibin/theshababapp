@@ -8,7 +8,11 @@ namespace Core.Entities
 {
     public class BillDetail : BaseEntity
     {
-        public BillDetail(string itemName, int itemCategoryId, string itemCategoryName, double amount InmateBill inmateBill)
+        public BillDetail()
+        {
+
+        }
+        public BillDetail(string itemName, int itemCategoryId, string itemCategoryName, double amount ,InmateBill inmateBill)
         {
             ItemName = itemName;
             ItemCategoryId = itemCategoryId;
