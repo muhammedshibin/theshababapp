@@ -7,6 +7,7 @@
     [formControl]="ngControl.control"
     bsDatepicker
     [bsConfig] = "bsConfig"
+    [bsValue]="bsValue"
     >
     <div class="invalid-feedback" *ngIf="ngControl.hasError('required')">
         {{label}} is required

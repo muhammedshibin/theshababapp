@@ -8,7 +8,11 @@ namespace Core.Interfaces
     public interface ITransactionService
     {
         Task<IReadOnlyList<TransactionDetail>> GetTransactions(TransactionsFilter specParams);
+        Task<int> GetTransactionsCount(TransactionsFilter specParams);
+        Task<IReadOnlyList<Category>> GetTransactionCategories();
         Task<TransactionDetail> GetTransaction(int id);
         Task<bool> PostTransaction(TransactionDetail transaction);
+        Task<bool> UpdateTransaction(TransactionDetail updated);
+        Task<bool> DeleteTransaction(int id);
     }
 }

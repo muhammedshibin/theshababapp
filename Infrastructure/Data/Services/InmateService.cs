@@ -43,12 +43,6 @@ namespace Infrastructure.Data.Services
             if (inmate == null) return false;
             inmate = inmateRequest;           
             return await _unitOfWork.Complete() > 0;
-        }
-
-        public async Task<bool> AddVendor(Vendor vendor)
-        {
-            _unitOfWork.Repository<Vendor>().Add(vendor);
-            return await _unitOfWork.Complete() > 0;
-        }
+        }        
     }
 }

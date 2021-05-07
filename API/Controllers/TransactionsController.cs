@@ -1,18 +1,16 @@
 ﻿using API.Dtos;
+using API.Extensions;
 using AutoMapper;
 using Core.DataFilters;
 using Core.Entities;
 using Core.Interfaces;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 
 namespace API.Controllers
 {
-    
+
     public class TransactionsController : BaseApiController
     {
         private readonly ITransactionService _transactionService;
@@ -24,9 +22,11 @@ namespace API.Controllers
             _mapper = mapper;
         }
         [HttpGet]
-        public async Task<ActionResult<IReadOnlyList<TransactionDto>>> GetTransactions([FromQuery] TransactionsFilter specParams)
+        public async Task<ActionResult<IReadOnlyList<TransactionDto>>> GetTransactions([FromQuery] TransactionsFilter filter)
         {
-            var transactions = await _transactionService.GetTransactions(specParams);
+            var transactions = await _transactionService.GetTransactions(filter);
+            int transactionsCount = await _transactionService.GetTransactionsCount(filter);
+            Response.AddPaginationHeader(transactionsCount, filter.PageIndex, filter.PageSize);
             return Ok(_mapper.Map<IReadOnlyList<TransactionDto>>(transactions));
         }
 
@@ -43,6 +43,31 @@ namespace API.Controllers
             var transaction = _mapper.Map<TransactionDetail>(transactionDto);
             await _transactionService.PostTransaction(transaction);
             return transactionDto;
+        }
+
+        [HttpPatch]
+        public async Task<ActionResult<TransactionDto>> UpdateTransaction(TransactionDto transactionDto)
+        {
+            var updated = _mapper.Map<TransactionDetail>(transactionDto);
+
+            return Ok(await _transactionService.UpdateTransaction(updated));
+
+        }
+        [HttpGet("categories")]
+        public async Task<ActionResult<IReadOnlyList<Category>>> GetTransactionCategories()
+        {
+            var transactionCategories = await _transactionService.GetTransactionCategories();
+            return Ok(transactionCategories);
+        }
+
+        [HttpDelete("{id}")]
+        public async Task<ActionResult<bool>> DeleteTransation(int id)
+        {
+            var deleted = await _transactionService.DeleteTransaction(id);
+
+            if (!deleted) return BadRequest(new ErrorResponse(400, "Failed to delete the transaction"));
+
+            return Ok(true);
         }
     }
 }

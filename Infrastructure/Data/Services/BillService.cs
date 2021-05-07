@@ -11,12 +11,14 @@ using Core.Specifications;
 
 namespace Infrastructure.Data.Services
 {
+   
+
     public class BillService : IBillService
     {
         private readonly ITransactionService _transactionService;
         private readonly IUnitOfWork _unitOfWork;
 
-        public BillService(ITransactionService transactionService,IUnitOfWork unitOfWork)
+        public BillService(ITransactionService transactionService, IUnitOfWork unitOfWork)
         {
             _transactionService = transactionService;
             _unitOfWork = unitOfWork;
@@ -25,20 +27,20 @@ namespace Infrastructure.Data.Services
         {
             var billSpec = new BillSpecification(month, year);
             var inmateBillsForMonth = await _unitOfWork.Repository<InmateBill>().FindAllBySpecAsync(billSpec);
-            
+
             _unitOfWork.Repository<InmateBill>().RemoveMany(inmateBillsForMonth);
 
             await _unitOfWork.Complete();
-            
-            var filter = new TransactionsFilter(month, year,false);
-            var transactions = await  _transactionService.GetTransactions(filter);
+
+            var filter = new TransactionsFilter(month, year, false);
+            var transactions = await _transactionService.GetTransactions(filter);
             var transactionsGrouped = transactions.GroupBy(t => t.CategoryId);
 
             var categoricalSum = transactionsGrouped.ToDictionary(billCategory => billCategory.Key, billCategory => billCategory.Sum(b => b.Amount));
 
-            var monthlyBill = new MonthlyBillDto(month,year);
+            var monthlyBill = new MonthlyBillDto(month, year);
 
-            var categories = transactions.Select(c => c.Category).Distinct().ToList();
+            var categories = transactions.Select(c => c.Category).ToHashSet();
 
             var categoryWiseExpensesList = new List<CategoryWiseExpense>();
 
@@ -51,14 +53,17 @@ namespace Infrastructure.Data.Services
                     CategoryId = category.Id,
                     CategoryName = category.Name,
                     TotalAmount = categoricalSum[category.Id],
-                    TransactionDetails = transactions.Select(t => new TransactionDetailDto()
-                    {
-                        TransactionDetailName = t.Name, Amount = t.Amount
-                    }).ToList()
+                    TransactionDetails = transactions
+                            .Where(t => t.Category.Name == category.Name)
+                            .Select(t => new TransactionDetailDto()
+                            {
+                                TransactionDetailName = t.Name,
+                                Amount = t.Amount
+                            }).ToList()
                 };
 
                 monthlyTotal += categoryWiseExpense.TotalAmount;
-                
+
                 categoryWiseExpensesList.Add(categoryWiseExpense);
             }
 
@@ -68,24 +73,30 @@ namespace Infrastructure.Data.Services
 
             return monthlyBill;
         }
-        public async Task GenerateIndividualBillsAsync(int month , int year)
+        public async Task GenerateIndividualBillsAsync(int month, int year)
         {
             var inmateBills = new List<InmateBill>();
 
             var inmatesSpec = new InmateWithLeaveSpecification();
-            var inmates = await  _unitOfWork.Repository<Inmate>().FindAllBySpecAsync(inmatesSpec);
+            var inmates = await _unitOfWork.Repository<Inmate>().FindAllBySpecAsync(inmatesSpec);
 
             var categories = await _unitOfWork.Repository<Category>().FindAllAsync();
 
             var monthlyBillDetails = await GenerateMonthlyBillAsync(month, year);
-            var messTransactions = monthlyBillDetails.CategoryWiseExpenses.FirstOrDefault(c => c.CategoryName == BillCategory.MESS.ToString());
-            var otherTransactions = monthlyBillDetails.CategoryWiseExpenses.Where(c => c.CategoryName != BillCategory.RENT.ToString() && c.CategoryName == BillCategory.MESS.ToString()).ToList();
+
+            var txnDetails = monthlyBillDetails.CategoryWiseExpenses;
+
+            var messTransactions = txnDetails.FirstOrDefault(c => c.CategoryName == BillCategory.MESS.ToString());
+            var otherTransactions = txnDetails.Where(c => c.CategoryName != BillCategory.RENT.ToString() && c.CategoryName != BillCategory.MESS.ToString()).ToList();
             var categoryNames = otherTransactions.Select(o => o.CategoryName).Distinct();
-            
-            
+
+
             var bottomBedInmates = inmates.Where(i => !i.IsInmateOnTopBed).Count();
 
-            var defaultRent = categories.FirstOrDefault(c => c.Name == BillCategory.RENT.ToString()).DefaultRate;
+            //check this later
+            //var defaultRentSettings = categories.FirstOrDefault(c => c.Name == BillCategory.RENT.ToString());
+
+            var defaultRent = txnDetails.FirstOrDefault(t => t.CategoryName == "RENT").TotalAmount;
 
             var rentforTop = GetRentForBottom(bottomBedInmates, inmates.Count, defaultRent);
 
@@ -96,8 +107,13 @@ namespace Infrastructure.Data.Services
             foreach (var inmate in inmates)
             {
                 var inmateBill = new InmateBill();
+                inmateBill.InmateId = inmate.Id;
+                inmateBill.Month = month;
+                inmateBill.Year = year;
+                inmateBill.CreatedOn = DateTime.Now;
                 var billDetails = new List<BillDetail>();
                 var leavesForInmate = inmate.InmateLeaves;
+
                 double occuppancy = 1;
                 int numberOfLeaveDays = 0;
                 if (leavesForInmate.Any())
@@ -108,17 +124,17 @@ namespace Infrastructure.Data.Services
                     foreach (var leave in leaveDaysInMonth)
                     {
                         if (leave.ToDate < lastDayOfMonth)
-                           numberOfLeaveDays += (leave.ToDate - leave.FromDate).Days;
+                            numberOfLeaveDays += (leave.ToDate - leave.FromDate).Days;
                         if (leave.FromDate < firstDayOfMonth)
                             numberOfLeaveDays += (leave.ToDate - firstDayOfMonth).Days;
                         if (leave.ToDate > lastDayOfMonth)
                             numberOfLeaveDays += (lastDayOfMonth - leave.FromDate).Days;
                     }
-                    
+
                 }
                 occuppancy = (numberOfDaysInMonth - numberOfLeaveDays) / numberOfDaysInMonth;
 
-                var rentDetail = new BillDetail("Rent", (int)BillCategory.RENT, BillCategory.RENT.ToString(),rentforTop, inmateBill);
+                var rentDetail = new BillDetail("Rent", (int)BillCategory.RENT, BillCategory.RENT.ToString(), rentforTop, inmateBill);
 
                 billDetails.Add(rentDetail);
 
@@ -144,7 +160,7 @@ namespace Infrastructure.Data.Services
 
                     var expense = thisCategoryDetails.TotalAmount;
 
-                    if(!cat.IsApplicableForVisitors && inmate.IsVisit)
+                    if (!cat.IsApplicableForVisitors && inmate.IsVisit)
                     {
                         continue;
                     }
@@ -162,18 +178,21 @@ namespace Infrastructure.Data.Services
                 if (!inmate.IsVisit)
                 {
                     var depositCategory = categories.FirstOrDefault(c => c.Name == BillCategory.DEPOSIT.ToString());
-                    var depositBill = new BillDetail("DEPOSIT", BillCategory.DEPOSIT.GetHashCode(),BillCategory.DEPOSIT.ToString(), depositCategory.DefaultRate, inmateBill);
+                    var depositBill = new BillDetail("DEPOSIT", BillCategory.DEPOSIT.GetHashCode(), BillCategory.DEPOSIT.ToString(), depositCategory.DefaultRate, inmateBill);
                     billDetails.Add(depositBill);
                 }
 
                 inmateBill.BillItems = billDetails;
 
+                inmateBill.BillAmount = billDetails.Sum(i => i.Amount);
+
                 inmateBills.Add(inmateBill);
+            }
 
                 _unitOfWork.Repository<InmateBill>().AddMany(inmateBills);
-
                 await _unitOfWork.Complete();
-            }
+
+            
         }
 
         public double GetRentForBottom(int x, int y, double rent)

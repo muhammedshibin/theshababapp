@@ -20,6 +20,8 @@ namespace API.Extensions
             services.AddScoped(typeof(IGenericRepository<>), typeof(GenericRepository<>));
             services.AddScoped<IInmateService, InmateService>();
             services.AddScoped<ITransactionService, TransactionService>();
+            services.AddScoped<IVendorService, VendorService>();
+            services.AddScoped<IBillService, BillService>();
             services.AddAutoMapper(typeof(MappingProfile));
             services.Configure<ApiBehaviorOptions>(options =>
             {

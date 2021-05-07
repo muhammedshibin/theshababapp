@@ -7,29 +7,38 @@ import { TextInputComponent } from './components/text-input/text-input.component
 import { DateInputComponent } from './components/date-input/date-input.component';
 import { BsDatepickerModule } from 'ngx-bootstrap/datepicker';
 import { PaginationModule } from 'ngx-bootstrap/pagination';
-
+import { ModalLgComponent } from './components/modal-lg/modal-lg.component';
+import { ModalModule } from 'ngx-bootstrap/modal';
+import { ToastrModule } from 'ngx-toastr';
+import { AlertWindowComponent } from './components/alert-window/alert-window.component';
 
 @NgModule({
-  declarations: [
-   TextInputComponent,
-   DateInputComponent
-  ],
+  declarations: [TextInputComponent, DateInputComponent, ModalLgComponent, AlertWindowComponent],
   imports: [
     CommonModule,
     FormsModule,
     ReactiveFormsModule,
     CarouselModule.forRoot(),
     BsDatepickerModule.forRoot(),
-    PaginationModule.forRoot()
+    PaginationModule.forRoot(),
+    ModalModule.forRoot(),
+    ToastrModule.forRoot({
+      positionClass: 'toast-bottom-right',
+      preventDuplicates: true,
+    }),
   ],
-  exports:[
+  exports: [
     FormsModule,
     ReactiveFormsModule,
     CarouselModule,
     TextInputComponent,
     DateInputComponent,
+    ModalLgComponent,
     BsDatepickerModule,
-    PaginationModule
-  ]
+    PaginationModule,
+    ModalModule,
+    ToastrModule,
+    AlertWindowComponent
+  ],
 })
-export class SharedModule { }
+export class SharedModule {}

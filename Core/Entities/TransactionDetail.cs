@@ -14,6 +14,8 @@ namespace Core.Entities
         public bool IsExpense { get; set; }
         public int PaidPartyId { get; set; }
         public Vendor PaidParty { get; set; }
+        public int PaidToId { get; set; }
+        public Vendor PaidTo { get; set; }
         public double Amount { get; set; }
         public int CategoryId { get; set; }
         public Category Category { get; set; }

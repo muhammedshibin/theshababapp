@@ -42,6 +42,11 @@ namespace Core.Interfaces
         /// <param name="tEntity"></param>
         void Add(T tEntity);
         /// <summary>
+        /// Update an entity in the database , Executed only when SaveChanges method is called
+        /// </summary>
+        /// <param name="tEntity"></param>
+        void Update(T tEntity);
+        /// <summary>
         /// Deletes an Item from Database , Executed only when SaveChanges method is called
         /// </summary>
         /// <param name="tEntity"></param>

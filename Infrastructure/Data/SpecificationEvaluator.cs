@@ -10,6 +10,11 @@ namespace Infrastructure.Data
         public static IQueryable<T> GenerateExpression(IQueryable<T> inputQuery,ISpecification<T> spec)
         {
             var query = inputQuery.AsQueryable();
+
+            if (!spec.TrackingNeeded)
+            {
+                query = query.AsNoTracking();
+            }
             
             if (spec.Criteria != null)
             {

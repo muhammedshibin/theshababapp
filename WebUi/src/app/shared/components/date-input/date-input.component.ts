@@ -10,14 +10,17 @@ import { ControlValueAccessor, NgControl } from '@angular/forms';
 export class DateInputComponent implements ControlValueAccessor {
 
   @Input() label : string;
-  @Input() maxDate: Date;
+  @Input() inputDate: Date;
   bsConfig: Partial<BsDatepickerConfig>;
+  bsValue = new Date();
 
   constructor(@Self() public ngControl: NgControl) {
     this.ngControl.valueAccessor = this;
     this.bsConfig = {
-      dateInputFormat: 'DD MMMM YYYY'
+      //dateInputFormat: 'DD MMMM YYYY'
+      dateInputFormat: 'YYYY-MM-DD'
     }
+    this.bsValue = this.inputDate || new Date();
 
    }
   writeValue(obj: any): void {
@@ -28,6 +31,5 @@ export class DateInputComponent implements ControlValueAccessor {
   }
   setDisabledState?(isDisabled: boolean): void {
    
-  }
-
+  } 
 }

@@ -38,6 +38,13 @@ namespace Infrastructure.Data
             _context.Set<T>().Add(tEntity);
         }
 
+        public void Update(T tEntity)
+        {
+            _context.Set<T>().Attach(tEntity);
+            _context.Entry(tEntity).State = EntityState.Modified;
+           
+        }
+
         public void AddMany(IEnumerable<T> tEntities)
         {
             foreach (var baseEntity in tEntities)

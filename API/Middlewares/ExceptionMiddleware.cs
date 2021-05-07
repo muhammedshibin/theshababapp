@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Http;
+using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
@@ -13,11 +14,13 @@ namespace API.Middlewares
     {
         private readonly RequestDelegate _next;
         private readonly ILogger<ExceptionMiddleware> _logger;
+        private readonly IHostEnvironment _env;
 
-        public ExceptionMiddleware(RequestDelegate next, ILogger<ExceptionMiddleware> logger)
+        public ExceptionMiddleware(RequestDelegate next, ILogger<ExceptionMiddleware> logger,IHostEnvironment env)
         {
             _next = next;
             _logger = logger;
+            _env = env;
         }
 
         public async Task InvokeAsync(HttpContext context)
@@ -34,7 +37,7 @@ namespace API.Middlewares
                 {
                     IsError = true,
                     StatusCode = (int)HttpStatusCode.InternalServerError,
-                    UserMessage = "An Error Occured , Please try again Later",
+                    UserMessage = _env.IsDevelopment()?e.Message:"An Error Occured , Please try again Later",
                     DeveloperMessage = e.StackTrace
                 };
 

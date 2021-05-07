@@ -12,6 +12,5 @@ namespace Core.Interfaces
         public Task<Inmate> GetInmate(int id);
         public Task<bool> AddInmate(Inmate inmate);
         public Task<bool> UpdateInmate(Inmate inmate);
-        public Task<bool> AddVendor(Vendor vendor);
     }
 }

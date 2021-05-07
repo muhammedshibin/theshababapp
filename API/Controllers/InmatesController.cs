@@ -94,19 +94,7 @@ namespace API.Controllers
             if (created) return Ok(inmateDto);
 
             return BadRequest();
-        }
-
-        [HttpPost("vendor")]
-        public async Task<ActionResult<VendorDto>> CreateVendorAccount(VendorDto vendorDto)
-        {
-            var vendor = _mapper.Map<Vendor>(vendorDto);
-
-            var created = await  _inmateService.AddVendor(vendor);
-
-            if (created) return vendorDto;
-
-            return BadRequest();
-        }
+        }        
 
     }
 }

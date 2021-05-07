@@ -7,7 +7,7 @@ namespace Core.Specifications
 {
     public class TransactionWithCategoryAndVendorSpecification : BaseSpecification<TransactionDetail>
     {
-        public TransactionWithCategoryAndVendorSpecification(TransactionsFilter spec) : 
+        public TransactionWithCategoryAndVendorSpecification(TransactionsFilter spec,bool forCount = false) : 
             base(txn =>
                 (!spec.Month.HasValue||txn.TransactionDate.Month == spec.Month)&&
                     (!spec.Year.HasValue||txn.TransactionDate.Year == spec.Year)&&
@@ -15,18 +15,22 @@ namespace Core.Specifications
                             (string.IsNullOrEmpty(spec.CategoryName)|| txn.Category.Name.ToLower().Contains(spec.CategoryName))
             )
         {
-            AddInclude(t => t.Category);
-            AddInclude(t => t.PaidParty);
-            AddOrderByDesc(t => t.TransactionDate);
-            if(spec.IsPagingNeeded)
-                AddPagination(spec.PageIndex - 1 * spec.PageSize,spec.PageSize);
+            if (!forCount)
+            {
+                AddInclude(t => t.Category);
+                AddInclude(t => t.PaidParty);
+                AddOrderByDesc(t => t.TransactionDate);
+                AddPagination((spec.PageIndex - 1) * spec.PageSize, spec.PageSize);
+            }
         }
         
-        public TransactionWithCategoryAndVendorSpecification(int id) : 
+        public TransactionWithCategoryAndVendorSpecification(int id , bool trackingNeeded = false) : 
             base(t => t.Id == id)
         {
             AddInclude(t => t.Category);
             AddInclude(t => t.PaidParty);
+            if (trackingNeeded) AddTracking();
         }
+        
     }
 }

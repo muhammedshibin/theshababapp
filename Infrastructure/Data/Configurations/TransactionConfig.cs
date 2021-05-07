@@ -22,8 +22,11 @@ namespace Infrastructure.Data.Configurations
     {
         public void Configure(EntityTypeBuilder<Vendor> builder)
         {
-            builder.HasMany(t => t.Transactions).WithOne(v => v.PaidParty)
+            builder.HasMany(t => t.OutgoingTransactions).WithOne(v => v.PaidParty)
                 .HasForeignKey(fk => fk.PaidPartyId).OnDelete(DeleteBehavior.Cascade);
+
+            builder.HasMany(t => t.IncomingTransactions).WithOne(v => v.PaidTo)
+               .HasForeignKey(fk => fk.PaidToId).OnDelete(DeleteBehavior.Cascade);
         }
     }
 }

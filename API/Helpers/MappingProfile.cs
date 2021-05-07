@@ -17,8 +17,10 @@ namespace API.Helpers
                 .ForMember(dest => dest.Category, m => m.MapFrom(src => src.Category.Name));
 
             CreateMap<TransactionDto, TransactionDetail>()
+                //.ForMember(dest => dest.TransactionDate , m => m.MapFrom(src => src.TransactionDate.Date))
                 .ForMember(dest => dest.Category , m => m.Ignore())
                 .ForMember(dest => dest.PaidParty, m => m.Ignore());
+
 
             CreateMap<InmateDto, Inmate>()
                 .ReverseMap();

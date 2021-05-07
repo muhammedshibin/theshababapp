@@ -14,6 +14,8 @@ namespace Core.Interfaces
         public int Skip { get;}
         public int Take { get;}
         public bool IsPagingEnabled { get; }
+        public bool TrackingNeeded { get; }
+
         
     }
 }

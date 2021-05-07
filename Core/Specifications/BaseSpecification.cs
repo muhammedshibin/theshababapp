@@ -25,6 +25,8 @@ namespace Core.Specifications
         public int Take { get; private set; }
         public bool IsPagingEnabled { get; private set; }
 
+        public bool TrackingNeeded { get; private set; } = false;
+
         public void AddInclude(Expression<Func<T, object>> includeExpression)
         {
             Includes.Add(includeExpression);
@@ -44,6 +46,11 @@ namespace Core.Specifications
             IsPagingEnabled = true;
             Skip = skip;
             Take = take;
+        }
+
+        public void AddTracking()
+        {
+            TrackingNeeded = true;
         }
         
         

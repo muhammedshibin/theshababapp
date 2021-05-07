@@ -192,7 +192,7 @@ namespace Infrastructure.Data.Migrations
                     b.ToTable("Leaves");
                 });
 
-            modelBuilder.Entity("Core.Entities.Transaction", b =>
+            modelBuilder.Entity("Core.Entities.TransactionDetail", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -219,6 +219,9 @@ namespace Infrastructure.Data.Migrations
                     b.Property<int>("PaidPartyId")
                         .HasColumnType("INTEGER");
 
+                    b.Property<int>("PaidToId")
+                        .HasColumnType("INTEGER");
+
                     b.Property<string>("Status")
                         .IsRequired()
                         .HasColumnType("TEXT");
@@ -231,6 +234,8 @@ namespace Infrastructure.Data.Migrations
                     b.HasIndex("CategoryId");
 
                     b.HasIndex("PaidPartyId");
+
+                    b.HasIndex("PaidToId");
 
                     b.ToTable("Transactions");
                 });
@@ -294,7 +299,7 @@ namespace Infrastructure.Data.Migrations
                     b.Navigation("Inmate");
                 });
 
-            modelBuilder.Entity("Core.Entities.Transaction", b =>
+            modelBuilder.Entity("Core.Entities.TransactionDetail", b =>
                 {
                     b.HasOne("Core.Entities.Category", "Category")
                         .WithMany()
@@ -303,14 +308,22 @@ namespace Infrastructure.Data.Migrations
                         .IsRequired();
 
                     b.HasOne("Core.Entities.Vendor", "PaidParty")
-                        .WithMany("Transactions")
+                        .WithMany("OutgoingTransactions")
                         .HasForeignKey("PaidPartyId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Core.Entities.Vendor", "PaidTo")
+                        .WithMany("IncomingTransactions")
+                        .HasForeignKey("PaidToId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.Navigation("Category");
 
                     b.Navigation("PaidParty");
+
+                    b.Navigation("PaidTo");
                 });
 
             modelBuilder.Entity("Core.Entities.Inmate", b =>
@@ -325,7 +338,9 @@ namespace Infrastructure.Data.Migrations
 
             modelBuilder.Entity("Core.Entities.Vendor", b =>
                 {
-                    b.Navigation("Transactions");
+                    b.Navigation("IncomingTransactions");
+
+                    b.Navigation("OutgoingTransactions");
                 });
 #pragma warning restore 612, 618
         }
