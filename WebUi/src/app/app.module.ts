@@ -1,3 +1,4 @@
+import { BillModule } from './bill/bill.module';
 import { LoadingInterceptor } from './core/interceptors/loading.interceptor';
 import { VendorModule } from './vendor/vendor.module';
 import { TransactionsModule } from './transactions/transactions.module';
@@ -26,6 +27,7 @@ import { NgxSpinnerModule } from 'ngx-spinner';
     BrowserAnimationsModule,
     HttpClientModule,
     NgxSpinnerModule,
+    BillModule
   ],
   providers: [
     { provide: HTTP_INTERCEPTORS, useClass: LoadingInterceptor, multi: true },

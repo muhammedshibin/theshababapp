@@ -1,0 +1,76 @@
+<div>
+    <h2 class="text-center">Generate Bill</h2>
+    <div class="container">
+        <form (ngSubmit)="onSubmit()" #billForm="ngForm">
+            <div class="row">
+                <div class="col-4">
+                    <h4 class="lead">Select Month</h4>
+                    <select class="form-control" [(ngModel)]="selectedMonth" name="selectedMonth">
+                        <option *ngFor="let month of monthNames" [value]="(monthNames.indexOf(month) + 1)">{{month}}
+                        </option>
+                    </select>
+                </div>
+                <div class="col-4">
+                    <label for="year">Year</label>
+                    <input type="number" [(ngModel)]="selectedYear" name="selectedYear" class="form-control">
+                </div>
+                <div class="col-1">
+                    <label></label>
+                    <button class="btn btn-primary mt-1">Generate</button>
+                </div>
+            </div>
+
+
+        </form>
+        <div *ngIf="monthlyBill">
+            <div class="container mt-5">
+                <table class="table table-hover">
+                    <tr class="bg-light">
+                        <td><strong>
+                                <h3>Transactions For </h3>
+                            </strong></td>
+                        <!-- <td class="text-center text-danger text-strong"><h3></h3></td> -->
+                        <td class="text-center text-danger text-strong">
+                            <h3>{{getMonthName(selectedMonth-1)}},{{selectedYear}}</h3>
+                        </td>
+                        <td></td>
+                    </tr>
+                    <tr class="bg-info">
+
+                    </tr>
+                    <tr *ngFor="let catExp of monthlyBill.categoryWiseExpenses">
+                        <td>{{catExp.categoryName }}</td>
+                        <td>
+                            <ul class="list-group">
+                                <li class="list-group-item list-group-item-secondary"
+                                    *ngFor="let txn of catExp.transactionDetails">
+
+                                    <div class="d-flex justify-content-between">
+                                        <p class="text-info">{{txn.transactionDetailName}}</p>
+                                        <p class="text-info">{{txn.amount | currency}}</p>
+                                    </div>
+                                </li>
+                            </ul>
+                        </td>
+                        <td class="align-middle">
+                            <h4>{{catExp.totalAmount | currency}}</h4>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td></td>
+                        <td class="text-dark"><h4>Total</h4></td>
+                        <td class="align-middle text-success">
+                            <h4>{{monthlyBill.subTotal | currency}}</h4>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td></td>
+                        <td colspan="2"><button (click)="onProceeding()" class="btn btn-outline-danger btn-lg">Generate Individual Bills</button></td>
+                    </tr>
+                </table>
+               
+            </div>
+        </div>
+    </div>
+
+</div>

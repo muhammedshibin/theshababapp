@@ -18,7 +18,7 @@ namespace Core.Entities
             ItemCategoryId = itemCategoryId;
             ItemCategoryName = itemCategoryName;
             Amount = amount;
-            this.inmateBill = inmateBill;
+            InmateBill = inmateBill;
         }
 
         public string ItemName { get; set; }
@@ -26,6 +26,6 @@ namespace Core.Entities
         public string ItemCategoryName { get; set; }
         public double Amount { get; set; }
         public int InmateBillId { get; set; }
-        public InmateBill inmateBill { get; set; }
+        public InmateBill InmateBill { get; set; }
     }
 }

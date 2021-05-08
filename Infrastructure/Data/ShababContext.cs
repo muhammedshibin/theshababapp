@@ -27,5 +27,7 @@ namespace Infrastructure.Data
         public DbSet<InmateBill> InmateBills { get; set; }
         public DbSet<BillDetail> BillDetails { get; set; }
         public DbSet<Leave> Leaves { get; set; }
+        public DbSet<BillPayment> Payments { get; set; }
+
     }
 }

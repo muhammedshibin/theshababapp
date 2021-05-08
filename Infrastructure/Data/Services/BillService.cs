@@ -11,7 +11,7 @@ using Core.Specifications;
 
 namespace Infrastructure.Data.Services
 {
-   
+
 
     public class BillService : IBillService
     {
@@ -22,6 +22,80 @@ namespace Infrastructure.Data.Services
         {
             _transactionService = transactionService;
             _unitOfWork = unitOfWork;
+        }
+        public async Task<IReadOnlyList<InmateBill>> GetInmateBillsAsync(BillFilter filter)
+        {
+            var spec = new BillForInmateWithBillDetailsSpecification(filter);
+            return await _unitOfWork.Repository<InmateBill>().FindAllBySpecAsync(spec);
+        }
+        public async Task<int> GetInmateBillsCountAsync(BillFilter filter)
+        {
+            var spec = new BillForInmateWithBillDetailsSpecification(filter,true);
+            return await _unitOfWork.Repository<InmateBill>().GetCountForSpecAsync(spec);
+        }
+        public async Task<IReadOnlyList<InmateBill>> GetBillsFOrInmateAsync(int inmateId)
+        {
+            var billspec = new BillForInmateWithBillDetailsSpecification(inmateId);
+            return await _unitOfWork.Repository<InmateBill>().
+                FindAllBySpecAsync(billspec);
+        }
+        public async Task<bool> AcceptBillPayment(PaymentDto paymentDto)
+        {
+            var payment = new BillPayment
+            {
+                InmateId = paymentDto.InmateId,
+                Amount = paymentDto.Amount,
+                BillId = paymentDto.BillId.HasValue ? paymentDto.BillId : null,
+                PaidOn = paymentDto.PaidOn ?? DateTime.Now
+            };
+
+            
+
+            var vendor = await _unitOfWork.Repository<Vendor>().FindByIdAsync(1);
+
+            vendor.AmountInHand += paymentDto.Amount;
+
+            var inmate = await _unitOfWork.Repository<Inmate>().FindByIdAsync(paymentDto.InmateId);
+            inmate.AmountDue -= paymentDto.Amount;
+            if(inmate.AmountDue < 0)
+            {
+                inmate.Savings = -1 * inmate.AmountDue;
+                inmate.AmountDue = 0;                
+            }
+            
+            if (paymentDto.BillId.HasValue && paymentDto.BillId != 0)
+            {
+                var bill = await _unitOfWork.Repository<InmateBill>()
+                    .FindOneBySpecAsync(new BillSpecification(paymentDto.BillId.Value));
+
+                if(bill != null)
+                {
+                    if (bill.BillItems.Any(b => b.ItemCategoryName == "DEPOSIT"))
+                    {
+                        inmate.Savings += 100;
+                    }
+
+                    bill.BillPayment = payment;
+
+                    if (paymentDto.Amount - bill.BillAmount >= 0)
+                    {
+                        bill.PaymentStatus = PaymentStatus.Paid;
+                    }
+                    if (paymentDto.Amount < bill.BillAmount)
+                    {
+                        bill.PaymentStatus = PaymentStatus.PartiallyPaid;
+                    }
+
+                }
+                
+            }
+            else
+            {
+                _unitOfWork.Repository<BillPayment>().Add(payment);
+            }
+
+            return await _unitOfWork.Complete() > 0;
+
         }
         public async Task<MonthlyBillDto> GenerateMonthlyBillAsync(int month, int year)
         {
@@ -92,7 +166,7 @@ namespace Infrastructure.Data.Services
 
 
             var bottomBedInmates = inmates.Where(i => !i.IsInmateOnTopBed).Count();
-
+            var visitorsCount = inmates.Count(i => i.IsVisit);
             //check this later
             //var defaultRentSettings = categories.FirstOrDefault(c => c.Name == BillCategory.RENT.ToString());
 
@@ -134,7 +208,7 @@ namespace Infrastructure.Data.Services
                 }
                 occuppancy = (numberOfDaysInMonth - numberOfLeaveDays) / numberOfDaysInMonth;
 
-                var rentDetail = new BillDetail("Rent", (int)BillCategory.RENT, BillCategory.RENT.ToString(), rentforTop, inmateBill);
+                var rentDetail = new BillDetail("RENT", (int)BillCategory.RENT, BillCategory.RENT.ToString(), rentforTop, inmateBill);
 
                 billDetails.Add(rentDetail);
 
@@ -147,7 +221,7 @@ namespace Infrastructure.Data.Services
 
                 var amountForInmate = (messExpense / inmates.Count) * occuppancy;
 
-                var messDetail = new BillDetail("Mess", (int)BillCategory.MESS, BillCategory.MESS.ToString(), amountForInmate, inmateBill);
+                var messDetail = new BillDetail("MESS", (int)BillCategory.MESS, BillCategory.MESS.ToString(), amountForInmate, inmateBill);
 
                 billDetails.Add(messDetail);
 
@@ -166,7 +240,16 @@ namespace Infrastructure.Data.Services
                     }
                     else
                     {
-                        amountForInmate = cat.NeedToConsiderDays ? (expense / inmates.Count) * occuppancy : (expense / inmates.Count);
+
+                        if (!cat.IsApplicableForVisitors && (inmates.Count > visitorsCount))
+                        {
+                            amountForInmate = cat.NeedToConsiderDays ? (expense / inmates.Count - visitorsCount) * occuppancy : (expense / (inmates.Count - visitorsCount));
+                        }
+                        else
+                        {
+                            amountForInmate = cat.NeedToConsiderDays ? (expense / (inmates.Count)) * occuppancy : (expense / inmates.Count);
+                        }
+
 
                         var thisCategoryBillDetail = new BillDetail(category, cat.Id, category, amountForInmate, inmateBill);
 
@@ -186,16 +269,17 @@ namespace Infrastructure.Data.Services
 
                 inmateBill.BillAmount = billDetails.Sum(i => i.Amount);
 
+                inmate.AmountDue += inmateBill.BillAmount;
+
                 inmateBills.Add(inmateBill);
             }
 
-                _unitOfWork.Repository<InmateBill>().AddMany(inmateBills);
-                await _unitOfWork.Complete();
+            _unitOfWork.Repository<InmateBill>().AddMany(inmateBills);
+            await _unitOfWork.Complete();
 
-            
+
         }
-
-        public double GetRentForBottom(int x, int y, double rent)
+        private static double GetRentForBottom(int x, int y, double rent)
         {
             return (rent - x * 30) / y;
         }

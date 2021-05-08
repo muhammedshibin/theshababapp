@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Core.Enumerations;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
@@ -16,6 +17,9 @@ namespace Core.Entities
         public double BillAmount { get; set; }
         public Inmate Inmate { get; set; }
         public int InmateId { get; set; }
+        public int? PaymentId { get; set; }
+        public PaymentStatus PaymentStatus { get; set; } = PaymentStatus.NotPaid;
+        public BillPayment BillPayment { get; set; }
         public List<BillDetail> BillItems { get; set; }
     }
 }

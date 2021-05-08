@@ -10,9 +10,11 @@ namespace Core.Specifications
             base(bill => bill.Month == month && bill.Year == year)
         {
         }
-
-        public BillSpecification()
+        
+        public BillSpecification(int billId):
+            base(b => b.Id == billId)
         {
+            AddInclude(b => b.BillItems);
         }
     }
 }

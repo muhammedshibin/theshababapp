@@ -11,6 +11,8 @@ import { ModalLgComponent } from './components/modal-lg/modal-lg.component';
 import { ModalModule } from 'ngx-bootstrap/modal';
 import { ToastrModule } from 'ngx-toastr';
 import { AlertWindowComponent } from './components/alert-window/alert-window.component';
+import { TabsModule } from 'ngx-bootstrap/tabs';
+import { AccordionModule } from 'ngx-bootstrap/accordion';
 
 @NgModule({
   declarations: [TextInputComponent, DateInputComponent, ModalLgComponent, AlertWindowComponent],
@@ -22,6 +24,8 @@ import { AlertWindowComponent } from './components/alert-window/alert-window.com
     BsDatepickerModule.forRoot(),
     PaginationModule.forRoot(),
     ModalModule.forRoot(),
+    TabsModule.forRoot(),
+    AccordionModule.forRoot(),
     ToastrModule.forRoot({
       positionClass: 'toast-bottom-right',
       preventDuplicates: true,
@@ -38,7 +42,9 @@ import { AlertWindowComponent } from './components/alert-window/alert-window.com
     PaginationModule,
     ModalModule,
     ToastrModule,
-    AlertWindowComponent
+    AlertWindowComponent,
+    TabsModule,
+    AccordionModule
   ],
 })
 export class SharedModule {}

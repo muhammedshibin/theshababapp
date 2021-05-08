@@ -50,6 +50,40 @@ namespace Infrastructure.Data.Migrations
                     b.ToTable("BillDetails");
                 });
 
+            modelBuilder.Entity("Core.Entities.BillPayment", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER");
+
+                    b.Property<double>("Amount")
+                        .HasColumnType("REAL");
+
+                    b.Property<int?>("BillId")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<DateTime>("CreatedOn")
+                        .HasColumnType("TEXT");
+
+                    b.Property<int>("InmateId")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<DateTime>("ModfiedOn")
+                        .HasColumnType("TEXT");
+
+                    b.Property<DateTime>("PaidOn")
+                        .HasColumnType("TEXT");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("BillId")
+                        .IsUnique();
+
+                    b.HasIndex("InmateId");
+
+                    b.ToTable("Payments");
+                });
+
             modelBuilder.Entity("Core.Entities.Category", b =>
                 {
                     b.Property<int>("Id")
@@ -89,6 +123,9 @@ namespace Infrastructure.Data.Migrations
                         .IsRequired()
                         .HasColumnType("TEXT");
 
+                    b.Property<double>("AmountDue")
+                        .HasColumnType("REAL");
+
                     b.Property<DateTime>("CreatedOn")
                         .HasColumnType("TEXT");
 
@@ -118,6 +155,9 @@ namespace Infrastructure.Data.Migrations
                     b.Property<string>("PictureUrl")
                         .HasColumnType("TEXT");
 
+                    b.Property<double>("Savings")
+                        .HasColumnType("REAL");
+
                     b.Property<string>("Status")
                         .IsRequired()
                         .HasColumnType("TEXT");
@@ -146,6 +186,12 @@ namespace Infrastructure.Data.Migrations
                         .HasColumnType("TEXT");
 
                     b.Property<int>("Month")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int?>("PaymentId")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int>("PaymentStatus")
                         .HasColumnType("INTEGER");
 
                     b.Property<int>("Year")
@@ -268,13 +314,30 @@ namespace Infrastructure.Data.Migrations
 
             modelBuilder.Entity("Core.Entities.BillDetail", b =>
                 {
-                    b.HasOne("Core.Entities.InmateBill", "inmateBill")
+                    b.HasOne("Core.Entities.InmateBill", "InmateBill")
                         .WithMany("BillItems")
                         .HasForeignKey("InmateBillId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("inmateBill");
+                    b.Navigation("InmateBill");
+                });
+
+            modelBuilder.Entity("Core.Entities.BillPayment", b =>
+                {
+                    b.HasOne("Core.Entities.InmateBill", "Bill")
+                        .WithOne("BillPayment")
+                        .HasForeignKey("Core.Entities.BillPayment", "BillId");
+
+                    b.HasOne("Core.Entities.Inmate", "Inmate")
+                        .WithMany()
+                        .HasForeignKey("InmateId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Bill");
+
+                    b.Navigation("Inmate");
                 });
 
             modelBuilder.Entity("Core.Entities.InmateBill", b =>
@@ -334,6 +397,8 @@ namespace Infrastructure.Data.Migrations
             modelBuilder.Entity("Core.Entities.InmateBill", b =>
                 {
                     b.Navigation("BillItems");
+
+                    b.Navigation("BillPayment");
                 });
 
             modelBuilder.Entity("Core.Entities.Vendor", b =>

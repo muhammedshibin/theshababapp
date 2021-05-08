@@ -8,10 +8,10 @@ namespace Core.Enumerations
 {
     public enum BillCategory
     {
-        RENT,
-        MESS,
-        USTHADSALARY,
-        DEPOSIT,
-        OTHERS
+        RENT = 1,
+        MESS =2 ,
+        USTHADSALARY = 3,
+        DEPOSIT = 4,
+        OTHERS = 5,
     }
 }

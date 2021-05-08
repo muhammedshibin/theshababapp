@@ -1,0 +1,21 @@
+<div class="container">
+    <div>
+        <div class="col-10">
+            <form [formGroup]="paymentForm" (ngSubmit)="onSubmit()">
+                <label for="">Inmate ID</label>
+                <app-text-input [formControl]="paymentForm.controls['inmateId']" [type]="'number'"
+                    [label]="'Inmate ID'"></app-text-input>
+                    <label for="">Paid On</label>
+                <app-date-input [formControl]="paymentForm.controls['paidOn']"
+                    [label]="'Paid On'"></app-date-input>
+                    <label for="">Amount</label>
+                    <app-text-input [formControl]="paymentForm.controls['amount']" [type]="'number'"
+                    [label]="'Amount'"></app-text-input>
+                    <label for="">Bill ID</label>
+                    <app-text-input [formControl]="paymentForm.controls['billId']" [type]="'number'"
+                    [label]="'Bill Id'"></app-text-input>
+                    <button class="btn btn-success">Pay</button>
+            </form>
+        </div>
+    </div>
+</div>

@@ -23,8 +23,19 @@ namespace Core.Entities
         public InmateStatus Status { get; set; } = InmateStatus.Active;
         public bool IsVisit { get; set; } = false;
         public bool IsInmateOnTopBed { get; set; } = false;
+        public double AmountDue { get; set; }
+        public double Savings { get; set; }
 
 
         public IReadOnlyList<Leave> InmateLeaves;
+        public IReadOnlyList<InmateBill> InmateBills;
+        public IReadOnlyList<BillPayment> Payments;
+
+        public int GetAge()
+        {
+            var age = (DateTime.Now.Year - DateOfBirth.Year);
+            if (DateTime.Now.Month < DateOfBirth.Month) age--;
+            return age;
+        }
     }
 }

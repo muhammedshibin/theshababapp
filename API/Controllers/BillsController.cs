@@ -1,4 +1,8 @@
-﻿using Core.CoreDtos;
+﻿using API.Dtos;
+using API.Extensions;
+using AutoMapper;
+using Core.CoreDtos;
+using Core.DataFilters;
 using Core.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 using System;
@@ -14,16 +18,20 @@ namespace API.Controllers
     public class BillsController : BaseApiController
     {
         private readonly IBillService _billservice;
+        private readonly IMapper _mapper;
 
-        public BillsController(IBillService billservice)
+        public BillsController(IBillService billservice , IMapper mapper)
         {
             _billservice = billservice;
+            _mapper = mapper;
         }
         // GET: api/<BillsController>
-        [HttpGet]
-        public IEnumerable<string> Get()
+        [HttpGet("inmate/{inmateId}")]
+        public async Task<ActionResult<BillDto>> GetBillsForInmate(int inmateId)
         {
-            return new string[] { "value1", "value2" };
+            var bills = await _billservice.GetBillsFOrInmateAsync(inmateId);
+            var billsToReturnDto = _mapper.Map<IReadOnlyList<BillDto>>(bills);
+            return Ok(billsToReturnDto);
         }
 
         // GET api/<BillsController>/5
@@ -42,9 +50,26 @@ namespace API.Controllers
         }
 
         // PUT api/<BillsController>/5
-        [HttpPut("{id}")]
-        public void Put(int id, [FromBody] string value)
+        [HttpPost("payment")]
+        public async Task<ActionResult<bool>> AcceptPayments(PaymentDto paymentDto)
         {
+            var paid = await  _billservice.AcceptBillPayment(paymentDto);
+
+            if (!paid) throw new Exception("Error occured during payment");
+
+            return Ok(true);
+        }
+        [HttpGet]
+        public async Task<ActionResult<IReadOnlyList<BillDto>>> GetBills([FromQuery]BillFilter filter)
+        {
+            var bills = await _billservice.GetInmateBillsAsync(filter);
+            var count = await _billservice.GetInmateBillsCountAsync(filter);
+
+            Response.AddPaginationHeader(count, filter.PageIndex, filter.PageSize);
+
+            var billsToReturnDto = _mapper.Map<IReadOnlyList<BillDto>>(bills);
+
+            return Ok(billsToReturnDto);
         }
 
         // DELETE api/<BillsController>/5

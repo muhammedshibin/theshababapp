@@ -10,4 +10,7 @@ export interface Inmate {
     status: number;
     isVisit: boolean;
     isInmateOnTopBed: boolean;
+    age: number;
+    amountDue: number;
+    savings: number;
   }

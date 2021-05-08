@@ -1,0 +1,45 @@
+<accordion-group [panelClass]=""
+heading="{{inmateBill.month}} {{inmateBill.year}}">
+    <table class="table table-bordered table-hover">
+        <tr>
+            <th></th>
+            <th>Total Bill Amount</th>
+            <th>{{inmateBill.billAmount | currency}}</th>            
+        </tr>
+        <tr>
+            <th></th>
+            <th>Payment Status</th>
+            <th class="text-success" *ngIf="inmateBill.paymentStatus!==0">Paid</th>            
+            <th class="text-danger" *ngIf="inmateBill.paymentStatus===0">Not Paid</th>            
+        </tr>
+        <tr>
+            <td></td>
+            <td class="text-warning"><strong>Category</strong></td>
+            <td class="text-warning"><strong>Amount</strong></td>
+        </tr>
+        <tr  *ngFor="let item of inmateBill.billItems;let i = index" >
+            <td>{{i+1}}</td>
+            <td><small><i>{{item.itemCategoryName}}</i></small></td>
+            <td>{{item.amount | currency}}</td>
+        </tr>
+    </table>
+    <div class="d-flex justify-content-center">
+        <button (click)="openModal(template)" class="btn btn-success" *ngIf="inmateBill.paymentStatus===0">Pay</button>        
+    </div>
+  </accordion-group>
+  <ng-template #template>
+    <div class="modal-header">
+      <h4 class="modal-title pull-left">Bill No - {{inmateBill.id}}</h4>
+      <button type="button" class="close pull-right" aria-label="Close" (click)="modalRef.hide()">
+        <span aria-hidden="true">&times;</span>
+      </button>
+    </div>
+    <div class="modal-body">
+        <app-bill-payment 
+        [inputBillId]='inmateBill.id' 
+        [inputInmateId]='inmateBill.inmateId' 
+        [inputAmount] = 'inmateBill.billAmount'
+        (paymentSuccess)="paymentSuccessEvent($event)">
+    </app-bill-payment>
+    </div>
+  </ng-template>

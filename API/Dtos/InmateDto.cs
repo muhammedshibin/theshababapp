@@ -15,6 +15,7 @@ namespace API.Dtos
         public string FullName { get; set; }
         [Required]
         public DateTime DateOfBirth { get; set; }
+        public int Age { get; set; }
         [Required]
         public string Address { get; set; }
         [EmailAddress]
@@ -26,5 +27,7 @@ namespace API.Dtos
         public InmateStatus Status { get; set; } = InmateStatus.Active;
         public bool IsVisit { get; set; } = false;
         public bool IsInmateOnTopBed { get; set; } = false;
+        public double AmountDue { get; set; }
+        public double Savings { get; set; }
     }
 }

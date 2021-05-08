@@ -1,6 +1,8 @@
 import { TenantService } from './../tenant.service';
 import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
+import { ToastrService } from 'ngx-toastr';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-add-tenant',
@@ -11,7 +13,7 @@ export class AddTenantComponent implements OnInit {
 
   tenantRegistrationForm: FormGroup;
 
-  constructor(private tenantService: TenantService) { }
+  constructor(private tenantService: TenantService , private toast: ToastrService , private router: Router) { }
 
   ngOnInit(): void {
     this.createRegistrationForm();
@@ -20,7 +22,7 @@ export class AddTenantComponent implements OnInit {
   createRegistrationForm(){
     this.tenantRegistrationForm = new FormGroup({
       fullName: new FormControl('',Validators.required),
-      email: new FormControl('',Validators.required),         
+      emailAddress: new FormControl('',Validators.required),         
       phoneNumber: new FormControl('',Validators.required),
       dateOfBirth: new FormControl('',Validators.required) ,
       address: new FormControl('',Validators.required),   
@@ -33,6 +35,8 @@ export class AddTenantComponent implements OnInit {
   addTenant(){
     this.tenantService.AddInmate(this.tenantRegistrationForm.value).subscribe((response) => {
       console.log(response);
+      this.toast.success('Inmate Added Successfully' , 'Success');
+      this.router.navigateByUrl('/tenants/list');
     },(err) => {
       console.log(err);
     })

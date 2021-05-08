@@ -1,0 +1,68 @@
+<div class="container">
+    <div class="row" *ngIf="inmate">
+
+        <div class="col-4">
+            <div class="card">
+                <img src="{{inmate.pictureUrl || 'assets/images/noimage.png'}}" alt="{{inmate.fullName}}"
+                    class="card-img-top img-thumbnail">
+                <div class="card-body">
+                    <div>
+                        <h4 class="text-info">{{inmate.fullName}}</h4>
+                    </div>
+                    <div>
+                        <strong>Contact Number:</strong>
+                        <p>{{inmate.phoneNumber}}</p>
+                    </div>
+                    <div>
+                        <strong>Age:</strong>
+                        <p>{{inmate.age}}</p>
+                    </div>
+
+                    <div>
+                        <strong>Member Status:</strong>
+                        <p>{{inmate.status == 0?'Active':'Inactive'}}</p>
+                    </div>
+
+                </div>
+                <div class="card-footer">
+                    <!-- <div class="btn-group d-flex">
+                        <button class="btn btn-primary">Like</button>
+                        <button class="btn btn-success">Message</button>
+                    </div> -->
+                </div>
+            </div>
+        </div>
+
+        <div class="col-8">
+            <tabset class="member-tabset" #memberTabs>
+                <tab heading="Basic Info" (selectTab)="onSelect($event)">
+                    <!-- (selectTab)="onTabActivated($event)" -->
+                    <div class="row">
+                        <div class="col-5">
+                            <h5 class="text-success">Email Address</h5>
+                            <p>{{inmate.emailAddress || 'None'}}</p>
+                            <h5 class="text-success">Inmate Type</h5>
+                            <p>{{inmate.isVisit?'Visit':'Regular'}}<i class="fa fa-edit fa-3 ml-3"></i></p>
+                            <h5 class="text-success">Address</h5>
+                            <p>{{inmate.address}}</p>
+                            <h5 class="text-success">Room Number</h5>
+                            <p class="lead">4<i class="fa fa-edit fa-3 ml-3"></i></p>
+                        </div>
+                        <div class="col-5">
+                           
+                            <h5 class="text-success">Amount Due</h5>
+                            <p>{{inmate.amountDue | currency}}<i class="fa fa-edit fa-3 ml-3"></i></p>
+                            <h5 class="text-success">Savings</h5>
+                            <p>{{inmate.savings | currency}}<i class="fa fa-edit fa-3 ml-3"></i></p>
+                        </div>
+                    </div>
+                </tab>
+                <tab heading="Bill Details" (selectTab)="onSelect($event)">
+                    <accordion>
+                        <app-tenant-bill *ngFor="let bill of inmateBills" [inmateBill]='bill' (billPaid)="onBillPaid($event)"></app-tenant-bill>
+                    </accordion>
+                </tab>
+            </tabset>
+        </div>
+    </div>
+</div>
