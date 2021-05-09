@@ -29,12 +29,18 @@ namespace Core.Interfaces
         /// <param name="spec"></param>
         /// <returns></returns>
         Task<IReadOnlyList<T>> FindAllBySpecAsync(ISpecification<T> spec);
-
+        /// <summary>
+        /// Retrieve list of items of entity for the provided specification
+        /// </summary>
+        /// <param name="spec"></param>
+        /// <returns></returns>
+        Task<IReadOnlyList<TOut>> FindAllBySpecAsync<TOut>(ISpecification<T> spec);
         /// <summary>
         /// GetCount for list of items of entity for the provided specification
         /// </summary>
         /// <param name="spec"></param>
         /// <returns></returns>
+
         Task<int> GetCountForSpecAsync(ISpecification<T> spec);
         /// <summary>
         /// Add an Item to the database , Executed only when SaveChanges method is called

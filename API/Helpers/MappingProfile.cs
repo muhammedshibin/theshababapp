@@ -1,5 +1,6 @@
 ﻿using API.Dtos;
 using AutoMapper;
+using Core.CoreDtos;
 using Core.Entities;
 using System;
 using System.Collections.Generic;
@@ -24,6 +25,8 @@ namespace API.Helpers
 
             CreateMap<InmateDto, Inmate>()
                 .ReverseMap();
+
+            CreateMap<Inmate, InmateToReturnDto>();
 
             CreateMap<Vendor, VendorDto>()
                 .ReverseMap();

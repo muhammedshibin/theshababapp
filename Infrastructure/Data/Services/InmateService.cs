@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Threading.Tasks;
+using Core.CoreDtos;
 using Core.DataFilters;
 using Core.Entities;
 using Core.Interfaces;
@@ -15,10 +16,10 @@ namespace Infrastructure.Data.Services
         {
             _unitOfWork = unitOfWork;
         }
-        public async Task<IReadOnlyList<Inmate>> GetInmates(InmateFilter filter)
+        public async Task<IReadOnlyList<InmateToReturnDto>> GetInmates(InmateFilter filter)
         {
             var spec = new InmateSpecification(filter);
-            return await  _unitOfWork.Repository<Inmate>().FindAllBySpecAsync(spec);
+            return await  _unitOfWork.Repository<Inmate>().FindAllBySpecAsync<InmateToReturnDto>(spec);
         }
 
         public async Task<int> GetInmatesCount(InmateFilter filter)

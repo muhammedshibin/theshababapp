@@ -12,6 +12,8 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Hosting;
 using System.IO;
 using API.Extensions;
+using Microsoft.AspNetCore.Authorization;
+using Core.CoreDtos;
 
 namespace API.Controllers
 {
@@ -28,6 +30,7 @@ namespace API.Controllers
             _env = env;
             _inmateService = inmateService;
         }
+        //[Authorize]
         [HttpGet]
         public async Task<ActionResult<IReadOnlyList<InmateDto>>> GetInmates([FromQuery]InmateFilter inmateFilter)
         {
@@ -36,7 +39,7 @@ namespace API.Controllers
 
             Response.AddPaginationHeader(count, inmateFilter.PageIndex, inmateFilter.PageSize);
 
-            return Ok(_mapper.Map<IReadOnlyList<InmateDto>>(inmates));
+            return Ok(inmates);
         }
 
         [HttpGet("{id}")]

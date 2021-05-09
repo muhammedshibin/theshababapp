@@ -5,6 +5,7 @@ import { Component, OnInit, TemplateRef } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { TabDirective } from 'ngx-bootstrap/tabs';
 import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
+import { BreadcrumbService } from 'xng-breadcrumb';
 
 @Component({
   selector: 'app-tenant-view',
@@ -17,10 +18,11 @@ export class TenantViewComponent implements OnInit {
 
   constructor(
     private activatedRoute: ActivatedRoute,
-    private tenantService: TenantService
+    private tenantService: TenantService,
+    private bcService: BreadcrumbService
   ) {}
 
-  ngOnInit(): void {
+  ngOnInit(): void {    
     this.loadTenant();
   }
 
@@ -30,6 +32,7 @@ export class TenantViewComponent implements OnInit {
     this.tenantService.getInmate(parseInt(id)).subscribe(
       (data) => {
         this.inmate = data;
+        this.bcService.set('@inmateName',this.inmate.fullName)
       },
       (err) => {
         console.log(err);

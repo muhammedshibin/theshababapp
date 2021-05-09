@@ -11,7 +11,7 @@ namespace Infrastructure.Data
 {
     public class ShababContext : DbContext
     {
-        public ShababContext(DbContextOptions options) : base(options)
+        public ShababContext(DbContextOptions<ShababContext> options) : base(options)
         {}
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)

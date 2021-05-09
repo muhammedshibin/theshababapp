@@ -42,10 +42,10 @@ export class BillService {
       params = params.append('year', billParams.year.toString());
     }
     if (billParams.search) {
-      params = params.append('month', billParams.search);
+      params = params.append('search', billParams.search);
     }
     if (billParams.paidPredicate) {
-      params = params.append('month', billParams.paidPredicate);
+      params = params.append('paidPredicate', billParams.paidPredicate);
     }
 
     return getPaginatedResult<InmateBill>(

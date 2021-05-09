@@ -21,6 +21,6 @@ namespace API
         public string DeveloperMessage { get; set; }
         public string UserMessage { get; set; }
         public int StatusCode { get; set; }
-        public List<string> ModelErrors { get; set; }
+        public List<string> Errors { get; set; }
     }
 }

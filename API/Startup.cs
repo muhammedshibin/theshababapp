@@ -1,9 +1,11 @@
 using API.Extensions;
 using API.Middlewares;
 using Infrastructure.Data;
+using Infrastructure.Identity;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.SpaServices.AngularCli;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
@@ -29,10 +31,12 @@ namespace API
         {
 
             services.AddDbContext<ShababContext>(options => options.UseSqlite(_config.GetConnectionString("DefaultConnection")));
+            services.AddDbContext<AppUserIdentityDbContext>(options => options.UseSqlite(_config.GetConnectionString("IdentityConnection")));
 
             services.AddControllersWithViews();
 
             services.AddApplicationServices();
+            services.AddIdentityExtensions(_config);
 
             services.AddCors(options => options.AddPolicy("CorsPolicy", policy => {
                 policy.AllowAnyHeader().AllowAnyMethod().WithOrigins("http://localhost:4200");
@@ -57,6 +61,10 @@ namespace API
             app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "BillingApp V1"));
 
             app.UseCors("CorsPolicy");
+
+            app.UseAuthentication();
+
+            app.UseAuthorization();
 
             app.UseEndpoints(endpoints =>
             {

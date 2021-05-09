@@ -2,6 +2,7 @@
 using Core.Interfaces;
 using Infrastructure.Data;
 using Infrastructure.Data.Services;
+using Infrastructure.Identity.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.DependencyInjection;
 using System;
@@ -22,8 +23,9 @@ namespace API.Extensions
             services.AddScoped<ITransactionService, TransactionService>();
             services.AddScoped<IVendorService, VendorService>();
             services.AddScoped<IBillService, BillService>();
+            services.AddScoped<ITokenService, TokenService>();
             services.AddAutoMapper(typeof(MappingProfile));
-            services.Configure<ApiBehaviorOptions>(options =>
+            services.Configure((Action<ApiBehaviorOptions>)(options =>
             {
                 options.InvalidModelStateResponseFactory = context =>
                {
@@ -31,10 +33,13 @@ namespace API.Extensions
                    var modelStateErrors = modelState.Where(e => e.Value.Errors.Count > 0)
                                                             .SelectMany(e => e.Value.Errors)
                                                             .Select(e => e.ErrorMessage).ToList();
-                   return new BadRequestObjectResult(new ErrorResponse 
-                   {IsError = true,UserMessage = "Invalid Request" , StatusCode = (int) HttpStatusCode.BadRequest ,ModelErrors = modelStateErrors});
+                   return new BadRequestObjectResult(new ErrorResponse
+                   {
+                       IsError = true,
+                       UserMessage = "Invalid Request" , StatusCode = (int)HttpStatusCode.BadRequest ,
+                       Errors = modelStateErrors});
                };
-            });
+            }));
             return services;
 
         }

@@ -22,7 +22,7 @@ namespace Core.Specifications
             base(b =>
             (!filter.Month.HasValue || b.Month == filter.Month) &&
             (!filter.Year.HasValue || b.Year == filter.Year) &&
-            (string.IsNullOrEmpty(filter.PaidPredicate) || b.PaymentStatus == (PaymentStatus) Enum.Parse(typeof(PaymentStatus),filter.PaidPredicate)) &&
+            (string.IsNullOrEmpty(filter.PaidPredicate) || b.PaymentStatus == (PaymentStatus)Enum.Parse(typeof(PaymentStatus), filter.PaidPredicate)) &&
             (string.IsNullOrEmpty(filter.Search) || b.Inmate.FullName.ToLower().Contains(filter.Search)))
         {
             if (!forCount)
@@ -30,8 +30,23 @@ namespace Core.Specifications
                 //AddInclude(b => b.BillItems);
                 AddInclude(b => b.Inmate);
                 AddOrderByDesc(b => b.CreatedOn);
+                if (!string.IsNullOrEmpty(filter.Sort))
+                {
+                    switch (filter.Sort.ToLower())
+                    {
+                        case "byNameAsc":
+                            AddOrderBy(x => x.Inmate.FullName);
+                            break;
+                        case "byNameDesc":
+                            AddOrderByDesc(x => x.Inmate.FullName);
+                            break;
+                        default:
+                            AddOrderByDesc(b => b.CreatedOn);
+                            break;
+                    }
+                }
                 AddPagination((filter.PageIndex - 1) * filter.PageSize, filter.PageSize);
-            }           
+            }
         }
     }
 }

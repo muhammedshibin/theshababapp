@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using AutoMapper;
+using AutoMapper.QueryableExtensions;
 using Core.Entities;
 using Core.Interfaces;
 using Microsoft.EntityFrameworkCore;
@@ -11,10 +13,12 @@ namespace Infrastructure.Data
     public class GenericRepository<T> : IGenericRepository<T> where T : BaseEntity
     {
         private readonly ShababContext _context;
+        private readonly IMapper _mapper;
 
-        public GenericRepository(ShababContext context)
+        public GenericRepository(ShababContext context,IMapper mapper)
         {
             _context = context;
+            _mapper = mapper;
         }
         public async Task<T> FindByIdAsync(int id)
         {
@@ -31,6 +35,12 @@ namespace Infrastructure.Data
         public async Task<IReadOnlyList<T>> FindAllBySpecAsync(ISpecification<T> spec)
         {
             return await EvaluateExpression(spec).ToListAsync();
+        }
+        public async Task<IReadOnlyList<TOut>> FindAllBySpecAsync<TOut>(ISpecification<T> spec)
+        {
+            return await EvaluateExpression(spec)
+                .ProjectTo<TOut>(_mapper.ConfigurationProvider)
+                .ToListAsync();
         }
         public void Add(T tEntity)
         {

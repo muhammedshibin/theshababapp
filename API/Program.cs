@@ -1,4 +1,6 @@
+using Core.Identity;
 using Infrastructure.Data;
+using Infrastructure.Identity;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
@@ -24,12 +26,16 @@ namespace API
             {
                 var context = services.GetRequiredService<ShababContext>();
                 await context.Database.MigrateAsync();
+
+                var identitydbcontext = services.GetRequiredService<AppUserIdentityDbContext>();
+                await identitydbcontext.Database.MigrateAsync();
+
                 await ShababContextSeed.Seed(context);
             }
             catch (Exception e)
             {
                 var logger = loggerFactory.CreateLogger<Program>();
-                logger.LogInformation("Error occured During Migration", e.Message);
+                logger.LogInformation(e.StackTrace);
             }
 
             host.Run();
