@@ -37,8 +37,8 @@ namespace API.Middlewares
                 {
                     IsError = true,
                     StatusCode = (int)HttpStatusCode.InternalServerError,
-                    UserMessage = _env.IsDevelopment()?e.Message:"An Error Occured , Please try again Later",
-                    DeveloperMessage = e.StackTrace
+                    UserMessage = _env.IsDevelopment() ? e.Message : "An Error Occured , Please try again Later",
+                    DeveloperMessage = _env.IsDevelopment() ? e.StackTrace : null
                 };
 
                 context.Response.StatusCode = (int)HttpStatusCode.InternalServerError;
