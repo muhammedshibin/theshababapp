@@ -13,6 +13,7 @@ import { ToastrModule } from 'ngx-toastr';
 import { AlertWindowComponent } from './components/alert-window/alert-window.component';
 import { TabsModule } from 'ngx-bootstrap/tabs';
 import { AccordionModule } from 'ngx-bootstrap/accordion';
+import { BsDropdownModule } from 'ngx-bootstrap/dropdown';
 
 @NgModule({
   declarations: [TextInputComponent, DateInputComponent, ModalLgComponent, AlertWindowComponent],
@@ -26,6 +27,7 @@ import { AccordionModule } from 'ngx-bootstrap/accordion';
     ModalModule.forRoot(),
     TabsModule.forRoot(),
     AccordionModule.forRoot(),
+    BsDropdownModule.forRoot(),
     ToastrModule.forRoot({
       positionClass: 'toast-bottom-right',
       preventDuplicates: true,
@@ -44,7 +46,8 @@ import { AccordionModule } from 'ngx-bootstrap/accordion';
     ToastrModule,
     AlertWindowComponent,
     TabsModule,
-    AccordionModule
+    AccordionModule,
+    BsDropdownModule
   ],
 })
 export class SharedModule {}

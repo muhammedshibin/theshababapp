@@ -42,7 +42,9 @@ namespace Infrastructure.Data.Services
         {
             var inmate = await  _unitOfWork.Repository<Inmate>().FindByIdAsync(inmateRequest.Id);
             if (inmate == null) return false;
-            inmate = inmateRequest;           
+            inmate.IsVisit = inmateRequest.IsVisit;
+            inmate.AmountDue = inmateRequest.AmountDue;
+            inmate.Savings = inmateRequest.Savings;
             return await _unitOfWork.Complete() > 0;
         }        
     }

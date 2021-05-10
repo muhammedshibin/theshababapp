@@ -30,4 +30,8 @@ export class TenantService {
   getTenantBills(inmateId: number){
     return this.http.get<InmateBill[]>(this.baseUrl + 'bills/inmate/' + inmateId);
   }
+
+  updateInmate(inmate: Inmate){
+    return this.http.patch(this.baseUrl +'Inmates',inmate);
+  }
 }

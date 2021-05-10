@@ -96,7 +96,7 @@ namespace API.Controllers
 
             if (created) return Ok(inmateDto);
 
-            return BadRequest();
+            return BadRequest("Error why");
         }        
 
     }

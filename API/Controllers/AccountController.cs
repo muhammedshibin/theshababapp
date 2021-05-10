@@ -1,6 +1,7 @@
 ﻿using API.Dtos;
 using Core.Identity;
 using Core.Interfaces;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -8,6 +9,7 @@ using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Claims;
 using System.Threading.Tasks;
 
 namespace API.Controllers
@@ -61,6 +63,38 @@ namespace API.Controllers
                 Token = await _tokenService.CreateToken(user)
             };
 
+        }
+
+        [HttpPost("login")]
+        public async Task<ActionResult<UserDto>> Login(LoginDto loginDto)
+        {
+            var user = await _userManager.FindByNameAsync(loginDto.Username);
+            if (user == null) return Unauthorized(new ErrorResponse(401, "You are Not Authorized"));
+
+            var result = await _signInManager.CheckPasswordSignInAsync(user, loginDto.Password,false);
+
+            if(!result.Succeeded) return Unauthorized(new ErrorResponse(401, "You are Not Authorized"));
+
+            return new UserDto
+            {
+                DisplayName = user.DisplayName,
+                Token = await _tokenService.CreateToken(user)
+            };
+        }
+        [Authorize]
+        [HttpGet("currentUser")]
+        public async Task<ActionResult<UserDto>> GetCurrentUserDetails()
+        {
+            var username = User.FindFirstValue(ClaimTypes.Name);
+
+            var user = await _userManager.FindByNameAsync(username);
+            if (user == null) return Unauthorized(new ErrorResponse(401, "You are Not Authorized"));
+
+            return new UserDto
+            {
+                DisplayName = user.DisplayName,
+                Token = await _tokenService.CreateToken(user)
+            };
         }
     }
 }

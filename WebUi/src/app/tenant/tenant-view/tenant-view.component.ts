@@ -15,6 +15,11 @@ import { BreadcrumbService } from 'xng-breadcrumb';
 export class TenantViewComponent implements OnInit {
   inmate: Inmate;
   inmateBills: InmateBill[] = [];
+  editDisabled = true;
+  tenantOptions = [
+    {value:true,display:'Visit'},
+    {value:false,display:'Regular'}
+  ]
 
   constructor(
     private activatedRoute: ActivatedRoute,
@@ -60,5 +65,17 @@ export class TenantViewComponent implements OnInit {
 
   onBillPaid(event: any){
     this.loadTenantBills();
+  }
+
+  onUpdate(){
+    this.tenantService.updateInmate(this.inmate).subscribe((response) => {
+      console.log('updated succesfully');
+    },err => {
+      console.log(err);
+    })
+  }
+  onReset(){
+    this.editDisabled = true;
+    this.loadTenant();
   }
 }

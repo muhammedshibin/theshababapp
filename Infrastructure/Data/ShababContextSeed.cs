@@ -47,6 +47,16 @@ namespace Infrastructure.Data
                         Id = 3,
                         ModfiedOn = DateTime.MinValue,
                         NeedToConsiderDays = true,
+                    },
+                    new Category
+                    {
+                        Name = "DEPOSIT",
+                        CreatedOn = DateTime.Now,
+                        DefaultRate = 100,
+                        IsApplicableForVisitors = false,
+                        Id = 4,
+                        ModfiedOn = DateTime.MinValue,
+                        NeedToConsiderDays = false,
                     }
                 };
 

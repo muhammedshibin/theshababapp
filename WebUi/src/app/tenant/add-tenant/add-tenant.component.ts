@@ -22,7 +22,7 @@ export class AddTenantComponent implements OnInit {
   createRegistrationForm(){
     this.tenantRegistrationForm = new FormGroup({
       fullName: new FormControl('',Validators.required),
-      emailAddress: new FormControl('',Validators.required),         
+      email: new FormControl('',Validators.required),         
       phoneNumber: new FormControl('',Validators.required),
       dateOfBirth: new FormControl('',Validators.required) ,
       address: new FormControl('',Validators.required),   

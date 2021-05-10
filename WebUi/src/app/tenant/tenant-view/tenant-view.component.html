@@ -37,12 +37,18 @@
             <tabset class="member-tabset" #memberTabs>
                 <tab heading="Basic Info" (selectTab)="onSelect($event)">
                     <!-- (selectTab)="onTabActivated($event)" -->
-                    <div class="row">
+                    <form (ngSubmit)="onUpdate()" #form="ngForm">      
+                    <div class="row">                                          
                         <div class="col-5">
                             <h5 class="text-success">Email Address</h5>
                             <p>{{inmate.emailAddress || 'None'}}</p>
                             <h5 class="text-success">Inmate Type</h5>
-                            <p>{{inmate.isVisit?'Visit':'Regular'}}<i class="fa fa-edit fa-3 ml-3"></i></p>
+                            <select [disabled]="editDisabled" name="isVisit" class="form-control col-5 my-2" [(ngModel)]="inmate.isVisit">
+                                <option *ngFor="let option of tenantOptions" [ngValue]="option.value">
+                                    {{ option.display }}
+                                </option>
+                            </select>
+                            <!-- <p>{{inmate.isVisit?'Visit':'Regular'}}<i class="fa fa-edit fa-3 ml-3"></i></p> -->
                             <h5 class="text-success">Address</h5>
                             <p>{{inmate.address}}</p>
                             <h5 class="text-success">Room Number</h5>
@@ -51,11 +57,18 @@
                         <div class="col-5">
                            
                             <h5 class="text-success">Amount Due</h5>
-                            <p>{{inmate.amountDue | currency}}<i class="fa fa-edit fa-3 ml-3"></i></p>
+                            <input type="number" [disabled]="editDisabled" class="form-control col-6" name="amountDue" [(ngModel)]="inmate.amountDue">
+                            <!-- <p>{{inmate.amountDue | currency}}<i class="fa fa-edit fa-3 ml-3"></i></p> -->
                             <h5 class="text-success">Savings</h5>
-                            <p>{{inmate.savings | currency}}<i class="fa fa-edit fa-3 ml-3"></i></p>
+                            <input type="number" [disabled]="editDisabled" class="form-control col-6" name="savings" [(ngModel)]="inmate.savings">
+                            <!-- <p>{{inmate.savings | currency}}<i class="fa fa-edit fa-3 ml-3"></i></p> -->
                         </div>
-                    </div>
+                                            
+                    </div>                    
+                    <button type="submit" class="btn btn-success" *ngIf="editDisabled===false" (click)="editDisabled = false" (click)="onUpdate()">Save Changes</button>
+                    <button class="btn btn-danger ml-2" *ngIf="editDisabled===true" (click)="editDisabled = false">Edit Details</button>
+                    <button class="btn btn-outline-primary ml-2" (click)="onReset()">Reset</button> 
+                </form>
                 </tab>
                 <tab heading="Bill Details" (selectTab)="onSelect($event)">
                     <accordion>

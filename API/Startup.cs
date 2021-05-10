@@ -50,9 +50,7 @@ namespace API
         {
             app.UseMiddleware<ExceptionMiddleware>();             
 
-            app.UseHttpsRedirection();
-
-            app.UseStaticFiles();                       
+            app.UseHttpsRedirection();              
 
             app.UseRouting();
 
@@ -66,11 +64,16 @@ namespace API
 
             app.UseAuthorization();
 
+            app.UseDefaultFiles();
+
+            app.UseStaticFiles();
+
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllerRoute(
                     name: "default",
                     pattern: "{controller}/{action=Index}/{id?}");
+                endpoints.MapFallbackToController("Index", "FallBack");
             });
 
           
