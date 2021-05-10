@@ -9,7 +9,7 @@ namespace Core.Entities
     public class Vendor : BaseEntity
     {
         public string Name { get; set; }
-        public double AmountInHand { get; set; }
+        public decimal AmountInHand { get; set; }
         public double DueAmount { get; set; }
         public List<TransactionDetail> IncomingTransactions { get; set; }
         public List<TransactionDetail> OutgoingTransactions { get; set; }

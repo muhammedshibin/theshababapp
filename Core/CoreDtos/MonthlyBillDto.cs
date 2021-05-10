@@ -12,7 +12,7 @@ namespace Core.CoreDtos
         public int Month { get; set; }
         public int Year { get; set; }
         
-        public double SubTotal { get; set; }
+        public decimal SubTotal { get; set; }
         public List<CategoryWiseExpense> CategoryWiseExpenses { get; set; }
     }
 
@@ -21,12 +21,12 @@ namespace Core.CoreDtos
         public int CategoryId { get; set; }
         public string CategoryName { get; set; }
         public List<TransactionDetailDto> TransactionDetails { get; set; }
-        public double TotalAmount { get; set; } = 0;
+        public decimal TotalAmount { get; set; } = 0;
     }
 
     public class TransactionDetailDto
     {
         public string TransactionDetailName { get; set; }
-        public double  Amount { get; set; }
+        public decimal  Amount { get; set; }
     }
 }

@@ -16,7 +16,7 @@ namespace Core.Entities
         public Vendor PaidParty { get; set; }
         public int PaidToId { get; set; }
         public Vendor PaidTo { get; set; }
-        public double Amount { get; set; }
+        public decimal Amount { get; set; }
         public int CategoryId { get; set; }
         public Category Category { get; set; }
         public TransactionStatus Status { get; set; } = TransactionStatus.Saved;

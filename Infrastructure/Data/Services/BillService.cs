@@ -118,7 +118,7 @@ namespace Infrastructure.Data.Services
 
             var categoryWiseExpensesList = new List<CategoryWiseExpense>();
 
-            double monthlyTotal = 0;
+            decimal monthlyTotal = 0;
 
             foreach (var category in categories)
             {
@@ -188,7 +188,7 @@ namespace Infrastructure.Data.Services
                 var billDetails = new List<BillDetail>();
                 var leavesForInmate = inmate.InmateLeaves;
 
-                double occuppancy = 1;
+                decimal occuppancy = 1;
                 int numberOfLeaveDays = 0;
                 if (leavesForInmate.Any())
                 {
@@ -206,7 +206,7 @@ namespace Infrastructure.Data.Services
                     }
 
                 }
-                occuppancy = (numberOfDaysInMonth - numberOfLeaveDays) / numberOfDaysInMonth;
+                occuppancy = (decimal) ((numberOfDaysInMonth - numberOfLeaveDays) / numberOfDaysInMonth);
 
                 var rentDetail = new BillDetail("RENT", (int)BillCategory.RENT, BillCategory.RENT.ToString(), rentforTop, inmateBill);
 
@@ -214,12 +214,12 @@ namespace Infrastructure.Data.Services
 
                 if (!inmate.IsInmateOnTopBed)
                 {
-                    rentDetail.Amount = rentforTop + 30;
+                    rentDetail.Amount = (decimal) rentforTop + 30;
                 }
 
                 var messExpense = messTransactions.TotalAmount;
 
-                var amountForInmate = (messExpense / inmates.Count) * occuppancy;
+                var amountForInmate =(decimal) (messExpense / inmates.Count) * occuppancy;
 
                 var messDetail = new BillDetail("MESS", (int)BillCategory.MESS, BillCategory.MESS.ToString(), amountForInmate, inmateBill);
 
@@ -243,11 +243,11 @@ namespace Infrastructure.Data.Services
 
                         if (!cat.IsApplicableForVisitors && (inmates.Count > visitorsCount))
                         {
-                            amountForInmate = cat.NeedToConsiderDays ? (expense / inmates.Count - visitorsCount) * occuppancy : (expense / (inmates.Count - visitorsCount));
+                            amountForInmate = cat.NeedToConsiderDays ?(decimal) (expense / inmates.Count - visitorsCount) * occuppancy : (expense / (inmates.Count - visitorsCount));
                         }
                         else
                         {
-                            amountForInmate = cat.NeedToConsiderDays ? (expense / (inmates.Count)) * occuppancy : (expense / inmates.Count);
+                            amountForInmate = cat.NeedToConsiderDays ?(decimal) (expense / (inmates.Count)) * occuppancy : (expense / inmates.Count);
                         }
 
 
@@ -279,7 +279,7 @@ namespace Infrastructure.Data.Services
 
 
         }
-        private static double GetRentForBottom(int x, int y, double rent)
+        private static decimal GetRentForBottom(int x, int y, decimal rent)
         {
             return (rent - x * 30) / y;
         }

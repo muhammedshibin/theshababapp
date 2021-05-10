@@ -14,7 +14,7 @@ namespace Core.Entities
         public int Month { get; set; }
         [Required]
         public int Year { get; set; }
-        public double BillAmount { get; set; }
+        public decimal BillAmount { get; set; }
         public Inmate Inmate { get; set; }
         public int InmateId { get; set; }
         public int? PaymentId { get; set; }

@@ -12,7 +12,7 @@ namespace Core.Entities
         {
 
         }
-        public BillDetail(string itemName, int itemCategoryId, string itemCategoryName, double amount ,InmateBill inmateBill)
+        public BillDetail(string itemName, int itemCategoryId, string itemCategoryName, decimal amount ,InmateBill inmateBill)
         {
             ItemName = itemName;
             ItemCategoryId = itemCategoryId;
@@ -24,7 +24,7 @@ namespace Core.Entities
         public string ItemName { get; set; }
         public int ItemCategoryId { get; set; }
         public string ItemCategoryName { get; set; }
-        public double Amount { get; set; }
+        public decimal Amount { get; set; }
         public int InmateBillId { get; set; }
         public InmateBill InmateBill { get; set; }
     }

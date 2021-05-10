@@ -11,7 +11,7 @@ namespace Core.Entities
         public string Name { get; set; }
         public bool IsApplicableForVisitors { get; set; }
         public bool NeedToConsiderDays { get; set; }
-        public double DefaultRate { get; set; }
+        public decimal DefaultRate { get; set; }
 
         public override bool Equals(object obj)
         {

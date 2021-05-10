@@ -12,6 +12,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.OpenApi.Models;
+using System;
 
 namespace API
 {
@@ -24,18 +25,14 @@ namespace API
             _config = config;
         }
 
-        
+
 
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
-        {
-
-            services.AddDbContext<ShababContext>(options => options.UseSqlite(_config.GetConnectionString("DefaultConnection")));
-            services.AddDbContext<AppUserIdentityDbContext>(options => options.UseSqlite(_config.GetConnectionString("IdentityConnection")));
-
+        { 
             services.AddControllersWithViews();
 
-            services.AddApplicationServices();
+            services.AddApplicationServices(_config);
             services.AddIdentityExtensions(_config);
 
             services.AddCors(options => options.AddPolicy("CorsPolicy", policy => {

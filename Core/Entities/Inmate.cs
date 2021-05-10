@@ -23,8 +23,8 @@ namespace Core.Entities
         public InmateStatus Status { get; set; } = InmateStatus.Active;
         public bool IsVisit { get; set; } = false;
         public bool IsInmateOnTopBed { get; set; } = false;
-        public double AmountDue { get; set; }
-        public double Savings { get; set; }
+        public decimal AmountDue { get; set; }
+        public decimal Savings { get; set; }
 
 
         public IReadOnlyList<Leave> InmateLeaves;
