@@ -48,9 +48,9 @@ namespace Core.Specifications
             Take = take;
         }
 
-        public void AddTracking()
+        public void AddNoTracking()
         {
-            TrackingNeeded = true;
+            TrackingNeeded = false;
         }
         
         

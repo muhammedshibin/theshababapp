@@ -29,7 +29,7 @@ namespace Core.Specifications
         {
             AddInclude(t => t.Category);
             AddInclude(t => t.PaidParty);
-            if (trackingNeeded) AddTracking();
+            if (!trackingNeeded) AddNoTracking();
         }
         
     }
