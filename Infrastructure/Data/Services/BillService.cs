@@ -170,7 +170,7 @@ namespace Infrastructure.Data.Services
             //check this later
             //var defaultRentSettings = categories.FirstOrDefault(c => c.Name == BillCategory.RENT.ToString());
 
-            var defaultRent = txnDetails.FirstOrDefault(t => t.CategoryName == "RENT").TotalAmount;
+            var defaultRent = txnDetails.Where(c => c.CategoryName == BillCategory.RENT.ToString()).Sum(i => i.TotalAmount);
 
             var rentforTop = GetRentForBottom(bottomBedInmates, inmates.Count, defaultRent);
 
@@ -180,11 +180,13 @@ namespace Infrastructure.Data.Services
 
             foreach (var inmate in inmates)
             {
-                var inmateBill = new InmateBill();
-                inmateBill.InmateId = inmate.Id;
-                inmateBill.Month = month;
-                inmateBill.Year = year;
-                inmateBill.CreatedOn = DateTime.Now;
+                var inmateBill = new InmateBill
+                {
+                    InmateId = inmate.Id,
+                    Month = month,
+                    Year = year,
+                    CreatedOn = DateTime.Now
+                };
                 var billDetails = new List<BillDetail>();
                 var leavesForInmate = inmate.InmateLeaves;
 
