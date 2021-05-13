@@ -14,7 +14,7 @@ using System.Threading.Tasks;
 
 namespace API.Controllers
 {
-
+    [Authorize]
     public class AccountController : BaseApiController
     {
         private readonly UserManager<AppUser> _userManager;

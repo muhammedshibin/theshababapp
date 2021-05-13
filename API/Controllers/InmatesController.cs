@@ -17,6 +17,7 @@ using Core.CoreDtos;
 
 namespace API.Controllers
 {
+    [Authorize]
     public class InmatesController : BaseApiController
     {
         

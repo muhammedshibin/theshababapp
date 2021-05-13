@@ -2,7 +2,7 @@ import { User } from './../../shared/models/user';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { ReplaySubject } from 'rxjs';
-import { map } from 'rxjs/operators';
+import { map, take } from 'rxjs/operators';
 import { environment } from 'src/environments/environment';
 
 @Injectable({
@@ -24,6 +24,7 @@ export class AccountService {
     );
   }
 
+  
   getCurrentUser(token: string) {
     let headers = new HttpHeaders();
     headers = headers.set('Authorization', `Bearer ${token}`);

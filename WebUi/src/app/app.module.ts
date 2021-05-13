@@ -1,3 +1,4 @@
+import { JwtInterceptor } from './core/interceptors/jwt.interceptor';
 import { BillModule } from './bill/bill.module';
 import { LoadingInterceptor } from './core/interceptors/loading.interceptor';
 import { VendorModule } from './vendor/vendor.module';
@@ -31,6 +32,7 @@ import { NgxSpinnerModule } from 'ngx-spinner';
   ],
   providers: [
     { provide: HTTP_INTERCEPTORS, useClass: LoadingInterceptor, multi: true },
+    { provide: HTTP_INTERCEPTORS, useClass: JwtInterceptor, multi: true }
   ],
   bootstrap: [AppComponent],
 })

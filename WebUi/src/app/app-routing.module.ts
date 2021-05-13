@@ -1,3 +1,4 @@
+import { AuthGuard } from './core/guards/auth.guard';
 import { GenerateBillComponent } from './bill/generate-bill/generate-bill.component';
 import { TenantViewComponent } from './tenant/tenant-view/tenant-view.component';
 import { TransactionsListComponent } from './transactions/transactions-list/transactions-list.component';
@@ -10,20 +11,51 @@ import { TenantListComponent } from './tenant/tenant-list/tenant-list.component'
 import { BillListComponent } from './bill/bill-list/bill-list.component';
 
 const routes: Routes = [
-  {path:'',component:HomeComponent,data:{breadcrumb: 'Home'}},
-  {path:'bills/add-bill',component:GenerateBillComponent},
-  {path:'bills/list',component:BillListComponent,data:{breadcrumb: 'Bills'}},
-  {path:'transactions/add-transaction', component:AddTransactionComponent , data:{breadcrumb: 'Add Transaction'}},
-  {path:'transactions/list', component:TransactionsListComponent , data:{breadcrumb: 'Transactions'}},
-  {path:'transactions/:id', component:AddTransactionComponent, data:{breadcrumb: 'Edit Transaction'}},  
-  {path:'tenants/add-tenant', component:AddTenantComponent},
-  {path:'tenants/list', component:TenantListComponent , data:{breadcrumb: 'Inmates'}},
-  {path:'tenants/:id', component:TenantViewComponent , data:{breadcrumb:{alias:'inmateName'}}}
-  
+  { path: '', component: HomeComponent, data: { breadcrumb: 'Home' } },
+  {
+    path: '',
+    runGuardsAndResolvers: 'always',
+    canActivate: [AuthGuard],
+    children: [
+      { path: 'bills/add-bill', component: GenerateBillComponent },
+      {
+        path: 'bills/list',
+        component: BillListComponent,
+        data: { breadcrumb: 'Bills' },
+      },
+      {
+        path: 'transactions/add-transaction',
+        component: AddTransactionComponent,
+        data: { breadcrumb: 'Add Transaction' },
+      },
+      {
+        path: 'transactions/list',
+        component: TransactionsListComponent,
+        data: { breadcrumb: 'Transactions' },
+      },
+      {
+        path: 'transactions/:id',
+        component: AddTransactionComponent,
+        data: { breadcrumb: 'Edit Transaction' },
+      },
+      { path: 'tenants/add-tenant', component: AddTenantComponent },
+      {
+        path: 'tenants/list',
+        component: TenantListComponent,
+        data: { breadcrumb: 'Inmates' },
+      },
+      {
+        path: 'tenants/:id',
+        component: TenantViewComponent,
+        data: { breadcrumb: { alias: 'inmateName' } },
+      },
+    ],
+  },
+  { path: '**', component: HomeComponent, pathMatch: 'full' },
 ];
 
 @NgModule({
   imports: [RouterModule.forRoot(routes)],
-  exports: [RouterModule]
+  exports: [RouterModule],
 })
-export class AppRoutingModule { }
+export class AppRoutingModule {}

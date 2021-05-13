@@ -4,6 +4,7 @@ using AutoMapper;
 using Core.CoreDtos;
 using Core.DataFilters;
 using Core.Interfaces;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
@@ -14,7 +15,7 @@ using System.Threading.Tasks;
 
 namespace API.Controllers
 {
-    
+    [Authorize]
     public class BillsController : BaseApiController
     {
         private readonly IBillService _billservice;
