@@ -23,6 +23,9 @@ export class AppComponent implements OnInit {
       },err => {
         console.log('error occured');
       })
+    }else{
+      this.accountService.initiate();
     }
+
   }
 }

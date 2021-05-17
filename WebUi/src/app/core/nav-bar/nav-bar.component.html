@@ -1,6 +1,6 @@
 <nav class="navbar navbar-expand-md navbar-light fixed-top bg-info d-flex justify-content-between">   
         <div>
-            <a class="navbar-brand" href="#"><i class="fa fa-users mr-2"></i>THE SHABAB APP</a>
+            <a class="navbar-brand" routerLink="/dashboard"><i class="fa fa-users mr-2"></i>THE SHABAB APP</a>
         </div>
         <div>
             <ul class="navbar-nav mr-auto" *ngIf="(currentUser$ | async) !== null">
@@ -23,7 +23,7 @@
                             aria-controls="dropdown-basic">
                             <strong>{{currentUser.displayName}}</strong> <span class="caret"></span>
                     </button>
-                    <ul id="dropdown-basic" *dropdownMenu class="dropdown-menu ml-2"
+                    <ul id="dropdown-basic" *dropdownMenu class="dropdown-menu"
                         role="menu" aria-labelledby="button-basic">
                       <li role="menuitem"><a class="dropdown-item" href="#">Settings</a></li>
                       <!-- <li role="menuitem"><a class="dropdown-item" href="#">Another action</a></li>

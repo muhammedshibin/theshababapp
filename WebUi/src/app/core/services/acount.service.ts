@@ -42,4 +42,8 @@ export class AccountService {
     localStorage.removeItem('token');
     this.currentUserSource.next(null);    
   }
+
+  initiate(){
+    this.currentUserSource.next(null);  
+  }
 }

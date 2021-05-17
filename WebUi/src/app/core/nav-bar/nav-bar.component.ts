@@ -1,3 +1,4 @@
+import { ToastrService } from 'ngx-toastr';
 import { Observable } from 'rxjs';
 import { Router } from '@angular/router';
 import { AccountService} from './../services/acount.service';
@@ -15,7 +16,7 @@ export class NavBarComponent implements OnInit {
   password: string;
   currentUser$: Observable<User>;
 
-  constructor(private accountService: AccountService ,private router: Router) { }
+  constructor(private accountService: AccountService ,private router: Router,private toastr:ToastrService) { }
 
   ngOnInit(): void {
     this.currentUser$ = this.accountService.currentUser$;
@@ -27,7 +28,7 @@ export class NavBarComponent implements OnInit {
         console.log('success');
         this.router.navigateByUrl('/transactions/list');
       },(err) =>{
-        console.log(err);
+        this.toastr.error('You are not authorized','Unauthorized');
       }
     )
   }

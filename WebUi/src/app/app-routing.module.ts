@@ -1,3 +1,4 @@
+import { DashboardComponent } from './home/dashboard/dashboard.component';
 import { AuthGuard } from './core/guards/auth.guard';
 import { GenerateBillComponent } from './bill/generate-bill/generate-bill.component';
 import { TenantViewComponent } from './tenant/tenant-view/tenant-view.component';
@@ -17,6 +18,7 @@ const routes: Routes = [
     runGuardsAndResolvers: 'always',
     canActivate: [AuthGuard],
     children: [
+      { path: 'dashboard', component: DashboardComponent},
       { path: 'bills/add-bill', component: GenerateBillComponent },
       {
         path: 'bills/list',
@@ -50,7 +52,7 @@ const routes: Routes = [
         data: { breadcrumb: { alias: 'inmateName' } },
       },
     ],
-  },
+  },  
   { path: '**', component: HomeComponent, pathMatch: 'full' },
 ];
 

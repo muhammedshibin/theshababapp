@@ -1,3 +1,4 @@
+import { RouterModule } from '@angular/router';
 import { Inmate } from './models/inmate';
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
@@ -14,9 +15,10 @@ import { AlertWindowComponent } from './components/alert-window/alert-window.com
 import { TabsModule } from 'ngx-bootstrap/tabs';
 import { AccordionModule } from 'ngx-bootstrap/accordion';
 import { BsDropdownModule } from 'ngx-bootstrap/dropdown';
+import { DashboardIconComponent } from './components/dashboard-icon/dashboard-icon.component';
 
 @NgModule({
-  declarations: [TextInputComponent, DateInputComponent, ModalLgComponent, AlertWindowComponent],
+  declarations: [TextInputComponent, DateInputComponent, ModalLgComponent, AlertWindowComponent, DashboardIconComponent],
   imports: [
     CommonModule,
     FormsModule,
@@ -26,6 +28,7 @@ import { BsDropdownModule } from 'ngx-bootstrap/dropdown';
     PaginationModule.forRoot(),
     ModalModule.forRoot(),
     TabsModule.forRoot(),
+    RouterModule,
     AccordionModule.forRoot(),
     BsDropdownModule.forRoot(),
     ToastrModule.forRoot({
@@ -47,7 +50,8 @@ import { BsDropdownModule } from 'ngx-bootstrap/dropdown';
     AlertWindowComponent,
     TabsModule,
     AccordionModule,
-    BsDropdownModule
+    BsDropdownModule,
+    DashboardIconComponent
   ],
 })
 export class SharedModule {}
