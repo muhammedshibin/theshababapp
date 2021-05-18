@@ -1,0 +1,16 @@
+<div class="container">
+    <div>
+        <div class="col-10">
+            <form [formGroup]="leaveForm" (ngSubmit)="onSubmit()">
+                <label for="">Leave Reason</label>
+                <app-text-input [formControl]="leaveForm.controls['leaveReason']" [label]="'Leave Reason'">
+                </app-text-input>
+                <label for="">From Date</label>
+                <app-date-input [formControl]="leaveForm.controls['fromDate']" [label]="'From Date'"></app-date-input>
+                <label for="">To Date</label>
+                <app-date-input [formControl]="leaveForm.controls['toDate']" [label]="'To Date'"></app-date-input>
+                <button class="btn btn-success">Apply</button>
+            </form>
+        </div>
+    </div>
+</div>

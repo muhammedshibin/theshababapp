@@ -2,6 +2,7 @@
 using AutoMapper;
 using Core.CoreDtos;
 using Core.Entities;
+using Core.Enumerations;
 using System;
 using System.Collections.Generic;
 using System.Globalization;
@@ -36,7 +37,15 @@ namespace API.Helpers
                 .ForMember(dest => dest.PaymentStatus , opt => opt.MapFrom(src => src.PaymentStatus.GetHashCode()))
                 .ForMember(dest => dest.Inmate, opt => opt.MapFrom(src => src.Inmate.FullName));
 
-            CreateMap<BillDetail, BillDetailDto>();  
+            CreateMap<BillDetail, BillDetailDto>();
+
+            CreateMap<Leave, LeaveDto>()
+                .ForMember(dest => dest.Inmate, m => m.MapFrom(src => src.Inmate.FullName))
+                .ForMember(dest => dest.Status, m => m.MapFrom(src => src.Status.ToString()));
+
+            CreateMap<LeaveDto, Leave>()
+                .ForMember(dest => dest.Inmate, m => m.Ignore())
+                .ForMember(dest => dest.Status, m => m.MapFrom(src => (LeaveStatus) Enum.Parse(typeof(LeaveStatus), src.Status)));
 
         }
     }

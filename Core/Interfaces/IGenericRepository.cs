@@ -22,7 +22,12 @@ namespace Core.Interfaces
         /// </summary>
         /// <param name="spec"></param>
         /// <returns></returns>
-        Task<T> FindOneBySpecAsync(ISpecification<T> spec);
+        Task<T> FindOneBySpecAsync(ISpecification<T> spec);/// <summary>
+        /// Retrieve an entity item for the provided input specification
+        /// </summary>
+        /// <param name="spec"></param>
+        /// <returns></returns>
+        Task<TOut> FindOneBySpecAsync<TOut>(ISpecification<T> spec);
         /// <summary>
         /// Retrieve list of items of entity for the provided specification
         /// </summary>

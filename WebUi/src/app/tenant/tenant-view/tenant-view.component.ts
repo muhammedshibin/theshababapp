@@ -6,6 +6,7 @@ import { ActivatedRoute } from '@angular/router';
 import { TabDirective } from 'ngx-bootstrap/tabs';
 import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
 import { BreadcrumbService } from 'xng-breadcrumb';
+import { Leave } from 'src/app/shared/models/leave';
 
 @Component({
   selector: 'app-tenant-view',
@@ -15,6 +16,7 @@ import { BreadcrumbService } from 'xng-breadcrumb';
 export class TenantViewComponent implements OnInit {
   inmate: Inmate;
   inmateBills: InmateBill[] = [];
+  leaves: Leave[];
   editDisabled = true;
   tenantOptions = [
     {value:true,display:'Visit'},
@@ -28,7 +30,7 @@ export class TenantViewComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {    
-    this.loadTenant();
+    this.loadTenant();    
   }
 
   loadTenant() {
@@ -56,9 +58,24 @@ export class TenantViewComponent implements OnInit {
     );
   }
 
+  loadTenantLeaves() {
+    this.tenantService.getTenantLeaves(this.inmate.id).subscribe(
+      (data) => {
+        this.leaves = data;
+      },
+      (err) => {
+        console.log(err);
+      }
+    );
+  }
+
   onSelect(tab: TabDirective) {
     if (tab.heading === 'Bill Details') {
       this.loadTenantBills();
+      //this.loadTenant();
+    }
+    if (tab.heading === 'Leaves') {
+      this.loadTenantLeaves();
       //this.loadTenant();
     }
   }  
@@ -77,5 +94,9 @@ export class TenantViewComponent implements OnInit {
   onReset(){
     this.editDisabled = true;
     this.loadTenant();
+  }
+
+  onLeaveAddedSuccess(event: any){
+    this.loadTenantLeaves();
   }
 }

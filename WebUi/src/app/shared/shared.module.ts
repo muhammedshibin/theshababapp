@@ -1,3 +1,4 @@
+import { TenantLeaveComponent } from './../tenant/tenant-leave/tenant-leave.component';
 import { RouterModule } from '@angular/router';
 import { Inmate } from './models/inmate';
 import { NgModule } from '@angular/core';

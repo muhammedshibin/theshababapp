@@ -1,3 +1,4 @@
+import { Leave } from './../shared/models/leave';
 import { environment } from './../../environments/environment';
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
@@ -14,8 +15,13 @@ export class TenantService {
 
   constructor(private http: HttpClient) { }
 
-  getInmates(pageNumber: number , pageSize: number){
+  getInmates(pageNumber: number , pageSize: number , search: string){
     let params = getPaginationHeaders(pageNumber,pageSize);
+
+    if(search){
+      params = params.append('search',search);
+    }
+
     return getPaginatedResult<Inmate>(this.http,this.baseUrl+'Inmates',params);
   }
 
@@ -29,9 +35,19 @@ export class TenantService {
 
   getTenantBills(inmateId: number){
     return this.http.get<InmateBill[]>(this.baseUrl + 'bills/inmate/' + inmateId);
-  }
+  }  
 
   updateInmate(inmate: Inmate){
     return this.http.patch(this.baseUrl +'Inmates',inmate);
   }
+
+  getTenantLeaves(inmateId: number){
+    return this.http.get<Leave[]>(this.baseUrl + 'leaves/tenant/' + inmateId);
+  }
+
+  addLeave(leave: Leave){
+    return this.http.post(this.baseUrl + 'leaves' ,leave);
+  }
+
+
 }

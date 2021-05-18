@@ -1,81 +1,95 @@
-<div class="container">
-    <div class="row" *ngIf="inmate">
-
-        <div class="col-4">
-            <div class="card">
-                <img src="{{inmate.pictureUrl || 'assets/images/noimage.png'}}" alt="{{inmate.fullName}}"
-                    class="card-img-top img-thumbnail">
-                <div class="card-body">
-                    <div>
-                        <h4 class="text-info">{{inmate.fullName}}</h4>
+<div *ngIf="inmate">
+    <div class="container">
+        <div class="row">
+    
+            <div class="col-4">
+                <div class="card">
+                    <img src="{{inmate.pictureUrl || 'assets/images/noimage.png'}}" alt="{{inmate.fullName}}"
+                        class="card-img-top img-thumbnail">
+                    <div class="card-body">
+                        <div>
+                            <h4 class="text-info">{{inmate.fullName}}</h4>
+                        </div>
+                        <div>
+                            <strong>Contact Number:</strong>
+                            <p>{{inmate.phoneNumber}}</p>
+                        </div>
+                        <div>
+                            <strong>Age:</strong>
+                            <p>{{inmate.age}}</p>
+                        </div>
+    
+                        <div>
+                            <strong>Member Status:</strong>
+                            <p>{{inmate.status == 0?'Active':'Inactive'}}</p>
+                        </div>
+    
                     </div>
-                    <div>
-                        <strong>Contact Number:</strong>
-                        <p>{{inmate.phoneNumber}}</p>
+                    <div class="card-footer">
+                        <!-- <div class="btn-group d-flex">
+                            <button class="btn btn-primary">Like</button>
+                            <button class="btn btn-success">Message</button>
+                        </div> -->
                     </div>
-                    <div>
-                        <strong>Age:</strong>
-                        <p>{{inmate.age}}</p>
-                    </div>
-
-                    <div>
-                        <strong>Member Status:</strong>
-                        <p>{{inmate.status == 0?'Active':'Inactive'}}</p>
-                    </div>
-
-                </div>
-                <div class="card-footer">
-                    <!-- <div class="btn-group d-flex">
-                        <button class="btn btn-primary">Like</button>
-                        <button class="btn btn-success">Message</button>
-                    </div> -->
                 </div>
             </div>
-        </div>
-
-        <div class="col-8">
-            <tabset class="member-tabset" #memberTabs>
-                <tab heading="Basic Info" (selectTab)="onSelect($event)">
-                    <!-- (selectTab)="onTabActivated($event)" -->
-                    <form (ngSubmit)="onUpdate()" #form="ngForm">      
-                    <div class="row">                                          
-                        <div class="col-5">
-                            <h5 class="text-success">Email Address</h5>
-                            <p>{{inmate.emailAddress || 'None'}}</p>
-                            <h5 class="text-success">Inmate Type</h5>
-                            <select [disabled]="editDisabled" name="isVisit" class="form-control col-5 my-2" [(ngModel)]="inmate.isVisit">
-                                <option *ngFor="let option of tenantOptions" [ngValue]="option.value">
-                                    {{ option.display }}
-                                </option>
-                            </select>
-                            <!-- <p>{{inmate.isVisit?'Visit':'Regular'}}<i class="fa fa-edit fa-3 ml-3"></i></p> -->
-                            <h5 class="text-success">Address</h5>
-                            <p>{{inmate.address}}</p>
-                            <h5 class="text-success">Room Number</h5>
-                            <p class="lead">4<i class="fa fa-edit fa-3 ml-3"></i></p>
+    
+            <div class="col-8">
+                <tabset class="member-tabset" #memberTabs>
+                    <tab heading="Basic Info" (selectTab)="onSelect($event)">
+                        <!-- (selectTab)="onTabActivated($event)" -->
+                        <form (ngSubmit)="onUpdate()" #form="ngForm">      
+                        <div class="row">                                          
+                            <div class="col-5">
+                                <h5 class="text-success">Email Address</h5>
+                                <p>{{inmate.emailAddress || 'None'}}</p>
+                                <h5 class="text-success">Inmate Type</h5>
+                                <select [disabled]="editDisabled" name="isVisit" class="form-control col-5 my-2" [(ngModel)]="inmate.isVisit">
+                                    <option *ngFor="let option of tenantOptions" [ngValue]="option.value">
+                                        {{ option.display }}
+                                    </option>
+                                </select>
+                                <!-- <p>{{inmate.isVisit?'Visit':'Regular'}}<i class="fa fa-edit fa-3 ml-3"></i></p> -->
+                                <h5 class="text-success">Address</h5>
+                                <p>{{inmate.address}}</p>
+                                <h5 class="text-success">Room Number</h5>
+                                <p class="lead">4<i class="fa fa-edit fa-3 ml-3"></i></p>
+                            </div>
+                            <div class="col-5">
+                               
+                                <h5 class="text-success">Amount Due</h5>
+                                <input type="number" [disabled]="editDisabled" class="form-control col-6" name="amountDue" [(ngModel)]="inmate.amountDue">
+                                <!-- <p>{{inmate.amountDue | currency}}<i class="fa fa-edit fa-3 ml-3"></i></p> -->
+                                <h5 class="text-success">Savings</h5>
+                                <input type="number" [disabled]="editDisabled" class="form-control col-6" name="savings" [(ngModel)]="inmate.savings">
+                                <!-- <p>{{inmate.savings | currency}}<i class="fa fa-edit fa-3 ml-3"></i></p> -->
+                            </div>
+                                                
+                        </div>                    
+                        <button type="submit" class="btn btn-success" *ngIf="editDisabled===false" (click)="editDisabled = false" (click)="onUpdate()">Save Changes</button>
+                        <button class="btn btn-danger ml-2" *ngIf="editDisabled===true" (click)="editDisabled = false">Edit Details</button>
+                        <button class="btn btn-outline-primary ml-2" (click)="onReset()">Reset</button> 
+                    </form>
+                    </tab>
+                    <tab heading="Bill Details" (selectTab)="onSelect($event)">
+    
+                        <div *ngIf="inmateBills.length === 0">
+                            <h3>There are no Bills to display</h3>                        
                         </div>
-                        <div class="col-5">
-                           
-                            <h5 class="text-success">Amount Due</h5>
-                            <input type="number" [disabled]="editDisabled" class="form-control col-6" name="amountDue" [(ngModel)]="inmate.amountDue">
-                            <!-- <p>{{inmate.amountDue | currency}}<i class="fa fa-edit fa-3 ml-3"></i></p> -->
-                            <h5 class="text-success">Savings</h5>
-                            <input type="number" [disabled]="editDisabled" class="form-control col-6" name="savings" [(ngModel)]="inmate.savings">
-                            <!-- <p>{{inmate.savings | currency}}<i class="fa fa-edit fa-3 ml-3"></i></p> -->
-                        </div>
-                                            
-                    </div>                    
-                    <button type="submit" class="btn btn-success" *ngIf="editDisabled===false" (click)="editDisabled = false" (click)="onUpdate()">Save Changes</button>
-                    <button class="btn btn-danger ml-2" *ngIf="editDisabled===true" (click)="editDisabled = false">Edit Details</button>
-                    <button class="btn btn-outline-primary ml-2" (click)="onReset()">Reset</button> 
-                </form>
-                </tab>
-                <tab heading="Bill Details" (selectTab)="onSelect($event)">
-                    <accordion>
-                        <app-tenant-bill *ngFor="let bill of inmateBills" [inmateBill]='bill' (billPaid)="onBillPaid($event)"></app-tenant-bill>
-                    </accordion>
-                </tab>
-            </tabset>
+                        <accordion *ngIf="inmateBills.length > 0">
+                            <app-tenant-bill *ngFor="let bill of inmateBills" [inmateBill]='bill' (billPaid)="onBillPaid($event)"></app-tenant-bill>
+                        </accordion>
+                    </tab>
+                    <tab heading="Leaves" (selectTab)="onSelect($event)">
+                        <accordion>
+                            <!-- <div *ngIf="leaves.length > 0" > -->
+                                <app-tenant-leave [leaves]='leaves' [tenantId]='inmate.id' (leaveSuccessEvent)="onLeaveAddedSuccess($event)" ></app-tenant-leave>
+                            <!-- </div>                             -->
+                        </accordion>
+                    </tab>
+                </tabset>
+            </div>
         </div>
     </div>
+    
 </div>

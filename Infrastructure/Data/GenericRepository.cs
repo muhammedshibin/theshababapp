@@ -32,6 +32,12 @@ namespace Infrastructure.Data
         {
             return await EvaluateExpression(spec).FirstOrDefaultAsync();
         }
+        public async Task<TOut> FindOneBySpecAsync<TOut>(ISpecification<T> spec)
+        {
+            return await EvaluateExpression(spec)
+                .ProjectTo<TOut>(_mapper.ConfigurationProvider)
+                .FirstOrDefaultAsync();
+        }
         public async Task<IReadOnlyList<T>> FindAllBySpecAsync(ISpecification<T> spec)
         {
             return await EvaluateExpression(spec).ToListAsync();

@@ -40,7 +40,8 @@ const routes: Routes = [
         component: AddTransactionComponent,
         data: { breadcrumb: 'Edit Transaction' },
       },
-      { path: 'tenants/add-tenant', component: AddTenantComponent },
+      { path: 'tenants/add-tenant', component: AddTenantComponent,
+      data: { breadcrumb: 'Add Inmate' } },
       {
         path: 'tenants/list',
         component: TenantListComponent,

@@ -1,4 +1,12 @@
 <div class="container">
+    <div class="d-flex justify-content-between">
+        <div>
+            <p  class="text-muted" *ngIf="tenants && tenants.length > 0">Showing {{tenants.length}} of {{pagination.count}} items</p>
+        </div>
+        <div class="form-group mr-5">
+            <input type="text" class="form-control" placeholder="Search" #search (keyup.enter)="onSearch()">
+        </div>        
+    </div>
     <div class="row">
         <div class="col-3" *ngFor="let tenant of tenants">
             <app-tenant-card [tenant]='tenant'></app-tenant-card>

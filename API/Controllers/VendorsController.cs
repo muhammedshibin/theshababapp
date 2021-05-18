@@ -12,7 +12,6 @@ using System.Threading.Tasks;
 
 namespace API.Controllers
 {
-    [Authorize]
     public class VendorsController : BaseApiController
     {
         private readonly IVendorService _vendorService;

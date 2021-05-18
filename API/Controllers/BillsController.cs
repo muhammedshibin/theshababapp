@@ -15,7 +15,7 @@ using System.Threading.Tasks;
 
 namespace API.Controllers
 {
-    [Authorize]
+    
     public class BillsController : BaseApiController
     {
         private readonly IBillService _billservice;
