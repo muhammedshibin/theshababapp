@@ -176,7 +176,7 @@ namespace Infrastructure.Data.Services
 
             var firstDayOfMonth = new DateTime(year, month, 1);
             var lastDayOfMonth = firstDayOfMonth.AddMonths(1).AddDays(-1);
-            double numberOfDaysInMonth = (lastDayOfMonth - firstDayOfMonth).Days;
+            int numberOfDaysInMonth = (lastDayOfMonth - firstDayOfMonth).Days;
 
             foreach (var inmate in inmates)
             {

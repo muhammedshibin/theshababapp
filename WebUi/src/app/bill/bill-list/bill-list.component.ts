@@ -17,8 +17,8 @@ export class BillListComponent implements OnInit {
   billParams = new BillParams(
     1,
     5,
-    new Date().getMonth(),
-    new Date().getFullYear()
+    null,
+    null
   );
   modalRef: BsModalRef;
   selectedBill: InmateBill;
@@ -39,7 +39,7 @@ export class BillListComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    this.billParams.month = 5;
+   
     this.billParams.paidPredicate = null;
     this.loadBills();
   }
