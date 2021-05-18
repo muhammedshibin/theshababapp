@@ -1,4 +1,4 @@
-import { BillService } from './../bill.service';
+import { BillService } from '../../../bill/bill.service';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { ToastrService } from 'ngx-toastr';

@@ -77,6 +77,7 @@ export class TransactionsListComponent implements OnInit {
     };
     this.alertmodalRef = this.modalService.show(AlertWindowComponent, {initialState});
     this.alertmodalRef.onHidden.subscribe(() => {
+      if(this.alertmodalRef.content.message !== 'Declined!')
       this.transactionService.deleteTransaction(txn.id).subscribe((success) => {
           this.toastr.success('Transaction Deleted Successfully','Success');
           this.loadTransactions();

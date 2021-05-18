@@ -26,7 +26,7 @@ export class NavBarComponent implements OnInit {
     this.accountService.login({username:this.username,password:this.password}).subscribe(
       (response) =>{
         console.log('success');
-        this.router.navigateByUrl('/transactions/list');
+        this.router.navigateByUrl('/dashboard');
       },(err) =>{
         this.toastr.error('You are not authorized','Unauthorized');
       }

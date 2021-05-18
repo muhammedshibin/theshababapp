@@ -1,13 +1,16 @@
 <div class="container">
     <div class="d-flex justify-content-between">
         <div>
-            <p  class="text-muted" *ngIf="tenants && tenants.length > 0">Showing {{tenants.length}} of {{pagination.count}} items</p>
+            <p class="text-muted" *ngIf="tenants && tenants.length > 0">Showing {{tenants.length}} of
+                {{pagination.count}} items</p>
         </div>
-        <div class="form-group mr-5">
-            <input type="text" class="form-control" placeholder="Search" #search (keyup.enter)="onSearch()">
-        </div>        
+        <div class="form-inline"><button class="btn btn-outline-danger mr-3" routerLink="/tenants/add-tenant">Add an Inmate</button>
+            <div class="form-group mr-5">
+                <input type="text" class="form-control" placeholder="Search" #search (keyup.enter)="onSearch()">
+            </div>
+        </div>
     </div>
-    <div class="row">
+    <div class="row mt-3">
         <div class="col-3" *ngFor="let tenant of tenants">
             <app-tenant-card [tenant]='tenant'></app-tenant-card>
         </div>
@@ -15,10 +18,10 @@
     <div class="d-flex justify-content-center">
         <div class="row" *ngIf="pagination">
             <div class="col-xs-12 col-12">
-                <pagination [boundaryLinks]="true" (pageChanged)="onPageChange($event)"  [itemsPerPage]="pagination.pageSize"
-                       [totalItems]="pagination.count"></pagination>
+                <pagination [boundaryLinks]="true" (pageChanged)="onPageChange($event)"
+                    [itemsPerPage]="pagination.pageSize" [totalItems]="pagination.count"></pagination>
             </div>
         </div>
     </div>
-    
+
 </div>

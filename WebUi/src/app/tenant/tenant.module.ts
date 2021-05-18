@@ -1,3 +1,4 @@
+import { TenantRoutingModule } from './tenant-routing.module';
 import { BillModule } from './../bill/bill.module';
 import { RouterModule } from '@angular/router';
 import { SharedModule } from './../shared/shared.module';
@@ -26,13 +27,10 @@ import { ApplyLeaveComponent } from './apply-leave/apply-leave.component';
   imports: [
     CommonModule,
     SharedModule,
-    RouterModule,
-    BillModule
+    RouterModule
   ],
   exports:[
-    AddTenantComponent,
-    TenantViewComponent,
-    TenantListComponent
+    TenantRoutingModule
   ]
 })
 export class TenantModule { }

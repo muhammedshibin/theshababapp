@@ -17,9 +17,10 @@ import { TabsModule } from 'ngx-bootstrap/tabs';
 import { AccordionModule } from 'ngx-bootstrap/accordion';
 import { BsDropdownModule } from 'ngx-bootstrap/dropdown';
 import { DashboardIconComponent } from './components/dashboard-icon/dashboard-icon.component';
+import { BillPaymentComponent} from './components/bill-payment/bill-payment.component';
 
 @NgModule({
-  declarations: [TextInputComponent, DateInputComponent, ModalLgComponent, AlertWindowComponent, DashboardIconComponent],
+  declarations: [TextInputComponent, DateInputComponent, ModalLgComponent, AlertWindowComponent, DashboardIconComponent,BillPaymentComponent],
   imports: [
     CommonModule,
     FormsModule,
@@ -52,7 +53,8 @@ import { DashboardIconComponent } from './components/dashboard-icon/dashboard-ic
     TabsModule,
     AccordionModule,
     BsDropdownModule,
-    DashboardIconComponent
+    DashboardIconComponent,
+    BillPaymentComponent
   ],
 })
 export class SharedModule {}
