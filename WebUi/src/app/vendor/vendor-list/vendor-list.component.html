@@ -1,0 +1,28 @@
+<div class="container">
+    <div class="row">
+        <div class="col-4" *ngFor="let account of vendors">
+            <div class="dashbord my-1">
+                <div class="flex-fill card bg-warning">
+                    <div class="row">
+                        
+                        <div class="col-12">
+                            <div class="text-center my-2">
+                                <h3 class="dashboard-icon">
+                                   {{account.name}}
+                                </h3>
+                                <h6>
+                                    <strong>Account Balance</strong> : {{account.amountInHand}}
+                                </h6>
+                                <div class="d-flex justify-content-center">
+                                    <a class="btn btn-outline-dark" routerLink="/vendors/{{account.id}}">Manage Account</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                </div>
+            </div>
+            
+        </div>
+    </div>
+</div>

@@ -11,5 +11,6 @@ namespace API.Dtos
         public string Name { get; set; }
         public double AmountInHand { get; set; }
         public double DueAmount { get; set; }
+        public DateTime CreatedOn { get; set; }
     }
 }

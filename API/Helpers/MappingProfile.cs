@@ -17,6 +17,7 @@ namespace API.Helpers
         {
             CreateMap<TransactionDetail, TransactionDto>()
                 .ForMember(dest => dest.PaidParty, m => m.MapFrom(src => src.PaidParty.Name))
+                .ForMember(dest => dest.PaidToParty, m => m.MapFrom(src => src.PaidTo.Name))
                 .ForMember(dest => dest.Category, m => m.MapFrom(src => src.Category.Name));
 
             CreateMap<TransactionDto, TransactionDetail>()
@@ -47,6 +48,9 @@ namespace API.Helpers
                 .ForMember(dest => dest.Inmate, m => m.Ignore())
                 .ForMember(dest => dest.Status, m => m.MapFrom(src => (LeaveStatus) Enum.Parse(typeof(LeaveStatus), src.Status)));
 
+
+            
+                
         }
     }
 }

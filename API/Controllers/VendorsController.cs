@@ -40,5 +40,14 @@ namespace API.Controllers
             var vendors = await _vendorService.GetVendors();
             return Ok(_mapper.Map<IReadOnlyList<VendorDto>>(vendors));
         }
+
+        [HttpGet("{id}")]
+        public async Task<ActionResult<VendorDto>> GetVendorById(int id)
+        {
+            var vendors = await _vendorService.GetVendor(id);
+            return Ok(_mapper.Map<VendorDto>(vendors));
+        }
+
+
     }
 }

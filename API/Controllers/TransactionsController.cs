@@ -1,6 +1,7 @@
 ﻿using API.Dtos;
 using API.Extensions;
 using AutoMapper;
+using Core.CoreDtos;
 using Core.DataFilters;
 using Core.Entities;
 using Core.Interfaces;
@@ -27,7 +28,7 @@ namespace API.Controllers
             var transactions = await _transactionService.GetTransactions(filter);
             int transactionsCount = await _transactionService.GetTransactionsCount(filter);
             Response.AddPaginationHeader(transactionsCount, filter.PageIndex, filter.PageSize);
-            return Ok(_mapper.Map<IReadOnlyList<TransactionDto>>(transactions));
+            return Ok(transactions);
         }
 
         [HttpGet("{id}")]

@@ -15,4 +15,7 @@ export class VendorService {
   getVendors(){
     return this.http.get<Vendor[]>(this.baseUrl + 'vendors');
   }
+  getVendor(id: number){
+    return this.http.get<Vendor>(this.baseUrl + 'vendors/'+ id);
+  }
 }

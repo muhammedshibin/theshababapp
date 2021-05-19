@@ -1,4 +1,5 @@
-﻿using Core.Entities;
+﻿using Core.CoreDtos;
+using Core.Entities;
 using Core.Interfaces;
 using System;
 using System.Collections.Generic;
@@ -26,6 +27,11 @@ namespace Infrastructure.Data.Services
         public async Task<IReadOnlyList<Vendor>> GetVendors()
         {
             return await _unitOfWork.Repository<Vendor>().FindAllAsync();
+        }
+
+        public async Task<Vendor> GetVendor(int id)
+        {
+            return await _unitOfWork.Repository<Vendor>().FindByIdAsync(id);
         }
     }
 }

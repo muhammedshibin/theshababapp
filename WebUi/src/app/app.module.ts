@@ -1,3 +1,4 @@
+import { FeedbackModule } from './feedback/feedback.module';
 import { JwtInterceptor } from './core/interceptors/jwt.interceptor';
 import { BillModule } from './bill/bill.module';
 import { LoadingInterceptor } from './core/interceptors/loading.interceptor';
@@ -28,7 +29,9 @@ import { NgxSpinnerModule } from 'ngx-spinner';
     BrowserAnimationsModule,
     HttpClientModule,
     NgxSpinnerModule,
-    BillModule
+    BillModule,
+    FeedbackModule,
+    VendorModule
   ],
   providers: [
     { provide: HTTP_INTERCEPTORS, useClass: LoadingInterceptor, multi: true },

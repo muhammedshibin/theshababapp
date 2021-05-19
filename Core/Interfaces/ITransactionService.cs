@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Threading.Tasks;
+using Core.CoreDtos;
 using Core.DataFilters;
 using Core.Entities;
 
@@ -7,7 +8,7 @@ namespace Core.Interfaces
 {
     public interface ITransactionService
     {
-        Task<IReadOnlyList<TransactionDetail>> GetTransactions(TransactionsFilter specParams);
+        Task<IReadOnlyList<TransactionDto>> GetTransactions(TransactionsFilter specParams);
         Task<int> GetTransactionsCount(TransactionsFilter specParams);
         Task<IReadOnlyList<Category>> GetTransactionCategories();
         Task<TransactionDetail> GetTransaction(int id);

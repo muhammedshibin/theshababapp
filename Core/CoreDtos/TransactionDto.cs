@@ -1,7 +1,7 @@
 ﻿using System;
 using Core.Entities;
 
-namespace API.Dtos
+namespace Core.CoreDtos
 {
     public class TransactionDto
     {
@@ -13,7 +13,7 @@ namespace API.Dtos
         public string PaidParty { get; set; }
         public int PaidToId { get; set; }
         public string PaidToParty { get; set; }
-        public double Amount { get; set; }
+        public decimal Amount { get; set; }
         public int CategoryId { get; set; }
         public string Category { get; set; }
     }

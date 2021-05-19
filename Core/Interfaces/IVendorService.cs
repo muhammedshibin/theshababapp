@@ -8,5 +8,6 @@ namespace Core.Interfaces
     {
         Task<bool> AddVendor(Vendor vendor);
         Task<IReadOnlyList<Vendor>> GetVendors();
+        Task<Vendor> GetVendor(int id);
     }
 }

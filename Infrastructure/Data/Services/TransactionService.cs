@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
+using Core.CoreDtos;
 using Core.DataFilters;
 using Core.Entities;
 using Core.Interfaces;
@@ -21,10 +22,10 @@ namespace Infrastructure.Data.Services
             _mapper = mapper;
         }
 
-        public async Task<IReadOnlyList<TransactionDetail>> GetTransactions(TransactionsFilter specParams)
+        public async Task<IReadOnlyList<TransactionDto>> GetTransactions(TransactionsFilter specParams)
         {
             var spec = new TransactionWithCategoryAndVendorSpecification(specParams);
-            var transactions = await _unitOfWork.Repository<TransactionDetail>().FindAllBySpecAsync(spec);
+            var transactions = await _unitOfWork.Repository<TransactionDetail>().FindAllBySpecAsync<TransactionDto>(spec);
             return transactions;
         }
         public async Task<int> GetTransactionsCount(TransactionsFilter specParams)

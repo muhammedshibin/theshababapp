@@ -107,7 +107,8 @@ namespace Infrastructure.Data.Services
             await _unitOfWork.Complete();
 
             var filter = new TransactionsFilter(month, year, false);
-            var transactions = await _transactionService.GetTransactions(filter);
+            var spec = new TransactionWithCategoryAndVendorSpecification(filter);
+            var transactions = await _unitOfWork.Repository<TransactionDetail>().FindAllBySpecAsync(spec);
             var transactionsGrouped = transactions.GroupBy(t => t.CategoryId);
 
             var categoricalSum = transactionsGrouped.ToDictionary(billCategory => billCategory.Key, billCategory => billCategory.Sum(b => b.Amount));

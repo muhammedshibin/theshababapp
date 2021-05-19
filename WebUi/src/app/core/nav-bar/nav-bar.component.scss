@@ -1,0 +1,9 @@
+a{
+    //text-decoration: none;
+    font-size: medium;
+    font-family: cursive;
+    color: rgb(131, 124, 116);
+    &.active{
+        color: rgb(0, 255, 242);;
+    }
+}

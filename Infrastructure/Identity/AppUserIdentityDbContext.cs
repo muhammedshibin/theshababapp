@@ -33,5 +33,7 @@ namespace Infrastructure.Identity
 
             
         }
+
+        public DbSet<FeedBack> FeedBacks { get; set; }
     }
 }

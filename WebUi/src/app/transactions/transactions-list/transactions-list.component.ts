@@ -1,3 +1,4 @@
+import { TransactionParams } from './../../shared/models/transactionParams';
 import { AlertWindowComponent } from './../../shared/components/alert-window/alert-window.component';
 import { Validators } from '@angular/forms';
 import { TransactionService } from './../transaction.service';
@@ -22,8 +23,7 @@ import { ToastrService } from 'ngx-toastr';
 export class TransactionsListComponent implements OnInit {
   @ViewChild('searchBox') search: ElementRef;
 
-  pageNumber = 1;
-  pageSize = 10;
+  transactionParams = new TransactionParams();
   pagination: Pagination;
 
   transactions: Transaction[];
@@ -45,8 +45,8 @@ export class TransactionsListComponent implements OnInit {
   }
 
   onSearch() {
-    const searchTerm: string = this.search.nativeElement.value;
-    this.loadTransactions(searchTerm);
+   this.transactionParams.search= this.search.nativeElement.value;
+    this.loadTransactions();
   }
 
   onSuccessfulAdding(event: any) {
@@ -54,9 +54,9 @@ export class TransactionsListComponent implements OnInit {
     this.loadTransactions();
   }
 
-  loadTransactions(searchTerm?: string) {
+  loadTransactions() {
     this.transactionService
-      .getTransactions(this.pageNumber, this.pageSize, searchTerm)
+      .getTransactions(this.transactionParams)
       .subscribe(
         (data) => {
           this.transactions = data.result;
@@ -87,7 +87,7 @@ export class TransactionsListComponent implements OnInit {
    
 
   onPageChange(event: any) {
-    this.pageNumber = event.page;
+    this.transactionParams.pageNumber = event.page;
     this.loadTransactions();
   }
 

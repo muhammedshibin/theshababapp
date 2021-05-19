@@ -1,5 +1,7 @@
 ﻿using Core.Identity;
+using Core.Interfaces;
 using Infrastructure.Identity;
+using Infrastructure.Identity.Services;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
@@ -72,6 +74,8 @@ namespace API.Extensions
                         ValidateAudience = false
                     };
                 });
+
+            services.AddScoped<IFeedbackService, FeedbackService>();
 
             return services;
 
