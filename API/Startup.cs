@@ -31,7 +31,7 @@ namespace API
         public void ConfigureServices(IServiceCollection services)
         { 
             services.AddControllersWithViews();
-
+            services.AddHttpContextAccessor();
             services.AddApplicationServices(_config);
             services.AddIdentityExtensions(_config);
 

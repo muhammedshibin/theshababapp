@@ -1,4 +1,16 @@
 <div class="container">
+    <div class="d-flex justify-content-end">
+        <button class="btn btn-info btn-lg" (click)="openModal()">Add Account</button>
+    </div>
+    <div class="jumbotron my-1" *ngIf="openForm">
+        <div class="form-inline justify-content-center">
+            <input type="text" name="vendorName" id=""[(ngModel)]="vendorName" placeholder="Enter account name here" class="form-control">
+            <button class="btn btn-success ml-2" (click)="createVendor()">Add</button>
+        </div>
+        
+    </div>
+
+
     <div class="row">
         <div class="col-4" *ngFor="let account of vendors">
             <div class="dashbord my-1">
@@ -26,3 +38,4 @@
         </div>
     </div>
 </div>
+

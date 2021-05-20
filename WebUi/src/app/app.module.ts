@@ -1,10 +1,6 @@
 import { FeedbackModule } from './feedback/feedback.module';
 import { JwtInterceptor } from './core/interceptors/jwt.interceptor';
-import { BillModule } from './bill/bill.module';
 import { LoadingInterceptor } from './core/interceptors/loading.interceptor';
-import { VendorModule } from './vendor/vendor.module';
-import { TransactionsModule } from './transactions/transactions.module';
-import { TenantModule } from './tenant/tenant.module';
 import { HomeModule } from './home/home.module';
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
@@ -23,15 +19,10 @@ import { NgxSpinnerModule } from 'ngx-spinner';
     AppRoutingModule,
     CoreModule,
     HomeModule,
-    TenantModule,
-    TransactionsModule,
-    VendorModule,
     BrowserAnimationsModule,
     HttpClientModule,
     NgxSpinnerModule,
-    BillModule,
-    FeedbackModule,
-    VendorModule
+    FeedbackModule
   ],
   providers: [
     { provide: HTTP_INTERCEPTORS, useClass: LoadingInterceptor, multi: true },

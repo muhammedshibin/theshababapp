@@ -1,6 +1,8 @@
+import { ToastrService } from 'ngx-toastr';
 import { VendorService } from './../vendor.service';
 import { Vendor } from './../../shared/models/vendor';
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild, ElementRef, TemplateRef } from '@angular/core';
+import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
 
 @Component({
   selector: 'app-vendor-list',
@@ -10,8 +12,10 @@ import { Component, OnInit } from '@angular/core';
 export class VendorListComponent implements OnInit {
 
   vendors: Vendor[];
+  vendorName: string;
+  openForm = false;
 
-  constructor(private vendorService: VendorService) { }
+  constructor(private vendorService: VendorService,private toastr: ToastrService,private modalService: BsModalService) { }
 
   ngOnInit(): void {
     this.loadVendors();
@@ -23,6 +27,20 @@ export class VendorListComponent implements OnInit {
     },err => {
       console.log(err);
     })
+  }
+
+  createVendor(){
+    this.vendorService.addVendor(this.vendorName).subscribe(() => {
+      this.toastr.success('Account Added Successfully','Success');
+      this.openForm = false;
+      this.loadVendors();
+    },err => {
+      console.log(err);
+    });
+  }
+
+  openModal() {
+    this.openForm = true;
   }
 
 }

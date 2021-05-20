@@ -5,16 +5,16 @@
         <div>
             <ul class="navbar-nav mr-auto" *ngIf="(currentUser$ | async) !== null">
                 <li class="nav-item" routerLinkActive="active">
-                    <a class="nav-link" routerLink="/tenants">Inmates <span class="sr-only">(current)</span></a>
+                    <a class="nav-link" routerLink="/tenants"><i class="fa fa-users mr-1"></i>Inmates <span class="sr-only">(current)</span></a>
                 </li>
                 <li class="nav-item" routerLinkActive="active">
-                    <a class="nav-link" routerLink="/transactions">Transactions</a>
+                    <a class="nav-link" routerLink="/transactions"><i class="fa fa-money mr-1"></i>Transactions</a>
                 </li>
                 <li class="nav-item" routerLinkActive="active">
-                    <a class="nav-link"  routerLink="/bills" >Bills</a>
+                    <a class="nav-link"  routerLink="/bills" ><i class="fa fa-paper-plane mr-1"></i>Bills</a>
                 </li>
                 <li class="nav-item" routerLinkActive="active">
-                    <a class="nav-link"  routerLink="/vendors" >Accounts</a>
+                    <a class="nav-link"  routerLink="/vendors" ><i class="fa fa-lock mr-1"></i>Accounts</a>
                 </li>
             </ul>
         </div>
