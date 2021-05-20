@@ -27,9 +27,48 @@
         </div>
         </div>
         <div class="col-9">
-            <div class="text-center">
-                <h2>Transactions</h2>
+            <h2>Transaction History</h2>
+            <hr/>
+            <div class="btn-group">
+                <label class="btn btn-warning" (click)="onModeSelection('paidBy')"
+                       btnCheckbox tabindex="0" role="button">Paid By </label>
+                <label class="btn btn-warning" (click)="onModeSelection('paidTo')"
+                       btnCheckbox tabindex="0" role="button">Paid To</label>
+              </div>
+            <div class="text-center mt-3">
+                <table class="table table-bordered">
+                    <thead>
+                        <tr>
+                            <th>No.</th>
+                            <th>{{selectedMode==='paidBy'?'Paid To':'Paid By'}}</th>
+                            <th>Transaction Date</th>
+                            <th>Category</th>
+                            <th>Amount</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr *ngFor="let txn of transactions;let i = index">
+                            <td>{{i+1}}</td>
+                            <td>{{selectedMode==='paidBy'?txn.paidToParty:txn.paidParty}}</td>
+                            <td>{{txn.transactionDate | date: 'dd/MM/yyyy'}}</td>
+                            <td>{{txn.category}}</td>                           
+                            <td>{{txn.amount | currency}}</td>
+                        </tr>
+                    </tbody>
+                </table>
+                <div class="d-flex justify-content-center">    
+                    <div class="row" *ngIf="pagination">
+                        <div class="col-xs-12 col-12">
+                            <pagination [boundaryLinks]="true" (pageChanged)="onPageChange($event)"  [itemsPerPage]="pagination.pageSize"
+                                   [totalItems]="pagination.count"></pagination>
+                        </div>
+                    </div>
+                </div>
+                
             </div>
+            
         </div>
+        
     </div>
+    
 </div>

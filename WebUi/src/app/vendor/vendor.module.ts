@@ -4,6 +4,7 @@ import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { VendorListComponent } from './vendor-list/vendor-list.component';
 import { VendorDetailComponent } from './vendor-detail/vendor-detail.component';
+import { SharedModule } from '../shared/shared.module';
 
 
 
@@ -14,7 +15,8 @@ import { VendorDetailComponent } from './vendor-detail/vendor-detail.component';
   ],
   imports: [
     CommonModule,
-    RouterModule
+    RouterModule,
+    SharedModule
   ],
   exports:[VendorRoutingModule]
 })

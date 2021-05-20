@@ -45,13 +45,13 @@ export class TransactionService {
       params = params.append('month', txnParams.month.toString());
     }
     if (txnParams.year) {
-      params = params.append('search', txnParams.year.toString());
+      params = params.append('year', txnParams.year.toString());
     }
     if (txnParams.paidBy) {
-      params = params.append('search', txnParams.paidBy.toString());
+      params = params.append('paidBy', txnParams.paidBy.toString());
     }
     if (txnParams.paidTo) {
-      params = params.append('search', txnParams.paidTo.toString());
+      params = params.append('paidTo', txnParams.paidTo.toString());
     }
     return getPaginatedResult<Transaction>(
       this.http,

@@ -25,7 +25,8 @@ namespace Infrastructure.Data.Services
         public async Task<IReadOnlyList<TransactionDto>> GetTransactions(TransactionsFilter specParams)
         {
             var spec = new TransactionWithCategoryAndVendorSpecification(specParams);
-            var transactions = await _unitOfWork.Repository<TransactionDetail>().FindAllBySpecAsync<TransactionDto>(spec);
+            var transactions = await _unitOfWork.Repository<TransactionDetail>()
+                .FindAllBySpecAsync<TransactionDto>(spec);
             return transactions;
         }
         public async Task<int> GetTransactionsCount(TransactionsFilter specParams)
