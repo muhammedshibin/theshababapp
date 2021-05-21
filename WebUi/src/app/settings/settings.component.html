@@ -1,0 +1,73 @@
+<div class="container">
+    <div class="d-flex justify-content-end">
+        <div>           
+            <button class="btn btn-info mr-2" (click)="addCategory()">Add Category</button>
+            <button class="btn btn-success" (click)="saveChanges()">Save Changes</button>
+        </div>
+    </div>
+    <table class="table table-bordered table-light table-striped table-hover mt-3">
+        <thead class="thead-dark">
+            <tr>
+                <th>Category Name</th>
+                <th>Default Rate</th>
+                <th>Default Rate Consideration</th>
+                <th>Days Consideration</th>
+                <th>Applicable For Visitors</th>
+                <th>Action</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr *ngFor="let cat of categories" style="font-weight: bold;text-align: center;">
+                <ng-container *ngIf="editFlag!=='enableEdit-'+cat.id">
+                    <td class="text-left">{{cat.name}}</td>
+                    <td>{{cat.defaultRate}}</td>
+                    <td>{{cat.considerDefaultRate}}</td>
+                    <td>{{cat.needToConsiderDays}}</td>
+                    <td>{{cat.isApplicableForVisitors}}</td>
+                    <td>
+                        <div class="d-flex align-items-center">
+                            <i class="fa fa-edit text-success mr-2" style="cursor: pointer;font-size:2em ;"
+                                (click)="editCategory(cat.id)">
+                            </i>
+
+                            <i class="fa fa-trash text-danger m-2" style="cursor: pointer;font-size:2em ;"
+                                (click)="deleteCategory(cat.id)">
+                            </i>
+                        </div>
+                    </td>
+                </ng-container>
+                <ng-container *ngIf="editFlag==='enableEdit-'+cat.id">
+                    <td><input type="text" [disabled]="cat.coreCategory" class="form-control" name="name" [value]="cat.name"
+                            [(ngModel)]="cat.name"></td>
+                    <td><input type="number" class="form-control" name="defaultRate" [value]="cat.defaultRate"
+                            [(ngModel)]="cat.defaultRate"></td>
+                    <td>
+                        <select class="custom-select" name="considerDefaultRate" [(ngModel)]="cat.considerDefaultRate">
+                            <option *ngFor="let val of options" [value]="val.value">{{val.display}}</option>
+                        </select>
+                    </td>
+
+                    <td>
+                        <select class="custom-select" name="needToConsiderDays" [(ngModel)]="cat.needToConsiderDays">
+                            <option *ngFor="let val of options" [value]="val.value">{{val.display}}</option>
+                        </select>
+                    </td>
+                    <td>
+                        <select class="custom-select" name="isApplicableForVisitors"
+                            [(ngModel)]="cat.isApplicableForVisitors">
+                           <option *ngFor="let val of options" [value]="val.value">{{val.display}}</option>
+                        </select>
+                    </td>
+                    <td class="text-center">
+                        <div class="d-flex align-items-center">
+                            <i class="fa fa-check text-success mr-2" style="cursor: pointer;font-size:2em ;"
+                                (click)="editingCompleted(cat.id)">
+                            </i>
+                        </div>
+                    </td>
+                </ng-container>
+
+            </tr>
+        </tbody>
+    </table>
+</div>

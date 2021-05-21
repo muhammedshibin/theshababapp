@@ -1,12 +1,18 @@
+import { SharedModule } from './../shared/shared.module';
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { SettingsComponent } from './settings.component';
 
 
 
 @NgModule({
-  declarations: [],
+  declarations: [
+    SettingsComponent
+  ],
   imports: [
-    CommonModule
-  ]
+    CommonModule,
+    SharedModule
+  ],
+  exports:[SettingsComponent]
 })
 export class SettingsModule { }

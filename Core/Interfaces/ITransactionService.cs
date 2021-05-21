@@ -15,5 +15,6 @@ namespace Core.Interfaces
         Task<bool> PostTransaction(TransactionDetail transaction);
         Task<bool> UpdateTransaction(TransactionDetail updated);
         Task<bool> DeleteTransaction(int id);
+        Task<bool> UpdateTransactionCategories(List<Category> categories);
     }
 }

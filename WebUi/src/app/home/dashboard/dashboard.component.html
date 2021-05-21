@@ -2,24 +2,28 @@
     <div class="container">
         <div class="row">
             <div class="col-4 my-2">
-                <app-dashboard-icon [logoClass]="'fa fa-user'" [logoLink]="'/tenants/list'" [logoName]="'Tenants'"
+                <app-dashboard-icon [logoClass]="'fa fa-user'" [logoLink]="'/tenants'" [logoName]="'Tenants'"
                     [logoColour]="'bg-success'"></app-dashboard-icon>
             </div>
             <div class="col-4 my-2">
-                <app-dashboard-icon [logoClass]="'fa fa-paper-plane'" [logoLink]="'/bills/list'" [logoName]="'Bills'"
+                <app-dashboard-icon [logoClass]="'fa fa-sticky-note'" [logoLink]="'/bills'" [logoName]="'Bills'"
                     [logoColour]="'bg-warning'"></app-dashboard-icon>
             </div>
             <div class="col-4 my-2">
-                <app-dashboard-icon [logoClass]="'fa fa-money'" [logoLink]="'/transactions/list'" [logoName]="'Transactions'"
+                <app-dashboard-icon [logoClass]="'fa fa-money'" [logoLink]="'/transactions'" [logoName]="'Transactions'"
                     [logoColour]="'bg-primary'"></app-dashboard-icon>
             </div>
             <div class="col-4 my-2">
-                <app-dashboard-icon [logoClass]="'fa fa-gear'" [logoLink]="'/tenants/list'" [logoName]="'Settings'"
+                <app-dashboard-icon [logoClass]="'fa fa-gear'" [logoLink]="'/settings'" [logoName]="'Settings'"
                     [logoColour]="'bg-dark'"></app-dashboard-icon>
             </div>
             <div class="col-4 my-2">
                 <app-dashboard-icon [logoClass]="'fa fa-lock'" [logoLink]="'/vendors'" [logoName]="'Accounts'"
                     [logoColour]="'bg-info'"></app-dashboard-icon>
+            </div>
+            <div class="col-4 my-2">
+                <app-dashboard-icon [logoClass]="'fa fa-sticky-note-o'" [logoLink]="'/bills/add-bill'" [logoName]="'Generate Bill'"
+                    [logoColour]="'bg-success'"></app-dashboard-icon>
             </div>
             <div class="col-4 my-2">
                 <app-dashboard-icon [logoClass]="'fa fa-comments'" [logoLink]="'/feedback'" [logoName]="'Feedbacks'"

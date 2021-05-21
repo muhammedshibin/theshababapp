@@ -1,3 +1,4 @@
+import { SettingsComponent } from './settings/settings.component';
 import { VendorListComponent } from './vendor/vendor-list/vendor-list.component';
 import { FeedbackComponent } from './feedback/feedback.component';
 import { DashboardComponent } from './home/dashboard/dashboard.component';
@@ -16,6 +17,7 @@ const routes: Routes = [
     children: [
       { path: 'dashboard', component: DashboardComponent },
       { path: 'feedback', component: FeedbackComponent },
+      { path: 'settings', component: SettingsComponent },
       {
         path: 'bills',
         loadChildren: () =>

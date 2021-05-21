@@ -30,7 +30,7 @@ namespace Infrastructure.Data.Services
         }
         public async Task<int> GetInmateBillsCountAsync(BillFilter filter)
         {
-            var spec = new BillForInmateWithBillDetailsSpecification(filter,true);
+            var spec = new BillForInmateWithBillDetailsSpecification(filter, true);
             return await _unitOfWork.Repository<InmateBill>().GetCountForSpecAsync(spec);
         }
         public async Task<IReadOnlyList<InmateBill>> GetBillsFOrInmateAsync(int inmateId)
@@ -49,7 +49,7 @@ namespace Infrastructure.Data.Services
                 PaidOn = paymentDto.PaidOn ?? DateTime.Now
             };
 
-            
+
 
             var vendor = await _unitOfWork.Repository<Vendor>().FindByIdAsync(1);
 
@@ -57,18 +57,18 @@ namespace Infrastructure.Data.Services
 
             var inmate = await _unitOfWork.Repository<Inmate>().FindByIdAsync(paymentDto.InmateId);
             inmate.AmountDue -= paymentDto.Amount;
-            if(inmate.AmountDue < 0)
+            if (inmate.AmountDue < 0)
             {
                 inmate.Savings = -1 * inmate.AmountDue;
-                inmate.AmountDue = 0;                
+                inmate.AmountDue = 0;
             }
-            
+
             if (paymentDto.BillId.HasValue && paymentDto.BillId != 0)
             {
                 var bill = await _unitOfWork.Repository<InmateBill>()
                     .FindOneBySpecAsync(new BillSpecification(paymentDto.BillId.Value));
 
-                if(bill != null)
+                if (bill != null)
                 {
                     if (bill.BillItems.Any(b => b.ItemCategoryName == "DEPOSIT"))
                     {
@@ -87,7 +87,7 @@ namespace Infrastructure.Data.Services
                     }
 
                 }
-                
+
             }
             else
             {
@@ -115,7 +115,7 @@ namespace Infrastructure.Data.Services
 
             var monthlyBill = new MonthlyBillDto(month, year);
 
-            var categories = transactions.Select(c => c.Category).ToHashSet();
+            var categories = await _unitOfWork.Repository<Category>().FindAllAsync();
 
             var categoryWiseExpensesList = new List<CategoryWiseExpense>();
 
@@ -127,7 +127,7 @@ namespace Infrastructure.Data.Services
                 {
                     CategoryId = category.Id,
                     CategoryName = category.Name,
-                    TotalAmount = categoricalSum[category.Id],
+                    TotalAmount = category.ConsiderDefaultRate && category.DefaultRate != 0 ? category.DefaultRate : (categoricalSum.ContainsKey(category.Id)?categoricalSum[category.Id]:0),
                     TransactionDetails = transactions
                             .Where(t => t.Category.Name == category.Name)
                             .Select(t => new TransactionDetailDto()
@@ -136,6 +136,18 @@ namespace Infrastructure.Data.Services
                                 Amount = t.Amount
                             }).ToList()
                 };
+
+                if(categoryWiseExpense.TransactionDetails == null || categoryWiseExpense.TransactionDetails.Count == 0)
+                {
+                    categoryWiseExpense.TransactionDetails = new List<TransactionDetailDto>
+                    {
+                        new TransactionDetailDto
+                        {
+                            TransactionDetailName = categoryWiseExpense.CategoryName,
+                            Amount = categoryWiseExpense.TotalAmount
+                        }
+                    };
+                }
 
                 monthlyTotal += categoryWiseExpense.TotalAmount;
 
@@ -196,7 +208,7 @@ namespace Infrastructure.Data.Services
                 if (leavesForInmate.Any())
                 {
                     var leaveDaysInMonth = leavesForInmate.Where(l =>
-                        (l.FromDate >= firstDayOfMonth) || (l.ToDate <= lastDayOfMonth));
+                        (l.FromDate >= firstDayOfMonth && l.FromDate <= lastDayOfMonth) || (l.ToDate <= lastDayOfMonth &&l.ToDate >= firstDayOfMonth));
 
                     foreach (var leave in leaveDaysInMonth)
                     {
@@ -209,7 +221,7 @@ namespace Infrastructure.Data.Services
                     }
 
                 }
-                occuppancy = (decimal) ((numberOfDaysInMonth - numberOfLeaveDays) / numberOfDaysInMonth);
+                occuppancy = (decimal)((numberOfDaysInMonth - numberOfLeaveDays) / numberOfDaysInMonth);
 
                 var rentDetail = new BillDetail("RENT", (int)BillCategory.RENT, BillCategory.RENT.ToString(), rentforTop, inmateBill);
 
@@ -217,12 +229,12 @@ namespace Infrastructure.Data.Services
 
                 if (!inmate.IsInmateOnTopBed)
                 {
-                    rentDetail.Amount = (decimal) rentforTop + 30;
+                    rentDetail.Amount = (decimal)rentforTop + 30;
                 }
 
                 var messExpense = messTransactions.TotalAmount;
 
-                var amountForInmate =(decimal) (messExpense / inmates.Count) * occuppancy;
+                var amountForInmate = (decimal)(messExpense / inmates.Count) * occuppancy;
 
                 var messDetail = new BillDetail("MESS", (int)BillCategory.MESS, BillCategory.MESS.ToString(), amountForInmate, inmateBill);
 
@@ -246,11 +258,11 @@ namespace Infrastructure.Data.Services
 
                         if (!cat.IsApplicableForVisitors && (inmates.Count > visitorsCount))
                         {
-                            amountForInmate = cat.NeedToConsiderDays ?(decimal) (expense / inmates.Count - visitorsCount) * occuppancy : (expense / (inmates.Count - visitorsCount));
+                            amountForInmate = cat.NeedToConsiderDays ? (decimal)(expense / inmates.Count - visitorsCount) * occuppancy : (expense / (inmates.Count - visitorsCount));
                         }
                         else
                         {
-                            amountForInmate = cat.NeedToConsiderDays ?(decimal) (expense / (inmates.Count)) * occuppancy : (expense / inmates.Count);
+                            amountForInmate = cat.NeedToConsiderDays ? (decimal)(expense / (inmates.Count)) * occuppancy : (expense / inmates.Count);
                         }
 
 

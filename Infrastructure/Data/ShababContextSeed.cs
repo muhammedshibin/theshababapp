@@ -27,6 +27,8 @@ namespace Infrastructure.Data
                         Id = 1,
                         ModfiedOn = DateTime.MinValue,
                         NeedToConsiderDays = false,
+                        ConsiderDefaultRate = true,
+                        CoreCategory =true
                     },
                     new Category
                     {
@@ -37,6 +39,7 @@ namespace Infrastructure.Data
                         Id = 2,
                         ModfiedOn = DateTime.MinValue,
                         NeedToConsiderDays = true,
+                        CoreCategory = true
                     },
                     new Category
                     {
@@ -47,6 +50,7 @@ namespace Infrastructure.Data
                         Id = 3,
                         ModfiedOn = DateTime.MinValue,
                         NeedToConsiderDays = true,
+                        ConsiderDefaultRate = true
                     },
                     new Category
                     {
@@ -61,6 +65,22 @@ namespace Infrastructure.Data
                 };
 
                 context.AddRange(categories);
+                await context.SaveChangesAsync();
+            }
+
+            var vendorsPresent = await context.Vendors.AnyAsync();
+            if (!vendorsPresent)
+            {
+                var mainAccount = new Vendor
+                {
+                    Name = "Main",
+                    CreatedBy = "Admin",
+                    Id = 1,
+                    AmountInHand = 0,
+                    DueAmount = 0
+                };
+
+                context.Vendors.Add(mainAccount);
                 await context.SaveChangesAsync();
             }
         }

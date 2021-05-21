@@ -21,6 +21,10 @@ export class TransactionService {
     return this.http.get<Category[]>(this.baseUrl + 'transactions/categories');
   }
 
+  updateTransactionCategories(categories: Category[]){
+    return this.http.patch(this.baseUrl + 'transactions/categories',categories);
+  }
+
   getTransactionById(id: string) {
     return this.http.get<Transaction>(this.baseUrl + 'transactions/' + id);
   }

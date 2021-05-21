@@ -1,10 +1,10 @@
 <accordion-group [panelClass]=""
-heading="{{inmateBill.month}} {{inmateBill.year}}">
-    <table class="table table-bordered table-hover">
+heading="Bill - {{inmateBill.month}} {{inmateBill.year}}">
+    <table class="table table-bordered table-warning">
         <tr>
             <th></th>
             <th>Total Bill Amount</th>
-            <th>{{inmateBill.billAmount | currency}}</th>            
+            <th>{{inmateBill.billAmount | currency:'AED '}}</th>            
         </tr>
         <tr>
             <th></th>
@@ -20,7 +20,7 @@ heading="{{inmateBill.month}} {{inmateBill.year}}">
         <tr  *ngFor="let item of inmateBill.billItems;let i = index" >
             <td>{{i+1}}</td>
             <td><small><i>{{item.itemCategoryName}}</i></small></td>
-            <td>{{item.amount | currency}}</td>
+            <td>{{item.amount | currency:'AED '}}</td>
         </tr>
     </table>
     <div class="d-flex justify-content-center">

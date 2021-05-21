@@ -12,6 +12,8 @@ namespace Core.Entities
         public bool IsApplicableForVisitors { get; set; }
         public bool NeedToConsiderDays { get; set; }
         public decimal DefaultRate { get; set; }
+        public bool ConsiderDefaultRate { get; set; } = false;
+        public bool CoreCategory { get; set; } = false;
 
         public override bool Equals(object obj)
         {

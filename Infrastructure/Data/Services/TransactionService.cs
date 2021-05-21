@@ -140,8 +140,41 @@ namespace Infrastructure.Data.Services
 
             _unitOfWork.Repository<TransactionDetail>().Remove(transaction);
 
+            return await _unitOfWork.Complete() > 0;            
+        }
+
+        public async Task<bool> UpdateTransactionCategories(List<Category> categories)
+        {
+            var existingcategories = await GetTransactionCategories();
+
+            var existingCategoryIds = existingcategories.Select(c => c.Id);
+
+            var nonExisting = categories.Where(c => !existingCategoryIds.Contains(c.Id));
+
+            foreach (var item in categories)
+            {
+                if (nonExisting.Contains(item))
+                {
+                    _unitOfWork.Repository<Category>().Add(item);
+                }
+                else
+                {
+                    var existing = existingcategories.FirstOrDefault(c => c.Id == item.Id);
+                    if(existing != null)
+                    {
+                        //item.Id = 0;
+                        existing.Name = item.Name;
+                        existing.IsApplicableForVisitors = item.IsApplicableForVisitors;
+                        existing.DefaultRate = item.DefaultRate;
+                        existing.ConsiderDefaultRate = item.ConsiderDefaultRate;
+                        existing.CoreCategory = item.CoreCategory;
+                    }
+                    //_unitOfWork.Repository<Category>().Update(existing);
+                }
+            }
+
             return await _unitOfWork.Complete() > 0;
-            
+
         }
     }
 }

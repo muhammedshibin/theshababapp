@@ -1,3 +1,4 @@
+import { SettingsModule } from './settings/settings.module';
 import { FeedbackModule } from './feedback/feedback.module';
 import { JwtInterceptor } from './core/interceptors/jwt.interceptor';
 import { LoadingInterceptor } from './core/interceptors/loading.interceptor';
@@ -22,7 +23,8 @@ import { NgxSpinnerModule } from 'ngx-spinner';
     BrowserAnimationsModule,
     HttpClientModule,
     NgxSpinnerModule,
-    FeedbackModule
+    FeedbackModule,
+    SettingsModule
   ],
   providers: [
     { provide: HTTP_INTERCEPTORS, useClass: LoadingInterceptor, multi: true },

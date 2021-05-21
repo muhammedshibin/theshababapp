@@ -70,5 +70,13 @@ namespace API.Controllers
 
             return Ok(true);
         }
+
+        [HttpPatch("categories")]
+        public async Task<ActionResult<bool>> UpdateTransactionCategories(List<Category> categories)
+        {
+            var updated = await  _transactionService.UpdateTransactionCategories(categories);
+
+            return Ok(updated);
+        }
     }
 }

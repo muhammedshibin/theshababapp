@@ -1,9 +1,11 @@
-export interface Category {
+export class Category {
     id: number;
-    createdOn: Date;
-    modfiedOn: Date;
+    createdOn?: Date = new Date();
+    modfiedOn?: Date = new Date();
     name: string;
-    isApplicableForVisitors: boolean;
-    needToConsiderDays: boolean;
-    defaultRate: number;
+    isApplicableForVisitors: boolean = true;
+    needToConsiderDays: boolean = true;
+    defaultRate: number = 0;
+    considerDefaultRate = false;
+    coreCategory: boolean = false;
 }
