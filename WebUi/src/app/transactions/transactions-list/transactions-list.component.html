@@ -1,4 +1,8 @@
 <div class="container">
+    <div class="d-flex justify-content-center" *ngIf="(transactions && transactions.length === 0)||(!transactions)">
+        <h2>There are no Transactions , Add one now</h2>
+        <button class="btn btn-info ml-2" (click)="openModal(template)">Add Transaction</button>
+    </div>
     <div class="d-flex justify-content-between"  *ngIf="transactions && transactions.length > 0">
         <p  class="text-muted">Showing {{transactions.length}} of {{pagination.count}} items</p>
         <div>

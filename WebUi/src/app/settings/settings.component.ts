@@ -12,7 +12,7 @@ export class SettingsComponent implements OnInit {
   categories: Category[];
   editFlag: string;
   options = [
-    { display: 'No', value: false },
+    { display: 'False', value: false },
     { display: 'True', value: true }
   ];
 

@@ -117,6 +117,8 @@ namespace Infrastructure.Data.Services
 
             var categories = await _unitOfWork.Repository<Category>().FindAllAsync();
 
+       
+
             var categoryWiseExpensesList = new List<CategoryWiseExpense>();
 
             decimal monthlyTotal = 0;
@@ -151,7 +153,9 @@ namespace Infrastructure.Data.Services
 
                 monthlyTotal += categoryWiseExpense.TotalAmount;
 
-                categoryWiseExpensesList.Add(categoryWiseExpense);
+                if(category.Name != BillCategory.DEPOSIT.ToString())
+
+                    categoryWiseExpensesList.Add(categoryWiseExpense);
             }
 
             monthlyBill.CategoryWiseExpenses = categoryWiseExpensesList;
@@ -187,9 +191,9 @@ namespace Infrastructure.Data.Services
 
             var rentforTop = GetRentForBottom(bottomBedInmates, inmates.Count, defaultRent);
 
-            var firstDayOfMonth = new DateTime(year, month, 1);
-            var lastDayOfMonth = firstDayOfMonth.AddMonths(1).AddDays(-1);
-            int numberOfDaysInMonth = (lastDayOfMonth - firstDayOfMonth).Days;
+            var occuppencies = CalculateOccuppancy(inmates, month, year);
+
+            var totalOccuppancy = occuppencies[0];
 
             foreach (var inmate in inmates)
             {
@@ -201,27 +205,30 @@ namespace Infrastructure.Data.Services
                     CreatedOn = DateTime.Now
                 };
                 var billDetails = new List<BillDetail>();
-                var leavesForInmate = inmate.InmateLeaves;
+               
 
-                decimal occuppancy = 1;
-                int numberOfLeaveDays = 0;
-                if (leavesForInmate.Any())
-                {
-                    var leaveDaysInMonth = leavesForInmate.Where(l =>
-                        (l.FromDate >= firstDayOfMonth && l.FromDate <= lastDayOfMonth) || (l.ToDate <= lastDayOfMonth &&l.ToDate >= firstDayOfMonth));
+                //decimal occuppancy = 1;
+                //int numberOfLeaveDays = 0;
+                //if (leavesForInmate.Any())
+                //{
+                //    var leaveDaysInMonth = leavesForInmate.Where(l =>
+                //        (l.FromDate >= firstDayOfMonth && l.FromDate <= lastDayOfMonth) || (l.ToDate <= lastDayOfMonth &&l.ToDate >= firstDayOfMonth));
 
-                    foreach (var leave in leaveDaysInMonth)
-                    {
-                        if (leave.ToDate < lastDayOfMonth)
-                            numberOfLeaveDays += (leave.ToDate - leave.FromDate).Days;
-                        if (leave.FromDate < firstDayOfMonth)
-                            numberOfLeaveDays += (leave.ToDate - firstDayOfMonth).Days;
-                        if (leave.ToDate > lastDayOfMonth)
-                            numberOfLeaveDays += (lastDayOfMonth - leave.FromDate).Days;
-                    }
+                //    foreach (var leave in leaveDaysInMonth)
+                //    {
+                //        if (leave.ToDate <= lastDayOfMonth && leave.FromDate >= firstDayOfMonth)
+                //            numberOfLeaveDays += (leave.ToDate - leave.FromDate).Days + 1;
+                //        else if (leave.FromDate < firstDayOfMonth && leave.ToDate <= lastDayOfMonth)
+                //            numberOfLeaveDays += (leave.ToDate - firstDayOfMonth).Days + 1;
+                //        else if (leave.ToDate > lastDayOfMonth && leave.FromDate >= firstDayOfMonth)
+                //            numberOfLeaveDays += (lastDayOfMonth - leave.FromDate).Days + 1;
+                //        else if (leave.ToDate > lastDayOfMonth && leave.FromDate < firstDayOfMonth)
+                //            numberOfLeaveDays += (lastDayOfMonth - firstDayOfMonth).Days + 1;
 
-                }
-                occuppancy = (decimal)((numberOfDaysInMonth - numberOfLeaveDays) / numberOfDaysInMonth);
+                //    }
+
+                //}
+                //occuppancy = ((numberOfDaysInMonth - numberOfLeaveDays) /(decimal) numberOfDaysInMonth);
 
                 var rentDetail = new BillDetail("RENT", (int)BillCategory.RENT, BillCategory.RENT.ToString(), rentforTop, inmateBill);
 
@@ -234,7 +241,9 @@ namespace Infrastructure.Data.Services
 
                 var messExpense = messTransactions.TotalAmount;
 
-                var amountForInmate = (decimal)(messExpense / inmates.Count) * occuppancy;
+                var occuppancy = occuppencies[inmate.Id];
+
+                var amountForInmate = messExpense * (occuppancy/totalOccuppancy);
 
                 var messDetail = new BillDetail("MESS", (int)BillCategory.MESS, BillCategory.MESS.ToString(), amountForInmate, inmateBill);
 
@@ -258,11 +267,12 @@ namespace Infrastructure.Data.Services
 
                         if (!cat.IsApplicableForVisitors && (inmates.Count > visitorsCount))
                         {
-                            amountForInmate = cat.NeedToConsiderDays ? (decimal)(expense / inmates.Count - visitorsCount) * occuppancy : (expense / (inmates.Count - visitorsCount));
+                            //check this
+                            amountForInmate = cat.NeedToConsiderDays ? (decimal)(expense / inmates.Count - visitorsCount) * (occuppancy/totalOccuppancy) : (expense / (inmates.Count - visitorsCount));
                         }
                         else
                         {
-                            amountForInmate = cat.NeedToConsiderDays ? (decimal)(expense / (inmates.Count)) * occuppancy : (expense / inmates.Count);
+                            amountForInmate = cat.NeedToConsiderDays ? (decimal) expense * (occuppancy / totalOccuppancy) : (expense / inmates.Count);
                         }
 
 
@@ -297,6 +307,48 @@ namespace Infrastructure.Data.Services
         private static decimal GetRentForBottom(int x, int y, decimal rent)
         {
             return (rent - x * 30) / y;
+        }
+
+        private static Dictionary<int,decimal> CalculateOccuppancy(IEnumerable<Inmate> inmates , int month ,int year)
+        {
+            var firstDayOfMonth = new DateTime(year, month, 1);
+            var lastDayOfMonth = firstDayOfMonth.AddMonths(1).AddDays(-1);
+            int numberOfDaysInMonth = (lastDayOfMonth - firstDayOfMonth).Days + 1;
+            decimal totalOccuppancy = 0;
+
+            Dictionary<int, decimal> occupancies = new Dictionary<int, decimal>();
+
+            foreach (var inmate in inmates)
+            {
+                decimal occuppancy = 1;
+                int numberOfLeaveDays = 0;
+                var leavesForInmate = inmate.InmateLeaves;
+                if (leavesForInmate.Any())
+                {
+                    var leaveDaysInMonth = leavesForInmate.Where(l =>
+                        (l.FromDate >= firstDayOfMonth && l.FromDate <= lastDayOfMonth) || (l.ToDate <= lastDayOfMonth && l.ToDate >= firstDayOfMonth));
+
+                    foreach (var leave in leaveDaysInMonth)
+                    {
+                        if (leave.ToDate <= lastDayOfMonth && leave.FromDate >= firstDayOfMonth)
+                            numberOfLeaveDays += (leave.ToDate - leave.FromDate).Days + 1;
+                        else if (leave.FromDate < firstDayOfMonth && leave.ToDate <= lastDayOfMonth)
+                            numberOfLeaveDays += (leave.ToDate - firstDayOfMonth).Days + 1;
+                        else if (leave.ToDate > lastDayOfMonth && leave.FromDate >= firstDayOfMonth)
+                            numberOfLeaveDays += (lastDayOfMonth - leave.FromDate).Days + 1;
+                        else if (leave.ToDate > lastDayOfMonth && leave.FromDate < firstDayOfMonth)
+                            numberOfLeaveDays += (lastDayOfMonth - firstDayOfMonth).Days + 1;
+
+                    }
+
+                }
+                occuppancy = ((numberOfDaysInMonth - numberOfLeaveDays) / (decimal)numberOfDaysInMonth);
+                occupancies.Add(inmate.Id, occuppancy);
+                totalOccuppancy += occuppancy;
+            }
+            occupancies.Add(0, totalOccuppancy);
+
+            return occupancies;
         }
     }
 }

@@ -24,6 +24,13 @@ namespace Infrastructure.Data.Services
             return await _unitOfWork.Complete() > 0;
         }
 
+        public async Task<bool> UpdateVendor(Vendor vendor)
+        {
+            var existingVendor = await  GetVendor(vendor.Id);
+            existingVendor.AmountInHand = vendor.AmountInHand;
+            return await _unitOfWork.Complete() > 0;
+        }
+
         public async Task<IReadOnlyList<Vendor>> GetVendors()
         {
             return await _unitOfWork.Repository<Vendor>().FindAllAsync();

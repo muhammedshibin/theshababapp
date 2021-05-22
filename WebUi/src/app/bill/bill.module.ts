@@ -1,3 +1,4 @@
+import { RouterModule } from '@angular/router';
 import { BillRoutingModule } from './bill-routing.module';
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
@@ -14,7 +15,8 @@ import { BillListComponent } from './bill-list/bill-list.component';
   ],
   imports: [
     CommonModule,
-    SharedModule
+    SharedModule,
+    RouterModule
   ],
   exports:[BillRoutingModule]
 })

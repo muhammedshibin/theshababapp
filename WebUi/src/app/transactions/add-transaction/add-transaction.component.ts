@@ -107,6 +107,10 @@ export class AddTransactionComponent implements OnInit {
     this.txnService.getTransactionCategories().subscribe(
       (response) => {
         this.categories = response;
+        const depositIndex = this.categories.findIndex(c => c.name === 'DEPOSIT');
+        if(depositIndex !== -1){
+          this.categories.splice(depositIndex,1);
+        }
       },
       (err) => {
         console.log(err);

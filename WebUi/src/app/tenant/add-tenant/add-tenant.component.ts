@@ -28,7 +28,7 @@ export class AddTenantComponent implements OnInit {
       address: new FormControl('',Validators.required),   
       isVisit: new FormControl('',Validators.required),   
       isInmateOnTopBed: new FormControl(true,Validators.required),   
-      inmatePhoto: new FormControl()
+      inmatePhoto: new FormControl(null)
     });
   }
 

@@ -48,6 +48,16 @@ namespace API.Controllers
             return Ok(_mapper.Map<VendorDto>(vendors));
         }
 
+        [HttpPatch]
+        public async Task<ActionResult<bool>> UpdateVendor(VendorDto vendorDto)
+        {
+            var vendor = _mapper.Map<Vendor>(vendorDto);
+
+            var updated = await _vendorService.UpdateVendor(vendor);
+
+            return updated;
+        }
+
 
     }
 }

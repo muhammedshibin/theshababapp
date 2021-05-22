@@ -22,6 +22,10 @@ export class TenantViewComponent implements OnInit {
     {value:true,display:'Visit'},
     {value:false,display:'Regular'}
   ]
+  bedTypeOptions = [
+    {value:true,display:'Top Bed'},
+    {value:false,display:'Bottom Bed'}
+  ]
 
   constructor(
     private activatedRoute: ActivatedRoute,

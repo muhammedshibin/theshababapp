@@ -19,6 +19,7 @@ import { BsDropdownModule } from 'ngx-bootstrap/dropdown';
 import { DashboardIconComponent } from './components/dashboard-icon/dashboard-icon.component';
 import { BillPaymentComponent} from './components/bill-payment/bill-payment.component';
 import { AlertModule } from 'ngx-bootstrap/alert';
+import { ButtonsModule } from 'ngx-bootstrap/buttons';
 
 @NgModule({
   declarations: [TextInputComponent, DateInputComponent, ModalLgComponent, AlertWindowComponent, DashboardIconComponent,BillPaymentComponent],
@@ -32,6 +33,7 @@ import { AlertModule } from 'ngx-bootstrap/alert';
     AlertModule.forRoot(),
     ModalModule.forRoot(),
     TabsModule.forRoot(),
+    ButtonsModule.forRoot(),
     RouterModule,
     AccordionModule.forRoot(),
     BsDropdownModule.forRoot(),
@@ -57,7 +59,8 @@ import { AlertModule } from 'ngx-bootstrap/alert';
     BsDropdownModule,
     DashboardIconComponent,
     BillPaymentComponent,
-    AlertModule
+    AlertModule,
+    ButtonsModule
   ],
 })
 export class SharedModule {}

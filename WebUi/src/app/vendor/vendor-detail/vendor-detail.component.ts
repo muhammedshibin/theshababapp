@@ -1,3 +1,4 @@
+import { ToastrService } from 'ngx-toastr';
 import { Pagination } from './../../shared/models/pagination';
 import { BreadcrumbService } from 'xng-breadcrumb';
 import { Vendor } from 'src/app/shared/models/vendor';
@@ -19,12 +20,14 @@ export class VendorDetailComponent implements OnInit {
   vendor: Vendor;
   pagination: Pagination;
   selectedMode = 'paidBy';
+  editMode = false;
 
   constructor(
     private transactionService: TransactionService,
     private activatedRoute: ActivatedRoute,
     private vendorService: VendorService,
-    private bcService: BreadcrumbService
+    private bcService: BreadcrumbService,
+    private toastr: ToastrService
   ) {}
 
   ngOnInit(): void {
@@ -69,6 +72,14 @@ export class VendorDetailComponent implements OnInit {
       this.txnParams.paidBy = null;
     }
     this.loadTransations();
+  }
+
+  onSaveChanges(){
+    this.vendorService.updateVendor(this.vendor).subscribe((response) => {
+      this.toastr.success('Account Details Updated Successfully','Success');
+    }, err => {
+      console.log(err);
+    })
   }
 
 }

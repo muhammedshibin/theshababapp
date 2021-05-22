@@ -4,7 +4,7 @@
     
             <div class="col-4">
                 <div class="card">
-                    <img src="{{inmate.pictureUrl || 'assets/images/noimage.png'}}" alt="{{inmate.fullName}}"
+                    <img src="{{inmate.pictureUrl || 'assets/images/man.png'}}" alt="{{inmate.fullName}}"
                         class="card-img-top img-thumbnail">
                     <div class="card-body">
                         <div>
@@ -49,20 +49,27 @@
                                         {{ option.display }}
                                     </option>
                                 </select>
+                                <h5 class="text-success">Bed Type</h5>
+                                <select [disabled]="editDisabled" name="isInmateOnTopBed" class="form-control col-7 my-2" [(ngModel)]="inmate.isInmateOnTopBed">
+                                    <option *ngFor="let option of bedTypeOptions" [ngValue]="option.value">
+                                        {{ option.display }}
+                                    </option>
+                                </select>
                                 <!-- <p>{{inmate.isVisit?'Visit':'Regular'}}<i class="fa fa-edit fa-3 ml-3"></i></p> -->
                                 <h5 class="text-success">Address</h5>
-                                <p>{{inmate.address}}</p>
-                                <h5 class="text-success">Room Number</h5>
-                                <p class="lead">4<i class="fa fa-edit fa-3 ml-3"></i></p>
+                                <p>{{inmate.address}}</p>                                
                             </div>
                             <div class="col-5">
                                
                                 <h5 class="text-success">Amount Due</h5>
                                 <input type="number" [disabled]="editDisabled" class="form-control col-6" name="amountDue" [(ngModel)]="inmate.amountDue">
                                 <!-- <p>{{inmate.amountDue | currency}}<i class="fa fa-edit fa-3 ml-3"></i></p> -->
-                                <h5 class="text-success">Savings</h5>
+                                <h5 class="text-success mt-2">Savings</h5>
                                 <input type="number" [disabled]="editDisabled" class="form-control col-6" name="savings" [(ngModel)]="inmate.savings">
                                 <!-- <p>{{inmate.savings | currency}}<i class="fa fa-edit fa-3 ml-3"></i></p> -->
+                                <h5 class="text-success mt-2">Room Number</h5>
+                                <p class="lead">4<i class="fa fa-edit fa-3 ml-3"></i></p>
+                                <small class="text-muted"><i>*Room number details are not supported as of now</i></small>
                             </div>
                                                 
                         </div>                    

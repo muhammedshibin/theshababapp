@@ -27,7 +27,7 @@ export class BillListComponent implements OnInit {
   //   {value : 'byNameDesc' , display: 'Inmate Descending'}
   // ]
   filtersList = [
-    { value: null, display: 'All' },
+    { value: undefined, display: 'All' },
     { value: 'NotPaid', display: 'Not Paid' },
     { value: 'PartiallyPaid', display: 'Not Fully Paid' },
     { value: 'Paid', display: 'Paid' },
@@ -40,7 +40,7 @@ export class BillListComponent implements OnInit {
 
   ngOnInit(): void {
    
-    this.billParams.paidPredicate = null;
+    this.billParams.paidPredicate = 'NotPaid';
     this.loadBills();
   }
 
@@ -68,10 +68,10 @@ export class BillListComponent implements OnInit {
     this.loadBills();
     this.modalRef.hide();
   }
-  onFilterChange(value: string){
+  onFilterChange(){
     this.billParams.pageNumber =1;
     this.billParams.pageSize = 5;
-    this.billParams.paidPredicate = value;
+    //this.billParams.paidPredicate = this.billParams.paidPredicate;
     this.loadBills();
   }
   onSearch(){

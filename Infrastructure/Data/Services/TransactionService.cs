@@ -50,9 +50,11 @@ namespace Infrastructure.Data.Services
         {
             _unitOfWork.Repository<TransactionDetail>().Add(transaction);
 
-            var vendorIds = new List<int>();
-            vendorIds.Add(transaction.PaidPartyId);
-            vendorIds.Add(transaction.PaidToId);
+            var vendorIds = new List<int>
+            {
+                transaction.PaidPartyId,
+                transaction.PaidToId
+            };
 
             var vendors = await _unitOfWork.Repository<Vendor>().FindAllBySpecAsync(new VendorSpecification(vendorIds));
 
@@ -137,6 +139,33 @@ namespace Infrastructure.Data.Services
             var transaction = await  _unitOfWork.Repository<TransactionDetail>().FindByIdAsync(id);
 
             if (transaction == null) throw new KeyNotFoundException($"Transaction with Id {id} does not exist");
+
+
+            var vendorIds = new List<int>
+            {
+                transaction.PaidPartyId,
+                transaction.PaidToId
+            };
+
+            var vendors = await _unitOfWork.Repository<Vendor>().FindAllBySpecAsync(new VendorSpecification(vendorIds));
+
+            foreach (var vendor in vendors)
+            {
+                if (vendor.Id == transaction.PaidPartyId)
+                {
+                    vendor.AmountInHand = transaction.IsExpense
+                       ? vendor.AmountInHand + transaction.Amount
+                       : vendor.AmountInHand - transaction.Amount;
+
+                }
+                if (vendor.Id == transaction.PaidToId)
+                {
+                    vendor.AmountInHand = transaction.IsExpense
+                       ? vendor.AmountInHand - transaction.Amount
+                       : vendor.AmountInHand + transaction.Amount;
+                }
+                vendor.ModfiedOn = DateTime.Now;
+            }
 
             _unitOfWork.Repository<TransactionDetail>().Remove(transaction);
 

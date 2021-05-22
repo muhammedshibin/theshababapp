@@ -1,4 +1,4 @@
-import { Vendor } from 'src/app/shared/models/vendor';
+import { Vendor } from './../shared/models/vendor';
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { environment } from 'src/environments/environment';
@@ -24,5 +24,9 @@ export class VendorService {
       name: vendor
     }
     return this.http.post(this.baseUrl + 'vendors',input);
+  }
+
+  updateVendor(vendor: Vendor){
+    return this.http.patch(this.baseUrl + 'vendors',vendor);
   }
 }
