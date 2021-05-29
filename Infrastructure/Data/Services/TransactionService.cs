@@ -205,5 +205,17 @@ namespace Infrastructure.Data.Services
             return await _unitOfWork.Complete() > 0;
 
         }
+
+        public async Task<bool> DeleteTransactionCategory(int id)
+        {
+            var category = await  _unitOfWork.Repository<Category>().FindByIdAsync(id);
+
+            if (category.CoreCategory) return false;
+
+            _unitOfWork.Repository<Category>().Remove(category);
+
+            return await _unitOfWork.Complete() > 0;
+
+        }
     }
 }

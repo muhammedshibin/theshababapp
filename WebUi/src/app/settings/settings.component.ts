@@ -2,6 +2,8 @@ import { ToastrService } from 'ngx-toastr';
 import { Category } from './../shared/models/category';
 import { TransactionService } from './../transactions/transaction.service';
 import { Component, OnInit } from '@angular/core';
+import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
+import { AlertWindowComponent } from '../shared/components/alert-window/alert-window.component';
 
 @Component({
   selector: 'app-settings',
@@ -15,10 +17,12 @@ export class SettingsComponent implements OnInit {
     { display: 'False', value: false },
     { display: 'True', value: true }
   ];
+  alertmodalRef: BsModalRef;
 
   constructor(
     private transactionService: TransactionService,
-    private toastr: ToastrService
+    private toastr: ToastrService,
+    private modalService: BsModalService
   ) {}
 
   ngOnInit(): void {
@@ -60,10 +64,7 @@ export class SettingsComponent implements OnInit {
         this.toastr.error('Category must have a name'), 'Error';
         //this.categories.splice(id-1,1);
       } else {
-        record.name.toUpperCase();
-        record.considerDefaultRate = Boolean(record.considerDefaultRate);
-        record.isApplicableForVisitors = Boolean(record.isApplicableForVisitors);
-        record.needToConsiderDays = Boolean(record.needToConsiderDays);
+        record.name.toUpperCase();       
         this.editFlag = undefined;
         console.log(this.categories);
       }
@@ -86,4 +87,26 @@ export class SettingsComponent implements OnInit {
     ];
     this.editCategory(this.categories.length);
   }
+
+  deleteCategory(id: number){
+    const initialState = {
+      text:'Are you sure you want to delete this Category'
+    };
+    this.alertmodalRef = this.modalService.show(AlertWindowComponent, {initialState});
+    this.alertmodalRef.onHidden.subscribe(() => {
+      if(this.alertmodalRef.content.message !== 'Declined!'){
+        this.transactionService.deleteTransactionCategory(id).subscribe((response) => {
+          this.toastr.success('Category Deleted Successfully','Success');
+          this.loadCategories();
+       },err => {
+         this.toastr.error('Error Occured, Please try again Later','Error Occured');
+       })
+      }
+      else{
+        return;
+      }
+      
+    
+  });
+}
 }

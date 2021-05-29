@@ -27,7 +27,7 @@ namespace API.Controllers
             _signInManager = signInManager;
             _tokenService = tokenService;
         }
-
+        [AllowAnonymous]
         [HttpPost("register")]
         public async Task<ActionResult<UserDto>> Register(RegisterDto registerDto)
         {

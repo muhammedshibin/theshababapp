@@ -78,5 +78,15 @@ namespace API.Controllers
 
             return Ok(updated);
         }
+
+        [HttpDelete("categories/{id}")]
+        public async Task<ActionResult<bool>> DeleteTransactionCategory(int id)
+        {
+            var deleted = await _transactionService.DeleteTransactionCategory(id);
+
+            if (!deleted) return BadRequest(new ErrorResponse(400, "Error Occured"));
+
+            return true;
+        }
     }
 }

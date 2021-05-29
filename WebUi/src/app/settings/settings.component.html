@@ -43,19 +43,19 @@
                             [(ngModel)]="cat.defaultRate"></td>
                     <td>
                         <select class="custom-select" name="considerDefaultRate" [(ngModel)]="cat.considerDefaultRate">
-                            <option *ngFor="let val of options" [value]="val.value">{{val.display}}</option>
+                            <option *ngFor="let val of options" [ngValue]="val.value">{{val.display}}</option>
                         </select>
                     </td>
 
                     <td>
                         <select class="custom-select" name="needToConsiderDays" [(ngModel)]="cat.needToConsiderDays">
-                            <option *ngFor="let val of options" [value]="val.value">{{val.display}}</option>
+                            <option *ngFor="let val of options" [ngValue]="val.value">{{val.display}}</option>
                         </select>
                     </td>
                     <td>
                         <select class="custom-select" name="isApplicableForVisitors"
                             [(ngModel)]="cat.isApplicableForVisitors">
-                           <option *ngFor="let val of options" [value]="val.value">{{val.display}}</option>
+                           <option *ngFor="let val of options" [ngValue]="val.value">{{val.display}}</option>
                         </select>
                     </td>
                     <td class="text-center">

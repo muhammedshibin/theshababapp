@@ -63,4 +63,8 @@ export class TransactionService {
       params
     );
   }
+
+  deleteTransactionCategory(id: number){
+    return this.http.delete(this.baseUrl + 'transactions/categories/'+ id );
+  }
 }

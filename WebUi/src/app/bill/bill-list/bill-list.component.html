@@ -11,7 +11,7 @@
         <div class="col-sm-1"></div>
         <div class="col-sm-9 py-2 mb-1">
             <div class="d-flex justify-content-between">
-                <div *ngIf="inmateBills.length > 0">
+                <div>
                     <div class="btn-group" name="paidPredicate"><button *ngFor="let filter of filtersList"
                             class="btn btn-outline-success btn-lg" (click)="onFilterChange()"
                             btnRadio="{{filter.value}}"
