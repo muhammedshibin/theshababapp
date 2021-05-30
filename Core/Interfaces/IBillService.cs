@@ -11,7 +11,7 @@ namespace Core.Interfaces
         Task<bool> AcceptBillPayment(PaymentDto paymentDto);
         Task<IReadOnlyList<InmateBill>> GetBillsFOrInmateAsync(int inmateId);
         Task GenerateIndividualBillsAsync(int month, int year);
-        Task<MonthlyBillDto> GenerateMonthlyBillAsync(int month, int year);
+        Task<MonthlyBillDto> GenerateMonthlyBillAsync(int month, int year, bool simulated = true);
         Task<IReadOnlyList<InmateBill>> GetInmateBillsAsync(BillFilter filter);
         Task<int> GetInmateBillsCountAsync(BillFilter filter);
 

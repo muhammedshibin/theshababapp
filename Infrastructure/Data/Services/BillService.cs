@@ -97,7 +97,7 @@ namespace Infrastructure.Data.Services
             return await _unitOfWork.Complete() > 0;
 
         }
-        public async Task<MonthlyBillDto> GenerateMonthlyBillAsync(int month, int year)
+        public async Task<MonthlyBillDto> GenerateMonthlyBillAsync(int month, int year,bool simulated = true)
         {
             var billSpec = new BillSpecification(month, year);
             var inmateBillsForMonth = await _unitOfWork.Repository<InmateBill>().FindAllBySpecAsync(billSpec);
