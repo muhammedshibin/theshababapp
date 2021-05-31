@@ -48,10 +48,11 @@ namespace Infrastructure.Data
                 .ProjectTo<TOut>(_mapper.ConfigurationProvider)
                 .ToListAsync();
         }
-        public void Add(T tEntity)
+        public T Add(T tEntity)
         {
             tEntity.CreatedOn = DateTime.Now;
             _context.Set<T>().Add(tEntity);
+            return tEntity;
         }
 
         public void Update(T tEntity)

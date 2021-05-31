@@ -11,7 +11,8 @@ namespace Core.Enumerations
         RENT = 1,
         MESS =2 ,
         USTHADSALARY = 3,
-        DEPOSIT = 4,
-        OTHERS = 5,
+        DEPOSIT = 5,
+        BILLPAYMENT = 4,
+        OTHERS = 6,
     }
 }

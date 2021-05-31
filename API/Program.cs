@@ -30,7 +30,9 @@ namespace API
                 var identitydbcontext = services.GetRequiredService<AppUserIdentityDbContext>();
                 await identitydbcontext.Database.MigrateAsync();
 
-                await ShababContextSeed.Seed(context);
+                var env = services.GetRequiredService<IHostEnvironment>();                
+
+                await ShababContextSeed.Seed(context,env);
             }
             catch (Exception e)
             {

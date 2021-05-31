@@ -60,7 +60,7 @@ export class AddTransactionComponent implements OnInit {
       transactionDate: [new Date(),Validators.required],
       isExpense: [true,Validators.required],
       paidPartyId: [1,Validators.required],
-      paidToId: [3,Validators.required],
+      paidToId: [2,Validators.required],
       categoryId: [1,Validators.required],
       amount: [null,[Validators.required]],
     });
@@ -96,7 +96,11 @@ export class AddTransactionComponent implements OnInit {
     this.vendorService.getVendors().subscribe(
       (response) => {
         this.vendors = response;
-        this.paidToVendors = [...response];
+        const billpaymentVendor = this.vendors.findIndex(c => c.id === 3);
+        if(billpaymentVendor !== -1){
+          this.vendors.splice(billpaymentVendor,1);
+        }
+        this.paidToVendors = [...this.vendors];
       },
       (err) => {
         console.log(err);
@@ -111,6 +115,10 @@ export class AddTransactionComponent implements OnInit {
         if(depositIndex !== -1){
           this.categories.splice(depositIndex,1);
         }
+        const billpaymentIndex = this.categories.findIndex(c => c.name === 'BILLPAYMENT');
+        if(billpaymentIndex !== -1){
+          this.categories.splice(billpaymentIndex,1);
+        }
       },
       (err) => {
         console.log(err);
@@ -123,16 +131,19 @@ export class AddTransactionComponent implements OnInit {
     const patchDateValue = this.transaction?.transactionDate.toLocaleString();
 
     if (this.transaction) {
-      this.transactionForm.patchValue({
-        id: this.transaction.id,
-        name: this.transaction.name,
-        categoryId: this.transaction.categoryId,
-        amount: this.transaction.amount,
-       transactionDate: patchDateValue || new Date() ,
-        isExpense: this.transaction.isExpense,
-        paidPartyId: this.transaction.paidPartyId,
-        paidToId: this.transaction.paidToId,
-      });
+
+      this.transactionForm.setValue(this.transaction);
+
+      // this.transactionForm.patchValue({
+      //   id: this.transaction.id,
+      //   name: this.transaction.name,
+      //   categoryId: this.transaction.categoryId,
+      //   amount: this.transaction.amount,
+      //  transactionDate: patchDateValue || new Date() ,
+      //   isExpense: this.transaction.isExpense,
+      //   paidPartyId: this.transaction.paidPartyId,
+      //   paidToId: this.transaction.paidToId,
+      // });
 
       
     }

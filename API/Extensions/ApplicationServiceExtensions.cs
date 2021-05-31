@@ -2,6 +2,7 @@
 using Core.Interfaces;
 using Infrastructure.Data;
 using Infrastructure.Data.Services;
+using Infrastructure.Helpers;
 using Infrastructure.Identity.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -62,7 +63,9 @@ namespace API.Extensions
             services.AddScoped<IVendorService, VendorService>();
             services.AddScoped<IBillService, BillService>();
             services.AddScoped<ITokenService, TokenService>();
+            services.AddScoped<IPhotoService, PhotoService>();
             services.AddAutoMapper(typeof(MappingProfile));
+            services.Configure<CloudinarySettings>(config.GetSection("CloudinarySettings"));
             services.Configure((Action<ApiBehaviorOptions>)(options =>
             {
                 options.InvalidModelStateResponseFactory = context =>

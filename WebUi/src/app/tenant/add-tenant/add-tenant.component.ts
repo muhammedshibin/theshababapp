@@ -1,5 +1,5 @@
 import { TenantService } from './../tenant.service';
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { ToastrService } from 'ngx-toastr';
 import { Router } from '@angular/router';
@@ -10,6 +10,9 @@ import { Router } from '@angular/router';
   styleUrls: ['./add-tenant.component.scss']
 })
 export class AddTenantComponent implements OnInit {
+
+  @ViewChild('inmatePhoto') inmatePhoto;
+  staged = false;
 
   tenantRegistrationForm: FormGroup;
 
@@ -34,7 +37,7 @@ export class AddTenantComponent implements OnInit {
 
   addTenant(){
     this.tenantService.AddInmate(this.tenantRegistrationForm.value).subscribe((response) => {
-      console.log(response);
+      this.uploadInmatePhoto(response.id);
       this.toast.success('Inmate Added Successfully' , 'Success');
       this.router.navigateByUrl('/tenants/list');
     },(err) => {
@@ -42,4 +45,21 @@ export class AddTenantComponent implements OnInit {
     })
   }
 
+  onFileChange(event: any){
+    this.staged = true;
+
+  }
+
+  uploadInmatePhoto(id: number){
+    
+      
+       const inmatePhoto  = this.inmatePhoto.nativeElement.files[0];
+       this.tenantService.AddInmatePhoto(inmatePhoto,id).subscribe(resp => {
+         console.log('image uploaded successfully');
+       },err => {
+         console.log(err);
+       });
+     
+    
+  }
 }

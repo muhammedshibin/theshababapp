@@ -47,13 +47,7 @@ namespace Infrastructure.Data.Services
                 Amount = paymentDto.Amount,
                 BillId = paymentDto.BillId.HasValue ? paymentDto.BillId : null,
                 PaidOn = paymentDto.PaidOn ?? DateTime.Now
-            };
-
-
-
-            var vendor = await _unitOfWork.Repository<Vendor>().FindByIdAsync(1);
-
-            vendor.AmountInHand += paymentDto.Amount;
+            }; 
 
             var inmate = await _unitOfWork.Repository<Inmate>().FindByIdAsync(paymentDto.InmateId);
             inmate.AmountDue -= paymentDto.Amount;
@@ -63,6 +57,30 @@ namespace Infrastructure.Data.Services
                 inmate.AmountDue = 0;
             }
 
+            var associatedVendorNamesList = new List<string> { VendorNames.Main, VendorNames.BillPaymentAccount };
+
+            var vendorSpec = new VendorSpecification(associatedVendorNamesList);
+
+            var vendors = await _unitOfWork.Repository<Vendor>().FindAllBySpecAsync(vendorSpec);
+
+            var mainAccount = vendors.FirstOrDefault(v => v.Name == VendorNames.Main);
+
+            var billPaymentAccount = vendors.FirstOrDefault(v => v.Name == VendorNames.BillPaymentAccount);
+
+            var transaction = new TransactionDetail
+            {
+
+                Name = $"Bill Payment-{paymentDto.PaidOn.Value.Month}- {inmate.FullName}",
+                CategoryId = 4,
+                PaidPartyId = billPaymentAccount.Id,
+                PaidToId = mainAccount.Id ,
+                Amount = paymentDto.Amount,
+                IsExpense = true,
+                TransactionDate = DateTime.Now
+            };
+
+            await _transactionService.PostTransaction(transaction);
+
             if (paymentDto.BillId.HasValue && paymentDto.BillId != 0)
             {
                 var bill = await _unitOfWork.Repository<InmateBill>()
@@ -70,7 +88,7 @@ namespace Infrastructure.Data.Services
 
                 if (bill != null)
                 {
-                    if (bill.BillItems.Any(b => b.ItemCategoryName == "DEPOSIT"))
+                    if (bill.BillItems.Any(b => b.ItemCategoryName == BillCategory.DEPOSIT.ToString()))
                     {
                         inmate.Savings += 100;
                     }
@@ -123,6 +141,17 @@ namespace Infrastructure.Data.Services
 
             decimal monthlyTotal = 0;
 
+            var associatedVendorNamesList = new List<string> { VendorNames.Main, VendorNames.Others };
+
+            var vendorSpec = new VendorSpecification(associatedVendorNamesList);
+
+            var vendors = await _unitOfWork.Repository<Vendor>().FindAllBySpecAsync(vendorSpec);
+
+            var mainAccount = vendors.FirstOrDefault(v => v.Name == VendorNames.Main);
+
+            var othersAccount = vendors.FirstOrDefault(v => v.Name == VendorNames.Others);
+
+
             foreach (var category in categories)
             {
                 var categoryWiseExpense = new CategoryWiseExpense
@@ -141,6 +170,21 @@ namespace Infrastructure.Data.Services
 
                 if(categoryWiseExpense.TransactionDetails == null || categoryWiseExpense.TransactionDetails.Count == 0)
                 {
+                    if (!simulated) {
+                        var transaction = new TransactionDetail
+                        {
+                            Name = categoryWiseExpense.CategoryName,
+                            CategoryId = category.Id,
+                            PaidPartyId = mainAccount.Id,
+                            PaidToId = othersAccount.Id,
+                            Amount = categoryWiseExpense.TotalAmount,
+                            TransactionDate = DateTime.Now,
+                            IsExpense = true
+                        };
+
+                        await _transactionService.PostTransaction(transaction);
+                    }                    
+
                     categoryWiseExpense.TransactionDetails = new List<TransactionDetailDto>
                     {
                         new TransactionDetailDto
@@ -153,7 +197,7 @@ namespace Infrastructure.Data.Services
 
                 monthlyTotal += categoryWiseExpense.TotalAmount;
 
-                if(category.Name != BillCategory.DEPOSIT.ToString())
+                if(category.Name != BillCategory.DEPOSIT.ToString() && category.Name != BillCategory.BILLPAYMENT.ToString())
 
                     categoryWiseExpensesList.Add(categoryWiseExpense);
             }
@@ -173,7 +217,7 @@ namespace Infrastructure.Data.Services
 
             var categories = await _unitOfWork.Repository<Category>().FindAllAsync();
 
-            var monthlyBillDetails = await GenerateMonthlyBillAsync(month, year);
+            var monthlyBillDetails = await GenerateMonthlyBillAsync(month, year,false);
 
             var txnDetails = monthlyBillDetails.CategoryWiseExpenses;
 
@@ -204,32 +248,8 @@ namespace Infrastructure.Data.Services
                     Year = year,
                     CreatedOn = DateTime.Now
                 };
-                var billDetails = new List<BillDetail>();
-               
-
-                //decimal occuppancy = 1;
-                //int numberOfLeaveDays = 0;
-                //if (leavesForInmate.Any())
-                //{
-                //    var leaveDaysInMonth = leavesForInmate.Where(l =>
-                //        (l.FromDate >= firstDayOfMonth && l.FromDate <= lastDayOfMonth) || (l.ToDate <= lastDayOfMonth &&l.ToDate >= firstDayOfMonth));
-
-                //    foreach (var leave in leaveDaysInMonth)
-                //    {
-                //        if (leave.ToDate <= lastDayOfMonth && leave.FromDate >= firstDayOfMonth)
-                //            numberOfLeaveDays += (leave.ToDate - leave.FromDate).Days + 1;
-                //        else if (leave.FromDate < firstDayOfMonth && leave.ToDate <= lastDayOfMonth)
-                //            numberOfLeaveDays += (leave.ToDate - firstDayOfMonth).Days + 1;
-                //        else if (leave.ToDate > lastDayOfMonth && leave.FromDate >= firstDayOfMonth)
-                //            numberOfLeaveDays += (lastDayOfMonth - leave.FromDate).Days + 1;
-                //        else if (leave.ToDate > lastDayOfMonth && leave.FromDate < firstDayOfMonth)
-                //            numberOfLeaveDays += (lastDayOfMonth - firstDayOfMonth).Days + 1;
-
-                //    }
-
-                //}
-                //occuppancy = ((numberOfDaysInMonth - numberOfLeaveDays) /(decimal) numberOfDaysInMonth);
-
+                var billDetails = new List<BillDetail>();  
+             
                 var rentDetail = new BillDetail("RENT", (int)BillCategory.RENT, BillCategory.RENT.ToString(), rentforTop, inmateBill);
 
                 billDetails.Add(rentDetail);

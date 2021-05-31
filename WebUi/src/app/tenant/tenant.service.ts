@@ -1,8 +1,8 @@
+import { Inmate } from './../shared/models/inmate';
 import { Leave } from './../shared/models/leave';
 import { environment } from './../../environments/environment';
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { Inmate } from '../shared/models/inmate';
 import { getPaginatedResult, getPaginationHeaders } from '../shared/functions/pagination_functions';
 import { InmateBill } from '../shared/models/inmateBill';
 
@@ -30,7 +30,13 @@ export class TenantService {
   }
 
   AddInmate(value: any){
-    return this.http.post(this.baseUrl +'Inmates',value);
+    return this.http.post<Inmate>(this.baseUrl +'Inmates',value);
+  }
+
+  AddInmatePhoto(value: any,inmateId: number){
+    const formData = new FormData();
+    formData.append('file',value);
+    return this.http.patch(this.baseUrl +'Inmates/photo/'+inmateId,formData);
   }
 
   getTenantBills(inmateId: number){

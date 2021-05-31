@@ -11,7 +11,8 @@ namespace Core.Interfaces
         public Task<IReadOnlyList<InmateToReturnDto>> GetInmates(InmateFilter inmateFilter);
         public Task<int> GetInmatesCount(InmateFilter filter);
         public Task<Inmate> GetInmate(int id);
-        public Task<bool> AddInmate(Inmate inmate);
+        public Task<Inmate> AddInmate(Inmate inmate);
         public Task<bool> UpdateInmate(Inmate inmate);
+        public Task<bool> UpdateInmatePhoto(string PhotoUrl,int inmateId);
     }
 }

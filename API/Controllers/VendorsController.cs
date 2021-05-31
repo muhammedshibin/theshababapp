@@ -25,7 +25,10 @@ namespace API.Controllers
         [HttpPost]
         public async Task<ActionResult<VendorDto>> CreateVendorAccount(VendorDto vendorDto)
         {
-            var vendor = _mapper.Map<Vendor>(vendorDto);
+            var vendor = new Vendor
+            {
+                Name = vendorDto.Name
+            };
 
             var created = await _vendorService.AddVendor(vendor);
 

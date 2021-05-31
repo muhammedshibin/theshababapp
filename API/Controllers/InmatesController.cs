@@ -23,15 +23,17 @@ namespace API.Controllers
         
         private readonly IMapper _mapper;
         private readonly IWebHostEnvironment _env;
+        private readonly IPhotoService _photoService;
         private readonly IInmateService _inmateService;
 
-        public InmatesController(IInmateService inmateService,IMapper mapper,IWebHostEnvironment env)
+        public InmatesController(IInmateService inmateService,IMapper mapper,IWebHostEnvironment env, IPhotoService photoService)
         {
             _mapper = mapper;
             _env = env;
+            _photoService = photoService;
             _inmateService = inmateService;
         }
-        //[Authorize]
+        
         [HttpGet]
         public async Task<ActionResult<IReadOnlyList<InmateDto>>> GetInmates([FromQuery]InmateFilter inmateFilter)
         {
@@ -52,28 +54,39 @@ namespace API.Controllers
 
         [HttpPost]
         public async Task<ActionResult<InmateDto>> AddInmate(InmateDto inmateDto)
-        {
-            var imageUrl = string.Empty;
-
-            if(inmateDto.InmatePhoto != null)
-            {
-                IFormFile file = inmateDto.InmatePhoto;
-                var UrlHost = _env.WebRootPath;
-                var location = Path.Combine(UrlHost, "Images");
-                var ImageUrl = Path.Combine(location, file.FileName);
-                await inmateDto.InmatePhoto.CopyToAsync(new FileStream(ImageUrl, FileMode.Create));
-                imageUrl = @"Images/" + file.FileName;
-            }
+        {                  
 
             var inmate = _mapper.Map<Inmate>(inmateDto);
-            inmate.PictureUrl = imageUrl;
 
-            var created = await _inmateService.AddInmate(inmate);
+            var createdInmate = await _inmateService.AddInmate(inmate);           
 
-            if (created) return Created("Success", inmateDto);
-
-            return BadRequest();
+            return Ok(_mapper.Map<InmateDto>(createdInmate));
+            
         }
+
+        [HttpPatch("photo/{inmateId}")]
+        public async Task<ActionResult<bool>> UpdateInmatePhoto(int inmateId)
+        {
+            var imageUrl = string.Empty;
+            var file = Request.Form.Files[0];
+
+            var imageUploadResult = await  _photoService.AddPhotoAsync(file);
+
+            if(imageUploadResult.Error != null)
+            {
+                return BadRequest(new ErrorResponse(400, imageUploadResult.Error.Message));
+            }
+
+            imageUrl = imageUploadResult.SecureUrl.AbsoluteUri;
+            
+            var updated = await _inmateService.UpdateInmatePhoto(imageUrl, inmateId);
+
+            if (updated) return Ok(true);
+
+            return BadRequest("Error Occured");
+        }
+
+
 
         [HttpPatch]
         public async Task<ActionResult<InmateDto>> UpdateInmate(InmateDto inmateDto)

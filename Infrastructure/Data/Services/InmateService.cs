@@ -33,10 +33,11 @@ namespace Infrastructure.Data.Services
             return await _unitOfWork.Repository<Inmate>().FindByIdAsync(id);
         }
 
-        public async Task<bool> AddInmate(Inmate inmate)
+        public async Task<Inmate> AddInmate(Inmate inmate)
         {
-            _unitOfWork.Repository<Inmate>().Add(inmate);
-            return await _unitOfWork.Complete() > 0;
+            var inmateToReturn = _unitOfWork.Repository<Inmate>().Add(inmate);
+            await _unitOfWork.Complete();
+            return inmateToReturn;
         }
         public async Task<bool> UpdateInmate(Inmate inmateRequest)
         {
@@ -46,6 +47,14 @@ namespace Infrastructure.Data.Services
             inmate.AmountDue = inmateRequest.AmountDue;
             inmate.Savings = inmateRequest.Savings;
             return await _unitOfWork.Complete() > 0;
-        }        
+        }
+
+        public async Task<bool> UpdateInmatePhoto(string PhotoUrl, int inmateId)
+        {
+            var inmate = await _unitOfWork.Repository<Inmate>().FindByIdAsync(inmateId);
+            if (inmate == null) return false;
+            inmate.PictureUrl = PhotoUrl;
+            return await _unitOfWork.Complete() > 0;
+        }
     }
 }

@@ -21,7 +21,7 @@ namespace Infrastructure.Data.Services
         public async Task<bool> AddVendor(Vendor vendor)
         {
             _unitOfWork.Repository<Vendor>().Add(vendor);
-            return await _unitOfWork.Complete() > 0;
+            return (await _unitOfWork.Complete()) > 0;
         }
 
         public async Task<bool> UpdateVendor(Vendor vendor)

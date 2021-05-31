@@ -51,7 +51,7 @@
                     </div>
                     <div class="col-3">
                         <p class="lead">Upload Inmate Photo</p>
-                        <input type="file" [disabled]="true" formControlName="inmatePhoto">
+                        <input type="file" #inmatePhoto (change)="onFileChange($event)">
                         <p class="text-warning mt-1"><i>Image Upload Currently not supported</i></p>
                     </div>
             </div>
