@@ -51,15 +51,12 @@ export class AddTenantComponent implements OnInit {
   }
 
   uploadInmatePhoto(id: number){
-    
-      
        const inmatePhoto  = this.inmatePhoto.nativeElement.files[0];
+       if(!inmatePhoto) return;
        this.tenantService.AddInmatePhoto(inmatePhoto,id).subscribe(resp => {
          console.log('image uploaded successfully');
        },err => {
          console.log(err);
        });
-     
-    
   }
 }
