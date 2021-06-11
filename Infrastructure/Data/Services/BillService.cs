@@ -8,6 +8,7 @@ using Core.Entities;
 using Core.Enumerations;
 using Core.Interfaces;
 using Core.Specifications;
+using Microsoft.Extensions.Logging;
 
 namespace Infrastructure.Data.Services
 {
@@ -17,11 +18,13 @@ namespace Infrastructure.Data.Services
     {
         private readonly ITransactionService _transactionService;
         private readonly IUnitOfWork _unitOfWork;
+        private readonly ILogger<BillService> _logger;
 
-        public BillService(ITransactionService transactionService, IUnitOfWork unitOfWork)
+        public BillService(ITransactionService transactionService, IUnitOfWork unitOfWork,ILogger<BillService> logger)
         {
             _transactionService = transactionService;
             _unitOfWork = unitOfWork;
+            _logger = logger;
         }
         public async Task<IReadOnlyList<InmateBill>> GetInmateBillsAsync(BillFilter filter)
         {
@@ -232,6 +235,8 @@ namespace Infrastructure.Data.Services
             //var defaultRentSettings = categories.FirstOrDefault(c => c.Name == BillCategory.RENT.ToString());
 
             var defaultRent = txnDetails.Where(c => c.CategoryName == BillCategory.RENT.ToString()).Sum(i => i.TotalAmount);
+
+            _logger.LogInformation($"Generating rent For top with  bottomBedInmates : {bottomBedInmates} , inmatesCount : {inmates?.Count} for default rate : {defaultRent}");
 
             var rentforTop = GetRentForBottom(bottomBedInmates, inmates.Count, defaultRent);
 
