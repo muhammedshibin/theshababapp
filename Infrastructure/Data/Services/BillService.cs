@@ -173,7 +173,7 @@ namespace Infrastructure.Data.Services
 
                 if(categoryWiseExpense.TransactionDetails == null || categoryWiseExpense.TransactionDetails.Count == 0)
                 {
-                    if (!simulated) {
+                    if (!simulated && categoryWiseExpense.TotalAmount > 0) {
                         var transaction = new TransactionDetail
                         {
                             Name = categoryWiseExpense.CategoryName,
