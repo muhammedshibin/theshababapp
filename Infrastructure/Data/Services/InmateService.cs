@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Threading.Tasks;
+using AutoMapper;
 using Core.CoreDtos;
 using Core.DataFilters;
 using Core.Entities;
@@ -11,10 +12,12 @@ namespace Infrastructure.Data.Services
     public class InmateService : IInmateService
     {
         private readonly IUnitOfWork _unitOfWork;
+        private readonly IMapper _mapper;
 
-        public InmateService(IUnitOfWork unitOfWork)
+        public InmateService(IUnitOfWork unitOfWork, IMapper mapper)
         {
             _unitOfWork = unitOfWork;
+            _mapper = mapper;
         }
         public async Task<IReadOnlyList<InmateToReturnDto>> GetInmates(InmateFilter filter)
         {
@@ -43,9 +46,12 @@ namespace Infrastructure.Data.Services
         {
             var inmate = await  _unitOfWork.Repository<Inmate>().FindByIdAsync(inmateRequest.Id);
             if (inmate == null) return false;
-            inmate.IsVisit = inmateRequest.IsVisit;
-            inmate.AmountDue = inmateRequest.AmountDue;
-            inmate.Savings = inmateRequest.Savings;
+
+            _mapper.Map(inmateRequest, inmate);
+
+            //inmate.IsVisit = inmateRequest.IsVisit;
+            //inmate.AmountDue = inmateRequest.AmountDue;
+            //inmate.Savings = inmateRequest.Savings;
             return await _unitOfWork.Complete() > 0;
         }
 

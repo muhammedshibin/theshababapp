@@ -83,6 +83,7 @@ namespace Infrastructure.Data
             }
 
             var vendorsPresent = await context.Vendors.AnyAsync();
+
             if (!vendorsPresent)
             {
                 var mainAccount = new Vendor

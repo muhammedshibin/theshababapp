@@ -26,12 +26,11 @@ namespace Core.Specifications
             }
         }
 
-        public TransactionWithCategoryAndVendorSpecification(int id, bool trackingNeeded = false) :
+        public TransactionWithCategoryAndVendorSpecification(int id) :
             base(t => t.Id == id)
         {
             AddInclude(t => t.Category);
-            AddInclude(t => t.PaidParty);
-            if (!trackingNeeded) AddNoTracking();
+            AddInclude(t => t.PaidParty);            
         }
 
     }

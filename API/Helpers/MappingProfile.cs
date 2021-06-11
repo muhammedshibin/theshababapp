@@ -28,6 +28,14 @@ namespace API.Helpers
             CreateMap<InmateDto, Inmate>()
                 .ReverseMap();
 
+            CreateMap<Inmate, Inmate>()
+                .ForMember(dest => dest.Id, o => o.UseDestinationValue());
+            CreateMap<TransactionDetail, TransactionDetail>()
+                .ForMember(dest => dest.Id, o => o.UseDestinationValue())
+                .ForMember(dest => dest.Category, o => o.UseDestinationValue())
+                .ForMember(dest => dest.PaidParty, o => o.UseDestinationValue())
+                .ForMember(dest => dest.PaidTo, o => o.UseDestinationValue());
+
             CreateMap<Inmate, InmateToReturnDto>();
 
             CreateMap<Vendor, VendorDto>()

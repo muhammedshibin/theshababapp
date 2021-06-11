@@ -96,10 +96,10 @@ export class AddTransactionComponent implements OnInit {
     this.vendorService.getVendors().subscribe(
       (response) => {
         this.vendors = response;
-        const billpaymentVendor = this.vendors.findIndex(c => c.id === 3);
-        if(billpaymentVendor !== -1){
-          this.vendors.splice(billpaymentVendor,1);
-        }
+        // const billpaymentVendor = this.vendors.findIndex(c => c.id === 3);
+        // if(billpaymentVendor !== -1){
+        //   this.vendors.splice(billpaymentVendor,1);
+        // }
         this.paidToVendors = [...this.vendors];
       },
       (err) => {
@@ -111,14 +111,14 @@ export class AddTransactionComponent implements OnInit {
     this.txnService.getTransactionCategories().subscribe(
       (response) => {
         this.categories = response;
-        const depositIndex = this.categories.findIndex(c => c.name === 'DEPOSIT');
-        if(depositIndex !== -1){
-          this.categories.splice(depositIndex,1);
-        }
-        const billpaymentIndex = this.categories.findIndex(c => c.name === 'BILLPAYMENT');
-        if(billpaymentIndex !== -1){
-          this.categories.splice(billpaymentIndex,1);
-        }
+        // const depositIndex = this.categories.findIndex(c => c.name === 'DEPOSIT');
+        // if(depositIndex !== -1){
+        //   this.categories.splice(depositIndex,1);
+        // }
+        // const billpaymentIndex = this.categories.findIndex(c => c.name === 'BILLPAYMENT');
+        // if(billpaymentIndex !== -1){
+        //   this.categories.splice(billpaymentIndex,1);
+        // }
       },
       (err) => {
         console.log(err);
@@ -132,20 +132,18 @@ export class AddTransactionComponent implements OnInit {
 
     if (this.transaction) {
 
-      this.transactionForm.setValue(this.transaction);
+      const existingTransaction = {
+        id:this.transaction.id,
+        name:this.transaction.name,
+        amount:this.transaction.amount,
+        categoryId: this.transaction.categoryId,
+        transactionDate: this.transaction.transactionDate,
+        isExpense: this.transaction.isExpense,
+        paidPartyId: this.transaction.paidPartyId,
+        paidToId: this.transaction.paidToId
+      }
 
-      // this.transactionForm.patchValue({
-      //   id: this.transaction.id,
-      //   name: this.transaction.name,
-      //   categoryId: this.transaction.categoryId,
-      //   amount: this.transaction.amount,
-      //  transactionDate: patchDateValue || new Date() ,
-      //   isExpense: this.transaction.isExpense,
-      //   paidPartyId: this.transaction.paidPartyId,
-      //   paidToId: this.transaction.paidToId,
-      // });
-
-      
+      this.transactionForm.setValue(existingTransaction);
     }
 
 

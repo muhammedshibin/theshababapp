@@ -127,9 +127,9 @@ namespace Infrastructure.Data.Services
                 newPaidPartyToVendor.AmountInHand += updated.Amount;
             }
 
-            existing = _mapper.Map(updated, existing);
+            _mapper.Map(updated, existing);
 
-            _unitOfWork.Repository<TransactionDetail>().Update(existing);
+            //_unitOfWork.Repository<TransactionDetail>().Update(existing);
 
             return await _unitOfWork.Complete() > 0;
         }
