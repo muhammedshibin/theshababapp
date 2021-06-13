@@ -13,6 +13,7 @@ namespace Core.Interfaces
         public Task<Inmate> GetInmate(int id);
         public Task<Inmate> AddInmate(Inmate inmate);
         public Task<bool> UpdateInmate(Inmate inmate);
+        public Task<bool> DeactivateInmate(DeactivatedInmate deactivatedInmate);
         public Task<bool> UpdateInmatePhoto(string PhotoUrl,int inmateId);
     }
 }

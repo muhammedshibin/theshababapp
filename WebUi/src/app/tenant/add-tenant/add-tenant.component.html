@@ -13,7 +13,7 @@
                         <app-text-input [formControl]="tenantRegistrationForm.controls['phoneNumber']"
                             [label]="'Phone Number'"></app-text-input>
                         <app-date-input [formControl]="tenantRegistrationForm.controls['dateOfBirth']"
-                            [label]="'Date of Birth'"></app-date-input>
+                            [label]="'Date of Birth'" [useMaxDate]="true"></app-date-input>
                         <div class="form-group">
                             <textarea placeholder="Address" class="form-control" formControlName="address"
                                 rows="3"></textarea>

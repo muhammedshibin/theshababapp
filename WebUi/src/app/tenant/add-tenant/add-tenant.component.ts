@@ -47,7 +47,6 @@ export class AddTenantComponent implements OnInit {
 
   onFileChange(event: any){
     this.staged = true;
-
   }
 
   uploadInmatePhoto(id: number){

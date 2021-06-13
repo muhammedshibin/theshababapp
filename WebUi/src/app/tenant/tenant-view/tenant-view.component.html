@@ -57,7 +57,15 @@
                                 </select>
                                 <!-- <p>{{inmate.isVisit?'Visit':'Regular'}}<i class="fa fa-edit fa-3 ml-3"></i></p> -->
                                 <h5 class="text-success">Address</h5>
-                                <p>{{inmate.address}}</p>                                
+                                <p>{{inmate.address}}</p> 
+                                <div *ngIf="!editDisabled">
+                                    <h5 class="text-success mt-2">Inmate Status</h5>
+                                    <select [disabled]="editDisabled" name="status" class="form-control col-7 my-2" [(ngModel)]="inmate.status">
+                                        <option *ngFor="let option of statusOptions" [ngValue]="option.value">
+                                            {{ option.display }}
+                                        </option>
+                                    </select>
+                                </div>                               
                             </div>
                             <div class="col-5">
                                
@@ -68,15 +76,19 @@
                                 <input type="number" [disabled]="editDisabled" class="form-control col-6" name="savings" [(ngModel)]="inmate.savings">
                                 <!-- <p>{{inmate.savings | currency}}<i class="fa fa-edit fa-3 ml-3"></i></p> -->
                                 <h5 class="text-success mt-2">Room Number</h5>
-                                <p class="lead">4<i class="fa fa-edit fa-3 ml-3"></i></p>
+                                <p class="lead">4<i class="fa fa-edit fa-3 ml-3"></i></p>    
                                 <small class="text-muted"><i>*Room number details are not supported as of now</i></small>
+                                
                             </div>
                                                 
-                        </div>                    
+                        </div>    
+                        <div class="mt-2">
                         <button type="submit" class="btn btn-success" *ngIf="editDisabled===false" (click)="editDisabled = false" (click)="onUpdate()">Save Changes</button>
                         <button class="btn btn-danger ml-2" *ngIf="editDisabled===true" (click)="editDisabled = false">Edit Details</button>
                         <button class="btn btn-outline-primary ml-2" (click)="onReset()">Reset</button> 
-                    </form>
+                  
+                        </div>                
+                          </form>
                     </tab>
                     <tab heading="Bill Details" (selectTab)="onSelect($event)">
     

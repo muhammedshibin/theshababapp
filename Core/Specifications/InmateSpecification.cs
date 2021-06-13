@@ -1,5 +1,6 @@
 ﻿using Core.DataFilters;
 using Core.Entities;
+using Core.Enumerations;
 
 namespace Core.Specifications
 {
@@ -24,6 +25,12 @@ namespace Core.Specifications
             }
             if(!forCount) AddPagination((filter.PageIndex - 1) * filter.PageSize , filter.PageSize);
         }
+
+        public InmateSpecification(InmateStatus status ) : base (x => x.Status == status)
+        {
+
+        }
         
     }
+
 }

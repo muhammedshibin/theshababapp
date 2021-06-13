@@ -1,6 +1,7 @@
 using API.Extensions;
 using API.Middlewares;
 using Infrastructure.Data;
+using Infrastructure.Data.Services;
 using Infrastructure.Identity;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;

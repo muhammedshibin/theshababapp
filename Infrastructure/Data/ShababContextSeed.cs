@@ -75,6 +75,16 @@ namespace Infrastructure.Data
                         ModfiedOn = DateTime.MinValue,
                         NeedToConsiderDays = false,
                         Id = 5
+                    },
+                    new Category
+                    {
+                        Name = "SETTLEMENT",
+                        CreatedOn = DateTime.Now,
+                        DefaultRate = 0,
+                        IsApplicableForVisitors = true,
+                        ModfiedOn = DateTime.MinValue,
+                        NeedToConsiderDays = false,
+                        Id = 6
                     }
                 };
 

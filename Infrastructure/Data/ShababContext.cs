@@ -35,6 +35,7 @@ namespace Infrastructure.Data
         public DbSet<BillDetail> BillDetails { get; set; }
         public DbSet<Leave> Leaves { get; set; }
         public DbSet<BillPayment> Payments { get; set; }
+        public DbSet<DeactivatedInmate> DeactivatedInmates { get; set; }
 
         public override async Task<int> SaveChangesAsync(CancellationToken cancellationToken = default(CancellationToken))
         {

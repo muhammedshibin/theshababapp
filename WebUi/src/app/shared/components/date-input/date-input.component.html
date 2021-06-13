@@ -8,6 +8,7 @@
     bsDatepicker
     [bsConfig] = "bsConfig"
     [bsValue]="bsValue"
+    [maxDate]="useMaxDate?getMaxDate():undefined"
     >
     <div class="invalid-feedback" *ngIf="ngControl.hasError('required')">
         {{label}} is required

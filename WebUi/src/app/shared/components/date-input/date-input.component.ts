@@ -11,6 +11,7 @@ export class DateInputComponent implements ControlValueAccessor {
 
   @Input() label : string;
   @Input() inputDate: Date;
+  @Input() useMaxDate: boolean = false;
   bsConfig: Partial<BsDatepickerConfig>;
   bsValue = new Date();
 
@@ -18,7 +19,8 @@ export class DateInputComponent implements ControlValueAccessor {
     this.ngControl.valueAccessor = this;
     this.bsConfig = {
       //dateInputFormat: 'DD MMMM YYYY'
-      dateInputFormat: 'YYYY-MM-DD'
+      dateInputFormat: 'YYYY-MM-DD',
+      maxDate: this.useMaxDate?this.getMaxDate():undefined
     }
     this.bsValue = this.inputDate || new Date();
 
@@ -32,4 +34,12 @@ export class DateInputComponent implements ControlValueAccessor {
   setDisabledState?(isDisabled: boolean): void {
    
   } 
+
+  getMaxDate(){
+    const d = new Date();
+    const year = d.getFullYear();
+    const month = d.getMonth();
+    const day = d.getDate();
+    return new Date(year-18, month, day);
+  }
 }

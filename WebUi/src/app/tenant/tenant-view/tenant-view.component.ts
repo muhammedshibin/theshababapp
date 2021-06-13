@@ -26,6 +26,12 @@ export class TenantViewComponent implements OnInit {
     {value:true,display:'Top Bed'},
     {value:false,display:'Bottom Bed'}
   ]
+  statusOptions = [
+    {value:0,display:'Active'},
+    {value:1,display:'Left'},
+    {value:2,display:'Away'},
+    {value:3,display:'Leaving'},
+  ]
 
   constructor(
     private activatedRoute: ActivatedRoute,

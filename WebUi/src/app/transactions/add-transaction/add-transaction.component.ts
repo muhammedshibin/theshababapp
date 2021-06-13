@@ -95,11 +95,7 @@ export class AddTransactionComponent implements OnInit {
   loadVendors() {
     this.vendorService.getVendors().subscribe(
       (response) => {
-        this.vendors = response;
-        // const billpaymentVendor = this.vendors.findIndex(c => c.id === 3);
-        // if(billpaymentVendor !== -1){
-        //   this.vendors.splice(billpaymentVendor,1);
-        // }
+        this.vendors = response;        
         this.paidToVendors = [...this.vendors];
       },
       (err) => {

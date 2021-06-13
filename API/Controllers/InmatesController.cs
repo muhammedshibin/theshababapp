@@ -91,27 +91,28 @@ namespace API.Controllers
         [HttpPatch]
         public async Task<ActionResult<InmateDto>> UpdateInmate(InmateDto inmateDto)
         {
-            var imageUrl = string.Empty;
-
-            if (inmateDto.InmatePhoto != null)
-            {
-                IFormFile file = inmateDto.InmatePhoto;
-                var UrlHost = _env.WebRootPath;
-                var location = Path.Combine(UrlHost, "Images");
-                var ImageUrl = Path.Combine(location, file.FileName);
-                await inmateDto.InmatePhoto.CopyToAsync(new FileStream(ImageUrl, FileMode.Create));
-                imageUrl = @"Images/" + file.FileName;
-            }
+           
 
             var inmate = _mapper.Map<Inmate>(inmateDto);
-            inmate.PictureUrl = imageUrl;
-
+           
             var created = await _inmateService.UpdateInmate(inmate);
 
             if (created) return Ok(inmateDto);
 
-            return BadRequest("Error why");
-        }        
+            return BadRequest();
+        }
+        [AllowAnonymous]
+        [HttpPost("deactivate")]
+        public async Task<ActionResult<bool>> DeactivateInmate(DeactivateInmateDto deactivateInmateDto)
+        {
+            var deactivatedInmate = _mapper.Map<DeactivateInmateDto, DeactivatedInmate>(deactivateInmateDto);
+
+
+            var deactivated = await _inmateService.DeactivateInmate(deactivatedInmate);
+
+            return Ok(deactivated);
+
+        }
 
     }
 }

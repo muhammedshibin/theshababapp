@@ -1,4 +1,6 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq.Expressions;
 using System.Threading.Tasks;
 using Core.Entities;
 
@@ -34,6 +36,12 @@ namespace Core.Interfaces
         /// <param name="spec"></param>
         /// <returns></returns>
         Task<IReadOnlyList<T>> FindAllBySpecAsync(ISpecification<T> spec);
+        /// <summary>
+        /// Retrieve list of items of entity for the provided specification
+        /// </summary>
+        /// <param name="spec"></param>
+        /// <returns></returns> 
+        Task<IReadOnlyList<TOut>> FindAllBySpecAsync<TOut>(ISpecification<T> spec, Expression<Func<T, TOut>> select);
         /// <summary>
         /// Retrieve list of items of entity for the provided specification
         /// </summary>

@@ -9,6 +9,8 @@ namespace Core.Enumerations
         [EnumMember(Value = "Left")]
         Left,
         [EnumMember(Value = "Away")]
-        Away
+        Away,
+        [EnumMember(Value = "Leaving")]
+        Leaving
     }
 }

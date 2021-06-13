@@ -9,7 +9,7 @@ namespace Core.Enumerations
     public class VendorNames
     {
         public const string Main = "Main";
-        public const string BillPaymentAccount = "Inmate Bill Payment";        
+        public const string BillPaymentAccount = "Inmate Payment";        
         public const string Others = "Others";        
     }
 }

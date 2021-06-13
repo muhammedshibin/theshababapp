@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Threading.Tasks;
 using AutoMapper;
 using AutoMapper.QueryableExtensions;
@@ -41,6 +42,10 @@ namespace Infrastructure.Data
         public async Task<IReadOnlyList<T>> FindAllBySpecAsync(ISpecification<T> spec)
         {
             return await EvaluateExpression(spec).ToListAsync();
+        }
+        public async Task<IReadOnlyList<TOut>> FindAllBySpecAsync<TOut>(ISpecification<T> spec,Expression<Func<T,TOut>> select)
+        {
+            return await EvaluateExpression(spec).Select(select).ToListAsync();
         }
         public async Task<IReadOnlyList<TOut>> FindAllBySpecAsync<TOut>(ISpecification<T> spec)
         {

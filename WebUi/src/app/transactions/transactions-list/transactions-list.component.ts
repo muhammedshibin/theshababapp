@@ -14,6 +14,8 @@ import {
 import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
 import { Router } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
+import { getMonthArray, getYears } from 'src/app/shared/functions/month_function';
+
 
 @Component({
   selector: 'app-transactions-list',
@@ -24,12 +26,24 @@ export class TransactionsListComponent implements OnInit {
   @ViewChild('searchBox') search: ElementRef;
 
   transactionParams = new TransactionParams();
+  
   pagination: Pagination;
 
   transactions: Transaction[];
 
   modalRef: BsModalRef;
   alertmodalRef: BsModalRef;
+  monthNames = getMonthArray();
+  years = getYears();
+  order = true;
+  sortOptions = [
+    {value:'amount',display:'Amount'},
+    {value:'txndate',display:'Transaction Date'},
+    {value:'category',display:'Category'},
+    {value:'name',display:'Transaction Name'},
+  ]
+
+  selectedSort = 'txndate';
 
   name: string;
 
@@ -41,6 +55,8 @@ export class TransactionsListComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
+    this.transactionParams.month = new Date().getMonth() + 1;
+    this.transactionParams.year = new Date().getFullYear();
     this.loadTransactions();
   }
 
@@ -93,5 +109,22 @@ export class TransactionsListComponent implements OnInit {
 
   openModal(template: TemplateRef<any>) {
     this.modalRef = this.modalService.show(template);
+  }  
+
+  onMonthChange(event: any){
+    this.loadTransactions();
+  }
+
+  onYearChange(event: any){
+    this.loadTransactions();
+  }
+
+  onSortChange(event: any){
+    const sortByOrder = this.order? 'desc':'asc';
+    const sortBy = `${this.selectedSort}${sortByOrder}`;
+    this.transactionParams.sortBy = sortBy;
+    this.loadTransactions();
   }
 }
+
+

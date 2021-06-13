@@ -38,6 +38,9 @@ namespace API.Helpers
 
             CreateMap<Inmate, InmateToReturnDto>();
 
+            CreateMap<DeactivateInmateDto, DeactivatedInmate>();
+
+
             CreateMap<Vendor, VendorDto>()
                 .ReverseMap();
 

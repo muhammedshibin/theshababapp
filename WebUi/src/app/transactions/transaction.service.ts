@@ -57,6 +57,8 @@ export class TransactionService {
     if (txnParams.paidTo) {
       params = params.append('paidTo', txnParams.paidTo.toString());
     }
+    params = params.append('sort',txnParams.sortBy);
+    
     return getPaginatedResult<Transaction>(
       this.http,
       this.baseUrl + 'transactions',
