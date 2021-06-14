@@ -10,7 +10,6 @@ using Core.Enumerations;
 using Core.Interfaces;
 using Core.Specifications;
 using Microsoft.Extensions.Logging;
-using OfficeOpenXml;
 
 namespace Infrastructure.Data.Services
 {
@@ -40,7 +39,7 @@ namespace Infrastructure.Data.Services
         }
         public async Task<IReadOnlyList<InmateBill>> GetBillsFOrInmateAsync(int inmateId)
         {
-            GenerateInvoices(4,10);
+           
             var billspec = new BillForInmateWithBillDetailsSpecification(inmateId);
             return await _unitOfWork.Repository<InmateBill>().
                 FindAllBySpecAsync(billspec);
@@ -394,28 +393,28 @@ namespace Infrastructure.Data.Services
             return occupancies;
         }
 
-        private void GenerateInvoices(int month , int year)
-        {
-            var fileName = $"Bill-{month}-{year}.xlsx";
-            var filePath = Path.Combine(Directory.GetCurrentDirectory(), "content", fileName);
+        //private void GenerateInvoices(int month , int year)
+        //{
+        //    var fileName = $"Bill-{month}-{year}.xlsx";
+        //    var filePath = Path.Combine(Directory.GetCurrentDirectory(), "content", fileName);
 
-            FileInfo file = new FileInfo(filePath);
+        //    FileInfo file = new FileInfo(filePath);
 
-            if (file.Exists)
-            {
-                file.Delete();
-                file = new FileInfo(filePath);
-            }
+        //    if (file.Exists)
+        //    {
+        //        file.Delete();
+        //        file = new FileInfo(filePath);
+        //    }
 
-            using var package = new ExcelPackage(file);
+        //    using var package = new ExcelPackage(file);
 
-            ExcelWorksheet ws = package.Workbook.Worksheets.Add("Bill Details");
+        //    ExcelWorksheet ws = package.Workbook.Worksheets.Add("Bill Details");
 
-            ws.Cells["A1:I2"].Merge = true;
-
-
+        //    ws.Cells["A1:I2"].Merge = true;
 
 
-        }
+
+
+        //}
     }
 }
