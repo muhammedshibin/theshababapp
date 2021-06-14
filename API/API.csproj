@@ -31,7 +31,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Content\" />
+    <Folder Include="Content\"  CopyToPublishDirectory="PreserveNewest"/>
   </ItemGroup>
 
 </Project>
