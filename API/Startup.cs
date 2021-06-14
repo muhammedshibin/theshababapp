@@ -67,9 +67,9 @@ namespace API
             app.UseDefaultFiles();
 
             app.UseStaticFiles();
-            app.UseStaticFiles(new StaticFileOptions {
-                FileProvider = new PhysicalFileProvider(Path.Combine(Directory.GetCurrentDirectory(), "Content")), RequestPath = "/content"
-            });
+            //app.UseStaticFiles(new StaticFileOptions {
+            //    FileProvider = new PhysicalFileProvider(Path.Combine(Directory.GetCurrentDirectory(), "Content")), RequestPath = "/content"
+            //});
 
             app.UseEndpoints(endpoints =>
             {
