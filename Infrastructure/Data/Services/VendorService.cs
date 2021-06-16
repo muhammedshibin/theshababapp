@@ -27,6 +27,7 @@ namespace Infrastructure.Data.Services
         public async Task<bool> UpdateVendor(Vendor vendor)
         {
             var existingVendor = await  GetVendor(vendor.Id);
+            existingVendor.Name = vendor.Name ?? existingVendor.Name;
             existingVendor.AmountInHand = vendor.AmountInHand;
             return await _unitOfWork.Complete() > 0;
         }

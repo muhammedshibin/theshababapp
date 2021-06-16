@@ -31,7 +31,7 @@ namespace API.Middlewares
             }
             catch (Exception e)
             {
-                _logger.LogError(e, e.StackTrace);
+                _logger.LogError(e.Message, e.StackTrace);
 
                 var response = new ErrorResponse
                 {
