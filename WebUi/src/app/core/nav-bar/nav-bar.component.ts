@@ -4,6 +4,7 @@ import { Router } from '@angular/router';
 import { AccountService} from './../services/acount.service';
 import { Component, OnInit } from '@angular/core';
 import { User } from 'src/app/shared/models/user';
+import { BreadcrumbService } from 'xng-breadcrumb';
 
 @Component({
   selector: 'app-nav-bar',
@@ -15,11 +16,13 @@ export class NavBarComponent implements OnInit {
   username: string;
   password: string;
   currentUser$: Observable<User>;
+  title$: Observable<any[]>;
 
-  constructor(private accountService: AccountService ,private router: Router,private toastr:ToastrService) { }
+  constructor(private accountService: AccountService ,private router: Router,private toastr:ToastrService,private bcService: BreadcrumbService) { }
 
   ngOnInit(): void {
     this.currentUser$ = this.accountService.currentUser$;
+    this.title$ = this.bcService.breadcrumbs$;
   }
 
   onLogin(){

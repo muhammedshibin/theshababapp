@@ -2,6 +2,7 @@ using Core.Identity;
 using Infrastructure.Data;
 using Infrastructure.Identity;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -29,6 +30,11 @@ namespace API
 
                 var identitydbcontext = services.GetRequiredService<AppUserIdentityDbContext>();
                 await identitydbcontext.Database.MigrateAsync();
+
+                var userManager = services.GetRequiredService<UserManager<AppUser>>();
+                var roleManager = services.GetRequiredService<RoleManager<AppRole>>();
+
+                await IdentitySeed.Seed(userManager, roleManager);
 
                 var env = services.GetRequiredService<IHostEnvironment>();                
 

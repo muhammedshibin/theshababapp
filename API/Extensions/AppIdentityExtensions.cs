@@ -1,4 +1,5 @@
-﻿using Core.Identity;
+﻿using Core.Enumerations;
+using Core.Identity;
 using Core.Interfaces;
 using Infrastructure.Identity;
 using Infrastructure.Identity.Services;
@@ -74,6 +75,12 @@ namespace API.Extensions
                         ValidateAudience = false
                     };
                 });
+
+            services.AddAuthorization(options =>
+            {
+                options.AddPolicy(AuthorizationPolicies.RequiresAdminRole, policy => policy.RequireRole(UserRoles.Admin));
+                options.AddPolicy(AuthorizationPolicies.RequiresAccountRole, policy => policy.RequireRole(UserRoles.Admin,UserRoles.Accountant));
+            });
 
             services.AddScoped<IFeedbackService, FeedbackService>();
 

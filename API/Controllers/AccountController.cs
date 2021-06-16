@@ -1,4 +1,5 @@
 ﻿using API.Dtos;
+using Core.Enumerations;
 using Core.Identity;
 using Core.Interfaces;
 using Microsoft.AspNetCore.Authorization;
@@ -27,7 +28,7 @@ namespace API.Controllers
             _signInManager = signInManager;
             _tokenService = tokenService;
         }
-        [AllowAnonymous]
+        [Authorize(Policy = AuthorizationPolicies.RequiresAdminRole)]
         [HttpPost("register")]
         public async Task<ActionResult<UserDto>> Register(RegisterDto registerDto)
         {
@@ -56,6 +57,8 @@ namespace API.Controllers
 
                 return BadRequest(errorResponse);
             }
+
+            var rolesResult = _userManager.AddToRoleAsync(user, UserRoles.Member);
 
             return new UserDto
             {
@@ -96,5 +99,7 @@ namespace API.Controllers
                 Token = await _tokenService.CreateToken(user)
             };
         }
+
+       
     }
 }

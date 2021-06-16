@@ -12,8 +12,8 @@
           <div class="carousel-caption d-none d-md-block" style="margin-bottom: 100px;">
             <!-- <h3 class="text-info">Manage Your Expenses</h3>
             -->
-            <button class="btn btn-outline-info btn-lg" routerLink='/dashboard'>Start Here</button>
-            <p class="text-muted mt-5">Contact shibin , If needed </p>
+            <button class="btn btn-primary btn-lg" *ngIf="(currentUser$ | async) as currentUser" routerLink='/dashboard'>Start Here</button>
+            
           </div>
         </slide>    
       </carousel>
