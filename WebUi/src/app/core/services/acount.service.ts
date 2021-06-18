@@ -1,3 +1,4 @@
+import { RegisterUser } from './../../shared/models/register-user';
 import { User } from './../../shared/models/user';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
@@ -32,6 +33,9 @@ export class AccountService {
       .get(this.baseUrl + 'account/currentUser', { headers: headers })
       .pipe(
         map((user: User) => {
+          user.roles = [];
+          const roles = this.getDecodedToken(user.token).role;
+          Array.isArray(roles)?user.roles = roles : user.roles.push(roles);
           this.currentUserSource.next(user);
           localStorage.setItem('token', user.token);
         })
@@ -45,5 +49,13 @@ export class AccountService {
 
   initiate(){
     this.currentUserSource.next(null);  
+  }
+
+  getDecodedToken(token){
+    return JSON.parse(atob(token.split('.')[1]));
+  }
+
+  registerUser(registerUser: RegisterUser){
+    return this.http.post(this.baseUrl+'account/register',registerUser);
   }
 }

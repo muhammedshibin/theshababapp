@@ -1,3 +1,4 @@
+import { AdminComponent } from './admin/admin.component';
 import { SettingsComponent } from './settings/settings.component';
 import { VendorListComponent } from './vendor/vendor-list/vendor-list.component';
 import { FeedbackComponent } from './feedback/feedback.component';
@@ -7,6 +8,7 @@ import { HomeComponent } from './home/home.component';
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { VendorDetailComponent } from './vendor/vendor-detail/vendor-detail.component';
+import { AdminGuard } from './core/guards/admin.guard';
 
 const routes: Routes = [
   { path: '', component: HomeComponent, data: { breadcrumb: 'Home' } },
@@ -43,8 +45,14 @@ const routes: Routes = [
         path: 'vendors',
         loadChildren: () =>
           import('./vendor/vendor.module').then((mod) => mod.VendorModule),
-        data: { breadcrumb: 'Vendors' },
+        data: { breadcrumb: 'Accounts' },
       },
+      {
+        path: 'admin',
+        component: AdminComponent,
+        canActivate: [AdminGuard],
+        data: { breadcrumb: 'Admin Panel' },
+      }
     ],
   },
   { path: '**', component: HomeComponent, pathMatch: 'full' },

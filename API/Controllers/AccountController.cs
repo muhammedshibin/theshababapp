@@ -40,7 +40,7 @@ namespace API.Controllers
             {
                 UserName = registerDto.UserName,
                 DisplayName = registerDto.DisplayName,
-
+                Email = registerDto.Email
             };
 
             var result = await _userManager.CreateAsync(user, registerDto.Password);
@@ -58,13 +58,14 @@ namespace API.Controllers
                 return BadRequest(errorResponse);
             }
 
-            var rolesResult = _userManager.AddToRoleAsync(user, UserRoles.Member);
+            var rolesResult = await _userManager.AddToRoleAsync(user, UserRoles.Member);
 
             return new UserDto
             {
                 DisplayName = user.DisplayName,
-                Token = await _tokenService.CreateToken(user)
-            };
+                Token = await _tokenService.CreateToken(user),
+                UserName = user.UserName
+        };
 
         }
         [AllowAnonymous]
@@ -81,8 +82,9 @@ namespace API.Controllers
             return new UserDto
             {
                 DisplayName = user.DisplayName,
-                Token = await _tokenService.CreateToken(user)
-            };
+                Token = await _tokenService.CreateToken(user),
+                UserName = user.UserName
+        };
         }
         [Authorize]
         [HttpGet("currentUser")]
@@ -96,7 +98,8 @@ namespace API.Controllers
             return new UserDto
             {
                 DisplayName = user.DisplayName,
-                Token = await _tokenService.CreateToken(user)
+                Token = await _tokenService.CreateToken(user),
+                UserName = user.UserName
             };
         }
 

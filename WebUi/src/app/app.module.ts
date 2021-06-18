@@ -1,3 +1,5 @@
+import { ErrorInterceptor } from './core/interceptors/error.interceptor';
+import { AdminModule } from './admin/admin.module';
 import { SettingsModule } from './settings/settings.module';
 import { FeedbackModule } from './feedback/feedback.module';
 import { JwtInterceptor } from './core/interceptors/jwt.interceptor';
@@ -24,10 +26,12 @@ import { NgxSpinnerModule } from 'ngx-spinner';
     HttpClientModule,
     NgxSpinnerModule,
     FeedbackModule,
-    SettingsModule
+    SettingsModule,
+    AdminModule
   ],
   providers: [
     { provide: HTTP_INTERCEPTORS, useClass: LoadingInterceptor, multi: true },
+    { provide: HTTP_INTERCEPTORS, useClass: ErrorInterceptor, multi: true },
     { provide: HTTP_INTERCEPTORS, useClass: JwtInterceptor, multi: true }
   ],
   bootstrap: [AppComponent],

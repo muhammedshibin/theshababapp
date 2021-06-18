@@ -20,9 +20,10 @@ import { DashboardIconComponent } from './components/dashboard-icon/dashboard-ic
 import { BillPaymentComponent} from './components/bill-payment/bill-payment.component';
 import { AlertModule } from 'ngx-bootstrap/alert';
 import { ButtonsModule } from 'ngx-bootstrap/buttons';
+import { HasRoleDirective } from './directives/has-role.directive';
 
 @NgModule({
-  declarations: [TextInputComponent, DateInputComponent, ModalLgComponent, AlertWindowComponent, DashboardIconComponent,BillPaymentComponent],
+  declarations: [TextInputComponent, DateInputComponent, ModalLgComponent, AlertWindowComponent, DashboardIconComponent,BillPaymentComponent, HasRoleDirective],
   imports: [
     CommonModule,
     FormsModule,
@@ -60,7 +61,8 @@ import { ButtonsModule } from 'ngx-bootstrap/buttons';
     DashboardIconComponent,
     BillPaymentComponent,
     AlertModule,
-    ButtonsModule
+    ButtonsModule,
+    HasRoleDirective
   ],
 })
 export class SharedModule {}

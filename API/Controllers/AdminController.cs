@@ -31,7 +31,8 @@ namespace API.Controllers
                         .ThenInclude(x => x.Role)
                         .Select(x => new
                         {
-                            Name = x.DisplayName,
+                            DisplayName = x.DisplayName,
+                            UserName = x.UserName,
                             Roles = x.UserRoles.Select(x => x.Role.Name).ToList()
                         })
                         .ToListAsync();

@@ -1,0 +1,17 @@
+
+<div class="container">
+    <div class="tab-panel">
+        <tabset class="member-tabset">
+            <tab heading = "User Management" (selectTab)="onSelect($event)" *appHasRole="['Admin']">
+                <div class="container">
+                        <app-user-management [users]="users"></app-user-management>
+                </div>
+            </tab>
+            <tab heading = "New User Registration" *appHasRole="['Admin']">
+                <div class="container">
+                        <app-add-user></app-add-user>
+                </div>
+            </tab>
+        </tabset>
+    </div>
+</div>

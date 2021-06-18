@@ -1,0 +1,32 @@
+<div>
+  <div class="alert alert-danger col-sm-8" *ngFor="let item of errors" role="alert">
+    {{item}}
+  </div>
+    <form #adduser="ngForm" autocomplete="off">
+        <div class="form-group row">
+            <label for="staticEmail" class="col-sm-2 col-form-label">Name</label>
+            <div class="col-sm-10">
+              <input type="text"  class="form-control"  name="displayName" [(ngModel)]="registerUser.displayName">
+            </div>
+          </div>
+          <div class="form-group row">
+            <label for="staticEmail" class="col-sm-2 col-form-label">Email</label>
+            <div class="col-sm-10">
+              <input type="text"  class="form-control"  name="Email" [(ngModel)]="registerUser.email">
+            </div>
+          </div>
+          <div class="form-group row">
+            <label for="inputPassword" class="col-sm-2 col-form-label">UserName</label>
+            <div class="col-sm-10">
+              <input type="text" class="form-control"   name="userName" [(ngModel)]="registerUser.userName">
+            </div>
+          </div>          
+          <div class="form-group row">
+            <label for="inputPassword" class="col-sm-2 col-form-label">Password</label>
+            <div class="col-sm-10">
+              <input type="password" class="form-control"  name="password" [(ngModel)]="registerUser.password">
+            </div>
+          </div>
+          <button class="btn btn-success" (click)="onSubmit()">Register</button>
+    </form>
+</div>

@@ -1,4 +1,6 @@
 export interface User{
     displayName: string;
     token: string;
+    roles: string[];
+    userName: string;
 }
