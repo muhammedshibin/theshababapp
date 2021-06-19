@@ -12,7 +12,7 @@ using System.Threading.Tasks;
 
 namespace API.Controllers
 {
-    //[Authorize(Policy = AuthorizationPolicies.RequiresAdminRole)]
+    [Authorize(Policy = AuthorizationPolicies.RequiresAdminRole)]
     public class AdminController : BaseApiController
     {
         private readonly RoleManager<AppRole> _roleManager;
@@ -40,7 +40,7 @@ namespace API.Controllers
             return Ok(users);
         }
 
-        [AllowAnonymous]
+        
         [HttpPost("edit-user-roles/{userName}")]
         public async Task<ActionResult> EditUserRole(string userName, [FromQuery] string roles)
         {
