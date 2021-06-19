@@ -1,5 +1,6 @@
-import { ErrorInterceptor } from './core/interceptors/error.interceptor';
 import { AdminModule } from './admin/admin.module';
+import { SharedModule } from './shared/shared.module';
+import { ErrorInterceptor } from './core/interceptors/error.interceptor';
 import { SettingsModule } from './settings/settings.module';
 import { FeedbackModule } from './feedback/feedback.module';
 import { JwtInterceptor } from './core/interceptors/jwt.interceptor';
@@ -8,7 +9,6 @@ import { HomeModule } from './home/home.module';
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { CoreModule } from './core/core.module';
@@ -27,12 +27,14 @@ import { NgxSpinnerModule } from 'ngx-spinner';
     NgxSpinnerModule,
     FeedbackModule,
     SettingsModule,
+    SharedModule,
     AdminModule
   ],
   providers: [
     { provide: HTTP_INTERCEPTORS, useClass: LoadingInterceptor, multi: true },
     { provide: HTTP_INTERCEPTORS, useClass: ErrorInterceptor, multi: true },
     { provide: HTTP_INTERCEPTORS, useClass: JwtInterceptor, multi: true }
+    
   ],
   bootstrap: [AppComponent],
 })

@@ -48,8 +48,9 @@ namespace API.Controllers
         [HttpGet("{id}")]
         public async Task<ActionResult<InmateDto>> GetInmate(int id)
         {
-            var inmates = await _inmateService.GetInmate(id);
-            return Ok(_mapper.Map<InmateDto>(inmates));
+            var inmate = await _inmateService.GetInmate(id);
+            if(inmate == null) return NotFound(new ErrorResponse(401,"Inmate Not Found"));
+            return Ok(_mapper.Map<InmateDto>(inmate));
         }
 
         [HttpPost]

@@ -6,7 +6,7 @@ import { Directive, ViewContainerRef, TemplateRef, OnInit, Input } from '@angula
 @Directive({
   selector: '[appHasRole]',
 })
-export class HasRoleDirective implements OnInit {
+export class HasRoleDirective implements OnInit{
 
   @Input() appHasRole: string[]
 
@@ -22,15 +22,14 @@ export class HasRoleDirective implements OnInit {
     })
   }
   ngOnInit(): void {
-    if(!this.user?.roles || this.user == null){
+    if(this.user == null &&!this.user.roles ){
       this.viewContainerRef.clear();
       return;
     }
 
-    if(this.user?.roles.some(r => this.appHasRole.includes(r))){
+    if(this.user.roles.some(r => this.appHasRole.includes(r))){
       this.viewContainerRef.createEmbeddedView(this.templateRef);
-    }else{
-      this.viewContainerRef.clear();
     }
+   
   }
 }

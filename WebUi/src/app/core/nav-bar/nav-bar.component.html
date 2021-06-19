@@ -1,67 +1,81 @@
 <div *ngIf="(title$ | async) as breadcrumbs">
-    <nav *ngIf="breadcrumbs.length > 0 && breadcrumbs[breadcrumbs.length-1].label === 'Home'" class="navbar navbar-expand-md navbar-light fixed-top bg-inherit">  
+    <nav *ngIf="breadcrumbs.length > 0 && breadcrumbs[breadcrumbs.length-1].label === 'Home'"
+        class="navbar navbar-expand-md navbar-light fixed-top bg-inherit">
         <div class="container-fluid d-flex justify-content-between">
             <div>
-                <a class="navbar-brand" class="text-light"  routerLink="/dashboard"><i class="fa fa-users mr-2"></i><span style="font-family: cursive;font-weight: bolder;"> SHABAB APP</span></a>
+                <a class="navbar-brand" class="text-light" routerLink="/dashboard"><i class="fa fa-users mr-2"></i><span
+                        style="font-family: cursive;font-weight: bolder;"> SHABAB APP</span></a>
             </div>
-            
-                
+
+
             <div>
                 <div *ngIf="(currentUser$ | async) as currentUser" style="color: ghostwhite;">
                     Welcome
                     <div class="btn-group" dropdown>
-                        <button id="button-basic" dropdownToggle type="button" class="btn btn-outline-default dropdown-toggle"
-                                aria-controls="dropdown-basic">
-                                <strong>{{currentUser.displayName}}</strong> <span class="caret"></span>
+                        <button id="button-basic" dropdownToggle type="button"
+                            class="btn btn-outline-default dropdown-toggle" aria-controls="dropdown-basic">
+                            <strong>{{currentUser.displayName}}</strong> <span class="caret"></span>
                         </button>
-                        <ul id="dropdown-basic" *dropdownMenu class="dropdown-menu"
-                            role="menu" aria-labelledby="button-basic">
-                          <li role="menuitem"><a class="dropdown-item" routerLink="/settings">Settings</a></li>
-                          <li class="divider dropdown-divider"></li>
-                          <li role="menuitem">
-                              <!-- <a class="dropdown-item" href="#">Separated link</a> -->
-                              <button class="btn btn-danger dropdown-item" (click)="logout()">Logout</button>
-                          </li>
+                        <ng-container *ngIf="currentUser" >
+                            <ul id="dropdown-basic" *dropdownMenu class="dropdown-menu" role="menu"
+                            aria-labelledby="button-basic">
+                            <li role="menuitem" *appHasRole="['Admin']"><a class="dropdown-item" routerLink="/admin">Admin Panel</a></li>
+                            <li role="menuitem"><a class="dropdown-item" routerLink="/settings">Settings</a></li>
+
+                            <li class="divider dropdown-divider"></li>
+                            <li role="menuitem">
+                                <!-- <a class="dropdown-item" href="#">Separated link</a> -->
+                                <button class="btn btn-danger dropdown-item" (click)="logout()">Logout</button>
+                            </li>
                         </ul>
-                      </div>
+                        </ng-container>
+                        
+                    </div>
                 </div>
                 <div *ngIf="(currentUser$ | async) === null">
                     <form #loginForm="ngForm" (ngSubmit)="onLogin()" class="form-inline ">
-                        <input class="form-control mr-sm-2" name="username" [(ngModel)]="username" placeholder="Username">
-                        <input class="form-control mr-sm-2" type="password" name="password" [(ngModel)]="password" placeholder="Password">
+                        <input class="form-control mr-sm-2" name="username" [(ngModel)]="username"
+                            placeholder="Username">
+                        <input class="form-control mr-sm-2" type="password" name="password" [(ngModel)]="password"
+                            placeholder="Password">
                         <button class="btn btn-danger my-2 my-sm-0" type="submit">Login</button>
                     </form>
+                    <a routerLink="/account/forgot-password" style="text-decoration: none;"><small
+                            class="d-flex justify-content-end text-white">Forgot Password?</small></a>
                 </div>
-                
+
             </div>
-        </div> 
-            
-      
+        </div>
+
+
     </nav>
-    <nav *ngIf="breadcrumbs.length > 0 && breadcrumbs[breadcrumbs.length-1].label !== 'Home'" class="navbar navbar-expand-md navbar-light fixed-top bg-success">  
+    <nav *ngIf="breadcrumbs.length > 0 && breadcrumbs[breadcrumbs.length-1].label !== 'Home'"
+        class="navbar navbar-expand-md navbar-light fixed-top bg-success">
         <div class="container-fluid d-flex justify-content-between">
             <div>
-                <a class="navbar-brand" routerLink="/dashboard"><i class="fa fa-users mr-2"></i><span style="font-family: cursive;font-weight: bolder;"> SHABAB APP</span></a>
+                <a class="navbar-brand" routerLink="/dashboard"><i class="fa fa-users mr-2"></i><span
+                        style="font-family: cursive;font-weight: bolder;"> SHABAB APP</span></a>
             </div>
             <div>
                 <ul class="navbar-nav mr-auto" *ngIf="(currentUser$ | async) !== null">
                     <li class="nav-item" routerLinkActive="active">
-                        <a class="nav-link" routerLink="/tenants"><i class="fa fa-user fa-2x mr-1"></i> <span class="sr-only">(current)</span></a>
+                        <a class="nav-link" routerLink="/tenants"><i class="fa fa-user fa-2x mr-1"></i> <span
+                                class="sr-only">(current)</span></a>
                     </li>
                     <li class="nav-item" routerLinkActive="active">
                         <a class="nav-link" routerLink="/transactions"><i class="fa fa-money fa-2x mr-1"></i></a>
                     </li>
                     <li class="nav-item" routerLinkActive="active">
-                        <a class="nav-link"  routerLink="/bills" ><i class="fa fa-sticky-note fa-2x mr-1"></i></a>
+                        <a class="nav-link" routerLink="/bills"><i class="fa fa-sticky-note fa-2x mr-1"></i></a>
                     </li>
                     <li class="nav-item" routerLinkActive="active">
-                        <a class="nav-link"  routerLink="/vendors" ><i class="fa fa-lock fa-2x mr-1"></i></a>
+                        <a class="nav-link" routerLink="/vendors"><i class="fa fa-lock fa-2x mr-1"></i></a>
                     </li>
                     <li class="nav-item" routerLinkActive="active">
-                        <a class="nav-link"  routerLink="/settings" ><i class="fa fa-gear fa-2x mr-1"></i></a>
+                        <a class="nav-link" routerLink="/settings"><i class="fa fa-gear fa-2x mr-1"></i></a>
                     </li>
                     <li class="nav-item" routerLinkActive="active">
-                        <a class="nav-link"  routerLink="/feedback" ><i class="fa fa-comments fa-2x mr-1"></i></a>
+                        <a class="nav-link" routerLink="/feedback"><i class="fa fa-comments fa-2x mr-1"></i></a>
                     </li>
                 </ul>
             </div>
@@ -69,34 +83,41 @@
                 <div *ngIf="(currentUser$ | async) as currentUser">
                     Welcome
                     <div class="btn-group" dropdown>
-                        <button id="button-basic" dropdownToggle type="button" class="btn btn-outline-default dropdown-toggle"
-                                aria-controls="dropdown-basic">
-                                <strong>{{currentUser.displayName}}</strong> <span class="caret"></span>
+                        <button id="button-basic" dropdownToggle type="button"
+                            class="btn btn-outline-default dropdown-toggle" aria-controls="dropdown-basic">
+                            <strong>{{currentUser.displayName}}</strong> <span class="caret"></span>
                         </button>
-                        <ul id="dropdown-basic" *dropdownMenu class="dropdown-menu"
-                            role="menu" aria-labelledby="button-basic">
-                          <li role="menuitem"><a class="dropdown-item" routerLink="/settings">Settings</a></li>
-                          <li role="menuitem" *appHasRole="['Admin']"><a class="dropdown-item" routerLink="/admin">Admin Panel</a></li>
-                          <li class="divider dropdown-divider"></li>
-                          <li role="menuitem">
-                              <!-- <a class="dropdown-item" href="#">Separated link</a> -->
-                              <button class="btn btn-danger dropdown-item" (click)="logout()">Logout</button>
-                          </li>
-                        </ul>
-                      </div>
+                        <ng-container *ngIf="currentUser">
+                            <ul id="dropdown-basic" *dropdownMenu class="dropdown-menu" role="menu"
+                                aria-labelledby="button-basic">
+                                <li role="menuitem"><a class="dropdown-item" routerLink="/settings">Settings</a></li>
+
+                                <li role="menuitem" *appHasRole="['Admin']"><a class="dropdown-item" routerLink="/admin">Admin Panel</a></li>
+
+                                <li class="divider dropdown-divider"></li>
+                                <li role="menuitem">
+                                    <!-- <a class="dropdown-item" href="#">Separated link</a> -->
+                                    <button class="btn btn-danger dropdown-item" (click)="logout()">Logout</button>
+                                </li>
+                            </ul>
+                        </ng-container>
+
+                    </div>
                 </div>
                 <div *ngIf="(currentUser$ | async) === null">
                     <form #loginForm="ngForm" (ngSubmit)="onLogin()" class="form-inline ">
-                        <input class="form-control mr-sm-2" name="username" [(ngModel)]="username" placeholder="Username">
-                        <input class="form-control mr-sm-2" type="password" name="password" [(ngModel)]="password" placeholder="Password">
+                        <input class="form-control mr-sm-2" name="username" [(ngModel)]="username"
+                            placeholder="Username">
+                        <input class="form-control mr-sm-2" type="password" name="password" [(ngModel)]="password"
+                            placeholder="Password">
                         <button class="btn btn-danger my-2 my-sm-0" type="submit">Login</button>
                     </form>
+
                 </div>
-                
+
             </div>
-        </div> 
-            
-      
+        </div>
+
+
     </nav>
 </div>
-

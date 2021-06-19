@@ -34,9 +34,7 @@ export class ApplyLeaveComponent implements OnInit {
       this.toastr.success('Leave Applied Successfully','Success');  
       this.leaveForm.reset();
       this.leaveApplied.emit(true);
-    },(err) =>{
-      this.toastr.error('Error Occured','Error');
-    })
+    });
   }
 
 }

@@ -17,11 +17,14 @@ constructor(private accountService: AccountService , private toastr: ToastrServi
   canActivate(): Observable<boolean> {
     return this.accountService.currentUser$.pipe(
       map((user: User) => {
-        if(user.roles.includes('Admin')){
-          return true;
+        if(user){
+          if(user.roles?.includes('Admin')){
+            return true;
+          }
+          this.toastr.error('You cannot enter this Area');    
+          this.router.navigateByUrl('');          
         }
-        this.toastr.error('You cannot enter this Area');    
-        this.router.navigateByUrl('');
+        
       })
     )
   }

@@ -12,6 +12,8 @@ import { environment } from 'src/environments/environment';
 export class AccountService {
   private currentUserSource = new ReplaySubject<User>(1);
   currentUser$ = this.currentUserSource.asObservable();
+  private currentRoles = new ReplaySubject<string[]>();
+  currentRoles$ = this.currentRoles.asObservable();
   baseUrl = environment.baseUrl;
 
   constructor(private http: HttpClient) {}
@@ -19,6 +21,9 @@ export class AccountService {
   login(value: any) {
     return this.http.post(this.baseUrl + 'account/login', value).pipe(
       map((user: User) => {
+        user.roles = [];
+        const roles = this.getDecodedToken(user.token).role;
+        Array.isArray(roles)?user.roles = roles : user.roles.push(roles);
         this.currentUserSource.next(user);
         localStorage.setItem('token', user.token);
       })
@@ -57,5 +62,13 @@ export class AccountService {
 
   registerUser(registerUser: RegisterUser){
     return this.http.post(this.baseUrl+'account/register',registerUser);
+  }
+
+  forgotPassword(email: string){
+    return this.http.get(this.baseUrl + 'account/forgot-password?email='+email);
+  }
+
+  resetPassword(value: any){
+    return this.http.post(this.baseUrl + 'account/reset-password',value);
   }
 }

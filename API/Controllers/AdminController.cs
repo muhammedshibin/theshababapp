@@ -12,7 +12,7 @@ using System.Threading.Tasks;
 
 namespace API.Controllers
 {
-    [Authorize(Policy = AuthorizationPolicies.RequiresAdminRole)]
+    //[Authorize(Policy = AuthorizationPolicies.RequiresAdminRole)]
     public class AdminController : BaseApiController
     {
         private readonly RoleManager<AppRole> _roleManager;

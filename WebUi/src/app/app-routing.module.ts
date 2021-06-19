@@ -1,3 +1,6 @@
+import { ResetPasswordComponent } from './core/reset-password/reset-password.component';
+import { ForgotPasswordComponent } from './core/forgot-password/forgot-password.component';
+import { NotFoundComponent } from './core/not-found/not-found.component';
 import { AdminComponent } from './admin/admin.component';
 import { SettingsComponent } from './settings/settings.component';
 import { VendorListComponent } from './vendor/vendor-list/vendor-list.component';
@@ -49,13 +52,16 @@ const routes: Routes = [
       },
       {
         path: 'admin',
-        component: AdminComponent,
-        canActivate: [AdminGuard],
+        loadChildren:() => import('./admin/admin.module').then((mod) => mod.AdminModule),
+        // canActivate:[AdminGuard],
         data: { breadcrumb: 'Admin Panel' },
       }
     ],
   },
-  { path: '**', component: HomeComponent, pathMatch: 'full' },
+  { path: 'not-found', component: NotFoundComponent},
+  { path: 'account/forgot-password', component: ForgotPasswordComponent,data : {breadcrumb:'Forgot Password'}},
+  { path: 'account/reset-password', component: ResetPasswordComponent,data : {breadcrumb:'Reset Password'}},
+  { path: '**', component: NotFoundComponent,pathMatch:'full'},
 ];
 
 @NgModule({

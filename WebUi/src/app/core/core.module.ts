@@ -5,13 +5,19 @@ import { CommonModule } from '@angular/common';
 import { NavBarComponent } from './nav-bar/nav-bar.component';
 import { SectionHeaderComponent } from './section-header/section-header.component';
 import { BreadcrumbModule } from 'xng-breadcrumb';
+import { NotFoundComponent } from './not-found/not-found.component';
+import { ForgotPasswordComponent } from './forgot-password/forgot-password.component';
+import { ResetPasswordComponent } from './reset-password/reset-password.component';
 
 
 
 @NgModule({
   declarations: [
     NavBarComponent,
-    SectionHeaderComponent
+    SectionHeaderComponent,
+    NotFoundComponent,
+    ForgotPasswordComponent,
+    ResetPasswordComponent
   ],
   imports: [
     CommonModule,
@@ -19,6 +25,6 @@ import { BreadcrumbModule } from 'xng-breadcrumb';
     RouterModule,
     BreadcrumbModule
   ],
-  exports:[NavBarComponent,SectionHeaderComponent]
+  exports:[NavBarComponent,SectionHeaderComponent,NotFoundComponent,ForgotPasswordComponent,ResetPasswordComponent]
 })
 export class CoreModule { }

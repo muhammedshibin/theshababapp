@@ -66,6 +66,7 @@ namespace API.Extensions
             services.AddScoped<IPhotoService, PhotoService>();
             services.AddAutoMapper(typeof(MappingProfile));
             services.Configure<CloudinarySettings>(config.GetSection("CloudinarySettings"));
+            services.Configure<EmailSettings>(config.GetSection("EmailSettings"));
             services.Configure((Action<ApiBehaviorOptions>)(options =>
             {
                 options.InvalidModelStateResponseFactory = context =>

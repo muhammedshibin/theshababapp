@@ -19,9 +19,10 @@ namespace API.Extensions
 {
     public static class AppIdentityExtensions
     {
-        public static IServiceCollection AddIdentityExtensions(this IServiceCollection services , IConfiguration config)
+        public static IServiceCollection AddIdentityExtensions(this IServiceCollection services, IConfiguration config)
         {
-            services.AddDbContext<AppUserIdentityDbContext>(options => {
+            services.AddDbContext<AppUserIdentityDbContext>(options =>
+            {
 
                 var env = Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT");
 
@@ -57,12 +58,18 @@ namespace API.Extensions
                 // or from the environment variable from Heroku, use it to set up your DbContext.
                 options.UseNpgsql(connStr);
             });
-            services.AddIdentityCore<AppUser>()
+            services.AddIdentityCore<AppUser>(options =>
+            {
+                options.SignIn.RequireConfirmedEmail = true;
+                options.User.RequireUniqueEmail = true;
+            }
+                )
                 .AddRoles<AppRole>()
                 .AddRoleManager<RoleManager<AppRole>>()
                 .AddSignInManager<SignInManager<AppUser>>()
                 .AddRoleValidator<RoleValidator<AppRole>>()
-                .AddEntityFrameworkStores<AppUserIdentityDbContext>();
+                .AddEntityFrameworkStores<AppUserIdentityDbContext>()
+                .AddDefaultTokenProviders();
 
             services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
                 .AddJwtBearer(options =>
@@ -79,10 +86,11 @@ namespace API.Extensions
             services.AddAuthorization(options =>
             {
                 options.AddPolicy(AuthorizationPolicies.RequiresAdminRole, policy => policy.RequireRole(UserRoles.Admin));
-                options.AddPolicy(AuthorizationPolicies.RequiresAccountRole, policy => policy.RequireRole(UserRoles.Admin,UserRoles.Accountant));
+                options.AddPolicy(AuthorizationPolicies.RequiresAccountRole, policy => policy.RequireRole(UserRoles.Admin, UserRoles.Accountant));
             });
 
             services.AddScoped<IFeedbackService, FeedbackService>();
+            services.AddScoped<IEmailService, EmailService>();
 
             return services;
 

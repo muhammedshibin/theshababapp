@@ -41,7 +41,8 @@ namespace Infrastructure.Identity
                 {
                     UserName = "admin",
                     DisplayName = "Admin User",
-                    Email = "shibin-2018@hotmail.com"
+                    Email = "shibin-2018@hotmail.com",
+                    EmailConfirmed = true
                 };
 
                 await userManager.CreateAsync(adminUser, "123@OneTwoThree");
