@@ -37,8 +37,7 @@ namespace API.Controllers
             _emailService = emailService;
             _config = config;
         }
-        [Authorize(Policy = AuthorizationPolicies.RequiresAdminRole)]
-        [AllowAnonymous]
+        [Authorize(Policy = AuthorizationPolicies.RequiresAdminRole)]       
         [HttpPost("register")]
         public async Task<ActionResult<bool>> Register(RegisterDto registerDto)
         {

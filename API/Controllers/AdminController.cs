@@ -40,6 +40,7 @@ namespace API.Controllers
             return Ok(users);
         }
 
+        [AllowAnonymous]
         [HttpPost("edit-user-roles/{userName}")]
         public async Task<ActionResult> EditUserRole(string userName, [FromQuery] string roles)
         {
