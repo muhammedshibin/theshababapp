@@ -1,5 +1,6 @@
 ﻿using API.Helpers;
 using Core.Interfaces;
+using Hangfire;
 using Infrastructure.Data;
 using Infrastructure.Data.Services;
 using Infrastructure.Helpers;
@@ -67,6 +68,7 @@ namespace API.Extensions
             services.AddAutoMapper(typeof(MappingProfile));
             services.Configure<CloudinarySettings>(config.GetSection("CloudinarySettings"));
             services.Configure<EmailSettings>(config.GetSection("EmailSettings"));
+            services.Configure<MongoSettings>(config.GetSection("MongoSettings"));
             services.Configure((Action<ApiBehaviorOptions>)(options =>
             {
                 options.InvalidModelStateResponseFactory = context =>
@@ -82,6 +84,12 @@ namespace API.Extensions
                        Errors = modelStateErrors});
                };
             }));
+
+            ////hangfire settings
+
+            //services.AddHangfire(x => x.UseSqlServerStorage("<connection string>"));
+            //services.AddHangfireServer();
+
             return services;
 
         }

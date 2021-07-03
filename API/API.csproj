@@ -15,6 +15,7 @@
 
   <ItemGroup>
     <PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="8.1.1" />
+    <PackageReference Include="Hangfire" Version="1.7.24" />
     <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="5.0.5" />
     <PackageReference Include="Microsoft.AspNetCore.SpaServices.Extensions" Version="5.0.4" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="5.0.5">
@@ -31,7 +32,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Content\"  CopyToPublishDirectory="PreserveNewest"/>
+    <Folder Include="Content\" CopyToPublishDirectory="PreserveNewest" />
   </ItemGroup>
 
 </Project>

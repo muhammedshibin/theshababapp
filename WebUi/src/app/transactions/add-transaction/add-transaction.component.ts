@@ -83,6 +83,7 @@ export class AddTransactionComponent implements OnInit {
         (response) => {
           console.log(response);
           this.toastr.success('Transaction Saved Successfully' , 'Success');
+          this.transactionForm.reset();
           this.formSubmitted.emit(true);
         },
         (err) => {
@@ -124,8 +125,7 @@ export class AddTransactionComponent implements OnInit {
 
   fillTransactionDetails() {
 
-    const patchDateValue = this.transaction?.transactionDate.toLocaleString();
-
+    
     if (this.transaction) {
 
       const existingTransaction = {

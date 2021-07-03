@@ -1,20 +1,45 @@
 <div style="margin-top:-50px">
-    <carousel>
-        <!-- <slide>
+  <carousel>
+    <!-- <slide>
           <img src="assets/images/accounting-1.jpg" alt="first slide" style="display: block; width: 100%;">
           <div class="carousel-caption d-none d-md-block">
             <h3>First slide label</h3>
             <p>Nulla vitae elit libero, a pharetra augue mollis interdum.</p>
           </div>
         </slide> -->
-        <slide>
-          <img src="assets/images/accounting-2.jpg" alt="second slide" style="display: block; width: 100%;">
-          <div class="carousel-caption d-none d-md-block" style="margin-bottom: 100px;" *ngIf="(currentUser$ | async) as currentUser">
-            <!-- <h3 class="text-info">Manage Your Expenses</h3>
+    <slide>
+      <img src="assets/images/accounting-2.jpg" alt="second slide" style="display: block; width: 100%;">
+      <div class="carousel-caption d-none d-md-block" style="margin-bottom: 100px;"
+        *ngIf="(currentUser$ | async) as currentUser">
+        <!-- <h3 class="text-info">Manage Your Expenses</h3>
             -->
-            <button class="btn btn-primary btn-lg" *ngIf="currentUser"  routerLink='/dashboard'>Start Here</button>
-            
-          </div>
-        </slide>    
-      </carousel>
+        <button class="btn btn-primary btn-lg" *ngIf="currentUser" routerLink='/dashboard'>Start Here</button>
+
+      </div>
+      <div class="carousel-caption d-none d-md-block" style="margin-bottom: 100px;"
+        *ngIf="!(currentUser$ | async) as currentUser">
+        <!-- <h3 class="text-info">Manage Your Expenses</h3>
+            -->
+        <div class="text-center" style="padding-right: 320px;padding-left: 320px;">
+
+          <form #loginForm="ngForm" (ngSubmit)="onLogin()" class="form-signin">
+            <!-- <img class="mb-4" src="/docs/4.6/assets/brand/bootstrap-solid.svg" alt="" width="72" height="72"> -->
+            <h1 class="display-3 text-white">Log in</h1>
+            <label for="inputEmail" class="sr-only">Email address</label>
+            <input type="email" id="inputEmail" class="form-control" name="username" [(ngModel)]="username"
+              placeholder="Username" autofocus="">
+            <label for="inputPassword" class="sr-only">Password</label>
+            <input type="password" type="password" name="password" [(ngModel)]="password" placeholder="Password"
+              class="form-control mt-1">
+            <a routerLink="/account/forgot-password" style="text-decoration: none;">
+              <small class="d-flex justify-content-end text-white">Forgot Password?
+              </small>
+            </a>
+            <button class="btn btn-lg btn-info btn-block mt-2" type="submit">Sign in</button>
+            <p class="mt-5 mb-3 text-muted"></p>
+          </form>
+        </div>
+      </div>
+    </slide>
+  </carousel>
 </div>

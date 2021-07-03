@@ -41,7 +41,7 @@ const routes: Routes = [
         path: 'tenants',
         loadChildren: () =>
           import('./tenant/tenant.module').then((mod) => mod.TenantModule),
-        data: { breadcrumb: 'Inmates' },
+        data: { breadcrumb: 'Members' },
       },
 
       {

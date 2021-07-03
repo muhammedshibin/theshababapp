@@ -1,6 +1,4 @@
-import { TenantLeaveComponent } from './../tenant/tenant-leave/tenant-leave.component';
 import { RouterModule } from '@angular/router';
-import { Inmate } from './models/inmate';
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';

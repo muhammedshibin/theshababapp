@@ -9,17 +9,17 @@ const routes = [
   {
     path: '',
     component: TenantListComponent,
-    data: { breadcrumb: 'Inmates' },
+    data: { breadcrumb: 'Members' },
   },
   {
     path: 'add-tenant',
     component: AddTenantComponent,
-    data: { breadcrumb: 'Add Inmate' },
+    data: { breadcrumb: 'Add Member' },
   },
   {
     path: 'list',
     component: TenantListComponent,
-    data: { breadcrumb: 'Inmates' },
+    data: { breadcrumb: 'Members' },
   },
   {
     path: ':id',
