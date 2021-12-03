@@ -30,7 +30,7 @@ namespace Infrastructure.Identity
                     await roleManager.CreateAsync(role);
                 }
 
-                var adminUser = await userManager.FindByNameAsync("shibin");
+                var adminUser = await userManager.FindByNameAsync("admin");
 
                 if (adminUser != null)
                 {
