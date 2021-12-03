@@ -43,7 +43,8 @@ namespace Infrastructure.Identity
                     UserName = "admin",
                     DisplayName = "Admin User",
                     Email = "shibin-2018@hotmail.com",
-                    EmailConfirmed = true                    
+                    EmailConfirmed = true,
+                    SecurityStamp = Guid.NewGuid().ToString()
                 };
 
                 await userManager.AddToRoleAsync(adminUser, "Admin");
