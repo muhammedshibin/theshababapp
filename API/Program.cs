@@ -43,7 +43,8 @@ namespace API
             catch (Exception e)
             {
                 var logger = loggerFactory.CreateLogger<Program>();
-                logger.LogInformation(e.StackTrace);
+                logger.LogInformation(e.StackTrace.ToString());
+                if(e.InnerException is object) logger.LogInformation(e.InnerException.Message);
             }
 
             host.Run();
