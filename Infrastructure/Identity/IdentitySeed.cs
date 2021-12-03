@@ -31,12 +31,13 @@ namespace Infrastructure.Identity
                 }
 
                 var adminUser = await userManager.FindByNameAsync("admin");
-
+                
+                
                 if (adminUser != null)
                 {
                     await userManager.DeleteAsync(adminUser);
                 }
-
+                Console.WriteLine("Adding Seed User");
                 adminUser = new AppUser
                 {
                     UserName = "admin",
