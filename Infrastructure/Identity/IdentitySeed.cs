@@ -47,7 +47,7 @@ namespace Infrastructure.Identity
 
                 await userManager.AddToRoleAsync(adminUser, "Admin");
 
-                await userManager.CreateAsync(adminUser, "P@$$w0rd");
+                await userManager.CreateAsync(adminUser, "Pa$$w0rd");
 
                 await userManager.AddToRoleAsync(adminUser, UserRoles.Admin);
 
